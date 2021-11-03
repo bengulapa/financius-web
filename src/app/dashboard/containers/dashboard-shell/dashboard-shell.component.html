@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+  <nav class="d-flex align-items-center justify-content-between w-100">
+    <span>Financius Web</span>
+
+    <button mat-icon-button>
+      <mat-icon>settings</mat-icon>
+    </button>
+  </nav>
+</mat-toolbar>
+
+<main class="p-3 d-flex">
+  <div class="w-50 me-1">
+    <div class="mb-2">
+      <app-overview-card></app-overview-card>
+    </div>
+
+    <app-trends-card></app-trends-card>
+  </div>
+
+  <div class="w-50 ms-1">
+    <app-accounts-card
+      *ngIf="data.accounts as accounts"
+      [accounts]="accounts"
+    ></app-accounts-card>
+  </div>
+</main>
