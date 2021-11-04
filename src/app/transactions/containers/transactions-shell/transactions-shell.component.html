@@ -1,0 +1,14 @@
+<app-main-toolbar></app-main-toolbar>
+
+<main class="p-3">
+  <h3>Transactions</h3>
+
+  <app-transactions-table
+    *ngIf="transactions$ | async as transactions; else loading"
+    [data]="transactions"
+  ></app-transactions-table>
+
+  <ng-template #loading>
+    <mat-progress-bar></mat-progress-bar>
+  </ng-template>
+</main>

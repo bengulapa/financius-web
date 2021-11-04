@@ -1,7 +1,13 @@
+import {
+  SyncState,
+  TransactionState,
+  TransactionType,
+} from './financius.enums';
+
 export interface BaseModel {
   id: string;
   model_state: number;
-  sync_state: number;
+  sync_state: SyncState;
 }
 
 export interface Currency extends BaseModel {
@@ -13,9 +19,16 @@ export interface Currency extends BaseModel {
   decimal_count: number;
 }
 
-export interface Category {}
+export interface Category extends BaseModel {
+  title: string;
+  color: number;
+  transaction_type: number;
+  sort_order: number;
+}
 
-export interface Tag {}
+export interface Tag extends BaseModel {
+  title: string;
+}
 
 export interface Account extends BaseModel {
   currency_code: string;
@@ -25,7 +38,19 @@ export interface Account extends BaseModel {
   include_in_totals: boolean;
 }
 
-export interface Transaction {}
+export interface Transaction extends BaseModel {
+  account_from_id: string | null;
+  account_to_id: string | null;
+  category_id: string | null;
+  tag_ids: string[];
+  date: number;
+  amount: number;
+  exchange_rate: number;
+  note: string;
+  transaction_state: TransactionState;
+  transaction_type: TransactionType;
+  include_in_reports: boolean;
+}
 
 export interface FinanciusBackup {
   version: number;
