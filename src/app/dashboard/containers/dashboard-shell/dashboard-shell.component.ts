@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   Account,
   FinanciusBackup,
-} from 'src/app/shared/shared/models/financius.models';
+} from 'src/app/shared/models/financius.models';
 import * as data from 'src/assets/data.json';
 
 @Component({

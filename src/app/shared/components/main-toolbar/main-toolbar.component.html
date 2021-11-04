@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+  <nav class="d-flex align-items-center justify-content-between w-100">
+    <span class="align-items-center">
+      <span class="me-4">
+        <a [routerLink]="['/dashboard']">Financius Web</a>
+      </span>
+
+      <a
+        [routerLink]="['/accounts']"
+        routerLinkActive="router-link-active"
+        mat-button
+        >Accounts</a
+      >
+    </span>
+
+    <button mat-icon-button>
+      <mat-icon>settings</mat-icon>
+    </button>
+  </nav>
+</mat-toolbar>

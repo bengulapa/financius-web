@@ -1,7 +1,7 @@
 import { formatCurrency } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import * as data from 'src/assets/data.json';
-import { FinanciusBackup } from '../shared/models/financius.models';
+import { FinanciusBackup } from '../models/financius.models';
 
 @Pipe({
   name: 'fwCurrency',
