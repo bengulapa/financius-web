@@ -1,4 +1,5 @@
 import {
+  ModelState,
   SyncState,
   TransactionState,
   TransactionType,
@@ -6,7 +7,7 @@ import {
 
 export interface BaseModel {
   id: string;
-  model_state: number;
+  model_state: ModelState;
   sync_state: SyncState;
 }
 

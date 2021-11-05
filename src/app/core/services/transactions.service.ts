@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
+  ModelState,
   SyncState,
   TransactionState,
   TransactionType,
@@ -19,7 +20,7 @@ export class TransactionsService {
   transactions = this.data.transactions.filter(
     (t) =>
       t.transaction_state === TransactionState.Confirmed &&
-      t.sync_state === SyncState.None
+      t.model_state === ModelState.Normal
   );
 
   constructor() {}

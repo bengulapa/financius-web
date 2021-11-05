@@ -15,3 +15,9 @@ export enum SyncState {
   Synced = 3,
   LocalChanges = 4,
 }
+
+export enum ModelState {
+  Normal = 1,
+  Deleted = 2,
+  DeletedUndo = 3,
+}
