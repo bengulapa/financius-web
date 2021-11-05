@@ -14,6 +14,6 @@ export class TransactionsShellComponent implements OnInit {
   constructor(private service: TransactionsService) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.service.get();
+    this.transactions$ = this.service.getAll();
   }
 }

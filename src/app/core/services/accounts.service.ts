@@ -17,7 +17,7 @@ export class AccountsService {
 
   constructor() {}
 
-  get(): Observable<Account[]> {
+  getAll(): Observable<Account[]> {
     return of(this.accounts.sort((a, b) => sortByName(a.title, b.title)));
   }
 }

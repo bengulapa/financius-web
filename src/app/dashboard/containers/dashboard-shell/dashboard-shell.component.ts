@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Account,
-  FinanciusBackup,
-} from 'src/app/shared/models/financius.models';
-import * as data from 'src/assets/data.json';
+import { Observable } from 'rxjs';
+import { AccountsService } from 'src/app/core/services/accounts.service';
+import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { Account } from 'src/app/shared/models/financius.models';
+import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
 @Component({
   selector: 'app-dashboard-shell',
@@ -11,9 +11,16 @@ import * as data from 'src/assets/data.json';
   styleUrls: ['./dashboard-shell.component.scss'],
 })
 export class DashboardShellComponent implements OnInit {
-  data: FinanciusBackup = data;
+  accounts$!: Observable<Account[]>;
+  transactions$!: Observable<TransactionsViewModel[]>;
 
-  constructor() {}
+  constructor(
+    private accountsService: AccountsService,
+    private transactionsService: TransactionsService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.accounts$ = this.accountsService.getAll();
+    this.transactions$ = this.transactionsService.getAll();
+  }
 }

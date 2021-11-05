@@ -1,6 +1,6 @@
 {
   "version": 9,
-  "timestamp": 1636094679566,
+  "timestamp": 1635901327945,
   "currencies": [
     {
       "id": "ed71e4f2-9a2e-4f2b-ae32-e9513f2d0f4e",
@@ -1381,7 +1381,7 @@
       "currency_code": "PHP",
       "title": "In Hand",
       "note": "",
-      "balance": 3617600,
+      "balance": 3633600,
       "include_in_totals": true
     },
     {
@@ -1561,7 +1561,7 @@
       "currency_code": "PHP",
       "title": "Lend",
       "note": "",
-      "balance": 15238000,
+      "balance": 10238000,
       "include_in_totals": true
     },
     {
@@ -1571,7 +1571,7 @@
       "currency_code": "PHP",
       "title": "BPI",
       "note": "Interest",
-      "balance": 16768784,
+      "balance": 23768784,
       "include_in_totals": true
     },
     {
@@ -1611,7 +1611,7 @@
       "currency_code": "PHP",
       "title": "UB Payroll",
       "note": "",
-      "balance": 57404909,
+      "balance": 52950211,
       "include_in_totals": true
     },
     {
@@ -1651,7 +1651,7 @@
       "currency_code": "PHP",
       "title": "Shopee Pay",
       "note": "",
-      "balance": 481500,
+      "balance": 499900,
       "include_in_totals": true
     }
   ],
@@ -1670,120 +1670,6 @@
       "note": "Birthday ",
       "transaction_state": 2,
       "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "c932eec7-9145-4c23-bff8-9423c3ddb511",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": "6d531d36-dec5-4708-95cb-91fe6b273f17",
-      "account_to_id": null,
-      "category_id": "9aaa9590-65f1-4b74-84d9-07567b04f34c",
-      "tag_ids": [],
-      "date": 1636094584360,
-      "amount": 8000,
-      "exchange_rate": 1.0,
-      "note": "",
-      "transaction_state": 1,
-      "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "5d51c6c4-3edc-41eb-85be-a82988f03ddc",
-      "model_state": 2,
-      "sync_state": 4,
-      "account_from_id": "91c6554e-a2db-45c5-8084-06392fc69db9",
-      "account_to_id": null,
-      "category_id": null,
-      "tag_ids": [],
-      "date": 1636093989161,
-      "amount": 1000,
-      "exchange_rate": 1.0,
-      "note": "",
-      "transaction_state": 1,
-      "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "cc0327b3-6722-4e1a-bdbc-ccfbba6f90a5",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": "3f80de6d-3f3f-4cbe-aa04-a1113d805f58",
-      "account_to_id": null,
-      "category_id": "9aaa9590-65f1-4b74-84d9-07567b04f34c",
-      "tag_ids": [
-        "c_groceries"
-      ],
-      "date": 1636011663247,
-      "amount": 18400,
-      "exchange_rate": 1.0,
-      "note": "Coffee",
-      "transaction_state": 1,
-      "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "9c567e59-0c2d-4f4d-b5b2-80f01a2b4f46",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": "6d531d36-dec5-4708-95cb-91fe6b273f17",
-      "account_to_id": null,
-      "category_id": "9aaa9590-65f1-4b74-84d9-07567b04f34c",
-      "tag_ids": [],
-      "date": 1636008212792,
-      "amount": 8000,
-      "exchange_rate": 1.0,
-      "note": "",
-      "transaction_state": 1,
-      "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "355c0f22-d96e-4ee0-819f-1c79eea80f52",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": "f77dc98c-ee50-4b20-b191-ebbf2ac7cbad",
-      "account_to_id": "f0a31e72-e760-4206-ba1d-f98b06006f62",
-      "category_id": null,
-      "tag_ids": [],
-      "date": 1635752304964,
-      "amount": 5000000,
-      "exchange_rate": 1.0,
-      "note": "Pautang",
-      "transaction_state": 1,
-      "transaction_type": 3,
-      "include_in_reports": true
-    },
-    {
-      "id": "ea7695c2-0fb1-44fd-81f3-597699e8b23a",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": "f77dc98c-ee50-4b20-b191-ebbf2ac7cbad",
-      "account_to_id": null,
-      "category_id": "5eeb1cc4-44b3-463e-8e8d-5d4ea034b1d2",
-      "tag_ids": [],
-      "date": 1635752275823,
-      "amount": 2000000,
-      "exchange_rate": 1.0,
-      "note": "",
-      "transaction_state": 1,
-      "transaction_type": 1,
-      "include_in_reports": true
-    },
-    {
-      "id": "4c98b6da-882f-4007-bcef-ab12ebd2f572",
-      "model_state": 1,
-      "sync_state": 1,
-      "account_from_id": null,
-      "account_to_id": "9e10e639-f02f-4faf-a14e-895595f80a00",
-      "category_id": "a3417223-887b-4f64-abf1-ea3df66f5c54",
-      "tag_ids": [],
-      "date": 1635147601946,
-      "amount": 4454698,
-      "exchange_rate": 1.0,
-      "note": "",
-      "transaction_state": 1,
-      "transaction_type": 2,
       "include_in_reports": true
     },
     {

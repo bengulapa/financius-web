@@ -1,4 +1,11 @@
 <mat-card>
-  <mat-card-title>Overview</mat-card-title>
-  <mat-card-content></mat-card-content>
+  <mat-card-title>{{ title }}</mat-card-title>
+  <mat-card-content>
+    <div class="d-flex justify-content-between align-items-center">
+      <div><!-- donut chart --></div>
+      <div matTooltip="Total monthly expense">
+        {{ totalExpense | fwCurrency: currencyCode }}
+      </div>
+    </div>
+  </mat-card-content>
 </mat-card>

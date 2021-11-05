@@ -14,6 +14,6 @@ export class AccountsShellComponent implements OnInit {
   constructor(private service: AccountsService) {}
 
   ngOnInit(): void {
-    this.accounts$ = this.service.get();
+    this.accounts$ = this.service.getAll();
   }
 }

@@ -25,7 +25,7 @@ export class TransactionsService {
 
   constructor() {}
 
-  get(): Observable<TransactionsViewModel[]> {
+  getAll(): Observable<TransactionsViewModel[]> {
     return of(this.transactions.map((t) => this.mapToViewModel(t)));
   }
 

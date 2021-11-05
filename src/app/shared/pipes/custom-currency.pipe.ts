@@ -7,7 +7,11 @@ import { FinanciusBackup } from '../models/financius.models';
   name: 'fwCurrency',
 })
 export class CustomCurrencyPipe implements PipeTransform {
-  transform(value: number, currencyCode: string): string | null {
+  transform(value: number, currencyCode: string | null): string {
+    if (!currencyCode) {
+      return '0';
+    }
+
     const backup: FinanciusBackup = data;
     const currency = backup.currencies.find((c) => c.code == currencyCode);
 
@@ -15,7 +19,7 @@ export class CustomCurrencyPipe implements PipeTransform {
       const balance = value / Math.pow(10, currency.decimal_count);
       return formatCurrency(balance, 'en', currency.symbol);
     } else {
-      return null;
+      return '0';
     }
   }
 }
