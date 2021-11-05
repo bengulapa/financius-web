@@ -4,18 +4,28 @@ import {
   Category,
   FinanciusBackup,
 } from 'src/app/shared/models/financius.models';
+import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 import * as data from 'src/assets/data.json';
+import { TransactionsService } from './transactions.service';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesService {
   data: FinanciusBackup = data;
 
-  constructor() {}
+  constructor(private transactionsService: TransactionsService) {}
 
-  get(): Observable<Category[]> {
+  get(categoryId: string): Observable<Category | null> {
+    return of(this.data.categories.find((c) => c.id === categoryId) || null);
+  }
+
+  getAll(): Observable<Category[]> {
     return of(
       this.data.categories.sort((a, b) => this.sortByName(a.title, b.title))
     );
+  }
+
+  getTransactions(categoryId: string): Observable<TransactionsViewModel[]> {
+    return this.transactionsService.getByCategory(categoryId);
   }
 
   private sortByName(a: string, b: string) {

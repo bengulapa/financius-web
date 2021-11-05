@@ -16,41 +16,49 @@ import * as data from 'src/assets/data.json';
 @Injectable({ providedIn: 'root' })
 export class TransactionsService {
   data: FinanciusBackup = data;
+  transactions = this.data.transactions.filter(
+    (t) =>
+      t.transaction_state === TransactionState.Confirmed &&
+      t.sync_state === SyncState.None
+  );
 
   constructor() {}
 
   get(): Observable<TransactionsViewModel[]> {
-    const tags = this.data.tags;
+    return of(this.transactions.map((t) => this.mapToViewModel(t)));
+  }
 
+  getByCategory(categoryId: string): Observable<TransactionsViewModel[]> {
     return of(
-      this.data.transactions
-        .filter(
-          (t) =>
-            t.transaction_state === TransactionState.Confirmed &&
-            t.sync_state === SyncState.None
-        )
-        .map((t) => ({
-          date: new Date(t.date),
-          category: this.getCategory(t),
-          tags: t.tag_ids?.length
-            ? tags
-                .filter((tag) => t.tag_ids.includes(tag.id))
-                .map((tag) => tag.title)
-            : [],
-          note: t.note,
-          amount: t.amount,
-          account: this.getAccount(t),
-          currencyCode:
-            this.data.accounts.find((a) => a.id === t.account_from_id)
-              ?.currency_code ||
-            this.data.accounts.find((a) => a.id === t.account_to_id)
-              ?.currency_code ||
-            null,
-          transactionType: t.transaction_type,
-        }))
+      this.transactions
+        .filter((t) => t.category_id === categoryId)
+        .map((t) => this.mapToViewModel(t))
     );
   }
 
+  private mapToViewModel(t: Transaction): TransactionsViewModel {
+    const tags = this.data.tags;
+
+    return {
+      date: new Date(t.date),
+      category: this.getCategory(t),
+      tags: t.tag_ids?.length
+        ? tags
+            .filter((tag) => t.tag_ids.includes(tag.id))
+            .map((tag) => tag.title)
+        : [],
+      note: t.note,
+      amount: t.amount,
+      account: this.getAccount(t),
+      currencyCode:
+        this.data.accounts.find((a) => a.id === t.account_from_id)
+          ?.currency_code ||
+        this.data.accounts.find((a) => a.id === t.account_to_id)
+          ?.currency_code ||
+        null,
+      transactionType: t.transaction_type,
+    };
+  }
   private getCategory(t: Transaction): Category | null {
     const categories = this.data.categories;
 
@@ -66,7 +74,7 @@ export class TransactionsService {
     const accountTo = this.data.accounts.find((a) => a.id === t.account_to_id);
 
     if (t.transaction_type === TransactionType.Transfer) {
-      return `${accountFrom?.title} -> ${accountTo?.title}`;
+      return `${accountFrom?.title} → ${accountTo?.title}`;
     }
 
     return accountFrom?.title || accountTo?.title || '';

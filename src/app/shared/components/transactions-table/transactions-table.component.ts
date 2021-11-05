@@ -20,10 +20,12 @@ export class TransactionsTableComponent implements OnInit, AfterViewInit {
   @Input()
   data: TransactionsViewModel[] | null = [];
 
+  @Input()
+  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
+
   dataSource!: MatTableDataSource<TransactionsViewModel>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
   TransactionType = TransactionType;
 
   constructor() {}

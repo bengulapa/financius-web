@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { TransactionsShellComponent } from './containers/transactions-shell/transactions-shell.component';
 
 @NgModule({
-  declarations: [TransactionsShellComponent, TransactionsTableComponent],
+  declarations: [TransactionsShellComponent],
   imports: [
     SharedModule,
     RouterModule.forChild([

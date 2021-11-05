@@ -14,6 +14,6 @@ export class CategoriesShellComponent implements OnInit {
   constructor(private service: CategoriesService) {}
 
   ngOnInit(): void {
-    this.categories$ = this.service.get();
+    this.categories$ = this.service.getAll();
   }
 }

@@ -4,11 +4,6 @@
   <h3>Transactions</h3>
 
   <app-transactions-table
-    *ngIf="transactions$ | async as transactions; else loading"
-    [data]="transactions"
+    [data]="transactions$ | async"
   ></app-transactions-table>
-
-  <ng-template #loading>
-    <mat-progress-bar></mat-progress-bar>
-  </ng-template>
 </main>
