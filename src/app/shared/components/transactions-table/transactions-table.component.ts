@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnInit,
@@ -15,8 +15,9 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
   selector: 'app-transactions-table',
   templateUrl: './transactions-table.component.html',
   styleUrls: ['./transactions-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsTableComponent implements OnInit, AfterViewInit {
+export class TransactionsTableComponent implements OnInit {
   @Input()
   data: TransactionsViewModel[] | null = [];
 
@@ -24,17 +25,14 @@ export class TransactionsTableComponent implements OnInit, AfterViewInit {
   displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
 
   dataSource!: MatTableDataSource<TransactionsViewModel>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
   TransactionType = TransactionType;
 
   constructor() {}
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.data || []);
-  }
-
-  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
