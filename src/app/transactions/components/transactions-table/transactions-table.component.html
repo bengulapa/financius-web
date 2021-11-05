@@ -21,7 +21,7 @@
     <td mat-cell *matCellDef="let row">
       <span
         *ngIf="row.category; else transfer"
-        [ngStyle]="{ color: '#' + (row.category.color * -1).toString(16) }"
+        [style.color]="row.category.color | colorHex"
       >
         {{ row.category.title }}
       </span>

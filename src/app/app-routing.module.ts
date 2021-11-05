@@ -19,6 +19,11 @@ const routes: Routes = [
         (m) => m.TransactionsModule
       ),
   },
+  {
+    path: 'categories',
+    loadChildren: () =>
+      import('./categories/categories.module').then((m) => m.CategoriesModule),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 

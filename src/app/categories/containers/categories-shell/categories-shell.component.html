@@ -1,0 +1,14 @@
+<app-main-toolbar></app-main-toolbar>
+
+<main class="p-3">
+  <h3>Categories</h3>
+
+  <app-categories-table
+    *ngIf="categories$ | async as categories; else loading"
+    [data]="categories"
+  ></app-categories-table>
+
+  <ng-template #loading>
+    <mat-progress-bar></mat-progress-bar>
+  </ng-template>
+</main>

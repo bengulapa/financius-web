@@ -31,6 +31,10 @@ table {
   width: 100%;
 }
 
+.router-link-active {
+  border-bottom: 2px solid red;
+}
+
 .transaction-type-Expense {
   color: red;
 }
