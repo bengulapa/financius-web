@@ -2,9 +2,7 @@
 
 <main class="p-3">
   <ng-container *ngIf="category$ | async as category; else loading">
-    <h2 [style.color]="category.color | colorHex">
-      Category {{ category.title }}
-    </h2>
+    <h2><a routerLink="/categories">Categories</a> / {{ category.title }}</h2>
 
     <div class="d-flex">
       <section class="w-30 me-1">
