@@ -37,6 +37,14 @@ export class TransactionsService {
     );
   }
 
+  getByTag(tagId: string): Observable<TransactionsViewModel[]> {
+    return of(
+      this.transactions
+        .filter((t) => t.tag_ids.includes(tagId))
+        .map((t) => this.mapToViewModel(t))
+    );
+  }
+
   private mapToViewModel(t: Transaction): TransactionsViewModel {
     const tags = this.data.tags;
 
