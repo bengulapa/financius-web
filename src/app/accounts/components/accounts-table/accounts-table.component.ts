@@ -30,6 +30,7 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
     'balance',
     'note',
     'include_in_totals',
+    'actions',
   ];
 
   constructor() {}

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
   ModelState,
-  SyncState,
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
@@ -23,10 +22,19 @@ export class TransactionsService {
       t.model_state === ModelState.Normal
   );
 
-  constructor() {}
-
   getAll(): Observable<TransactionsViewModel[]> {
     return of(this.transactions.map((t) => this.mapToViewModel(t)));
+  }
+
+  getByAccount(accountId: string): Observable<TransactionsViewModel[]> {
+    return of(
+      this.transactions
+        .filter(
+          (t) =>
+            t.account_to_id === accountId || t.account_from_id === accountId
+        )
+        .map((t) => this.mapToViewModel(t))
+    );
   }
 
   getByCategory(categoryId: string): Observable<TransactionsViewModel[]> {
@@ -68,6 +76,7 @@ export class TransactionsService {
       transactionType: t.transaction_type,
     };
   }
+
   private getCategory(t: Transaction): Category | null {
     const categories = this.data.categories;
 
@@ -76,7 +85,7 @@ export class TransactionsService {
       : null;
   }
 
-  getAccount(t: Transaction): string {
+  private getAccount(t: Transaction): string {
     const accountFrom = this.data.accounts.find(
       (a) => a.id === t.account_from_id
     );
