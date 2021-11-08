@@ -8,7 +8,7 @@
           [results]="pieData"
           [legend]="true"
           [legendPosition]="LegendPosition.Below"
-          scheme="forest"
+          [customColors]="customColors"
         >
           <ng-template #tooltipTemplate let-model="model">
             <div>

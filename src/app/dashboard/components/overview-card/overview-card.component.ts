@@ -6,8 +6,12 @@ import {
 } from '@angular/core';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import * as _ from 'lodash';
-import { SingleChartData } from 'src/app/shared/models/chart.models';
+import {
+  ChartColor,
+  SingleChartData,
+} from 'src/app/shared/models/chart.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
 @Component({
   selector: 'app-overview-card',
@@ -26,6 +30,7 @@ export class OverviewCardComponent implements OnInit {
   currencyCode!: string | null;
   pieData: SingleChartData[] = [];
   LegendPosition = LegendPosition;
+  customColors: ChartColor[] = [];
 
   constructor() {}
 
@@ -41,6 +46,13 @@ export class OverviewCardComponent implements OnInit {
     this.pieData = Object.keys(expensesGroup).map((e) => ({
       name: e,
       value: _.sumBy(expensesGroup[e], 'amount'),
+    }));
+
+    this.customColors = Object.keys(expensesGroup).map((e) => ({
+      name: e,
+      value: new ColorHexPipe().transform(
+        this.transactions?.find((t) => t.category?.title === e)?.category?.color
+      ),
     }));
   }
 }
