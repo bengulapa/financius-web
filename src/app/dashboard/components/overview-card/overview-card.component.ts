@@ -9,6 +9,9 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { LegendPosition } from '@swimlane/ngx-charts';
+import * as _ from 'lodash';
+import { ChartData } from 'src/app/shared/models/chart.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
@@ -25,6 +28,8 @@ export class OverviewCardComponent implements OnInit {
   title!: string;
   totalExpense: number = 0;
   currencyCode!: string | null;
+  pieData: ChartData[] = [];
+  LegendPosition = LegendPosition;
 
   constructor() {}
 
@@ -45,8 +50,16 @@ export class OverviewCardComponent implements OnInit {
           new Date(t.date).getFullYear() === currentDate.getFullYear() &&
           t.transactionType === TransactionType.Expense
       ) || [];
+
     // TODO: Group per currency code?
     this.currencyCode = monthlyExpenses[0]?.currencyCode;
-    this.totalExpense = monthlyExpenses.reduce((a, b) => a + b.amount, 0) || 0;
+    this.totalExpense = _.sumBy(monthlyExpenses, 'amount');
+
+    const expensesGroup = _.groupBy(monthlyExpenses, 'category.title');
+
+    this.pieData = Object.keys(expensesGroup).map((e) => ({
+      name: e,
+      value: _.sumBy(expensesGroup[e], 'amount'),
+    }));
   }
 }

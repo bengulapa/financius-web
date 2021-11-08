@@ -2,9 +2,26 @@
   <mat-card-title>{{ title }}</mat-card-title>
   <mat-card-content>
     <div class="d-flex justify-content-between align-items-center">
-      <div><!-- donut chart --></div>
+      <div>
+        <ngx-charts-pie-chart
+          [view]="[400, 120]"
+          [results]="pieData"
+          [legend]="true"
+          [legendPosition]="LegendPosition.Below"
+          scheme="forest"
+        >
+          <ng-template #tooltipTemplate let-model="model">
+            <div>
+              {{ model.name }}
+            </div>
+            <div>{{ model.value | fwCurrency: currencyCode }}</div>
+          </ng-template>
+        </ngx-charts-pie-chart>
+      </div>
+
       <div matTooltip="Total monthly expense">
-        {{ totalExpense | fwCurrency: currencyCode }}
+        <h4>Total Monthly Expense</h4>
+        <span class="total">{{ totalExpense | fwCurrency: currencyCode }}</span>
       </div>
     </div>
   </mat-card-content>
