@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { Account } from 'src/app/shared/models/financius.models';
 
 @Component({
@@ -17,13 +18,14 @@ export class AccountsCardComponent implements OnInit {
   accounts!: Account[];
 
   activeAccounts: Account[] = [];
-  inactiveAccounts: Account[] = [];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.activeAccounts = this.accounts.filter((a) => a.include_in_totals);
+  }
 
-    this.inactiveAccounts = this.accounts.filter((a) => !a.include_in_totals);
+  onAccountClicked(accountId: string) {
+    this.router.navigateByUrl(`/accounts/${accountId}`);
   }
 }

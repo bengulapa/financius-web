@@ -3,19 +3,10 @@
 
   <mat-card-content>
     <mat-selection-list dense [multiple]="false">
-      <mat-list-option *ngFor="let account of activeAccounts" [value]="account">
-        <div class="d-flex justify-content-between w-100">
-          <span>{{ account.title }}</span>
-          <span>{{ account.balance | fwCurrency: account.currency_code }}</span>
-        </div>
-      </mat-list-option>
-
-      <mat-divider></mat-divider>
-      <div mat-subheader>Inactive</div>
-
       <mat-list-option
-        *ngFor="let account of inactiveAccounts"
+        *ngFor="let account of activeAccounts"
         [value]="account"
+        (selectedChange)="onAccountClicked(account.id)"
       >
         <div class="d-flex justify-content-between w-100">
           <span>{{ account.title }}</span>
