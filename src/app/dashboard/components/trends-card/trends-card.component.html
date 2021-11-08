@@ -1,4 +1,13 @@
 <mat-card>
   <mat-card-title>Trends</mat-card-title>
-  <mat-card-content></mat-card-content>
+  <mat-card-content>
+    <div #containerRef class="d-flex">
+      <ngx-charts-line-chart
+        [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+        [results]="chartData"
+        [xAxis]="true"
+        scheme="forest"
+      ></ngx-charts-line-chart>
+    </div>
+  </mat-card-content>
 </mat-card>

@@ -1,9 +1,4 @@
 import {
-  FormStyle,
-  getLocaleMonthNames,
-  TranslationWidth,
-} from '@angular/common';
-import {
   ChangeDetectionStrategy,
   Component,
   Input,
@@ -11,8 +6,7 @@ import {
 } from '@angular/core';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import * as _ from 'lodash';
-import { ChartData } from 'src/app/shared/models/chart.models';
-import { TransactionType } from 'src/app/shared/models/financius.enums';
+import { SingleChartData } from 'src/app/shared/models/chart.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
 @Component({
@@ -23,39 +17,26 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 })
 export class OverviewCardComponent implements OnInit {
   @Input()
+  title!: string;
+
+  @Input()
   transactions!: TransactionsViewModel[] | null;
 
-  title!: string;
   totalExpense: number = 0;
   currencyCode!: string | null;
-  pieData: ChartData[] = [];
+  pieData: SingleChartData[] = [];
   LegendPosition = LegendPosition;
 
   constructor() {}
 
   ngOnInit(): void {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-
-    this.title = getLocaleMonthNames(
-      'en',
-      FormStyle.Format,
-      TranslationWidth.Wide
-    )[currentMonth];
-
-    const monthlyExpenses =
-      this.transactions?.filter(
-        (t) =>
-          new Date(t.date).getMonth() === currentMonth &&
-          new Date(t.date).getFullYear() === currentDate.getFullYear() &&
-          t.transactionType === TransactionType.Expense
-      ) || [];
-
     // TODO: Group per currency code?
-    this.currencyCode = monthlyExpenses[0]?.currencyCode;
-    this.totalExpense = _.sumBy(monthlyExpenses, 'amount');
+    this.currencyCode = this.transactions
+      ? this.transactions[0].currencyCode
+      : '';
+    this.totalExpense = _.sumBy(this.transactions, 'amount');
 
-    const expensesGroup = _.groupBy(monthlyExpenses, 'category.title');
+    const expensesGroup = _.groupBy(this.transactions, 'category.title');
 
     this.pieData = Object.keys(expensesGroup).map((e) => ({
       name: e,

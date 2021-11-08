@@ -4,12 +4,17 @@
   <div class="w-50 me-1">
     <div class="mb-2">
       <app-overview-card
-        *ngIf="transactions$ | async as transactions"
-        [transactions]="transactions"
+        *ngIf="expenses$ | async as expenses"
+        [title]="title"
+        [transactions]="expenses"
       ></app-overview-card>
     </div>
 
-    <app-trends-card></app-trends-card>
+    <app-trends-card
+      *ngIf="expenses$ | async as expenses"
+      [title]="title"
+      [transactions]="expenses"
+    ></app-trends-card>
   </div>
 
   <div class="w-50 ms-1">
