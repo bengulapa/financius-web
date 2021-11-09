@@ -8,13 +8,13 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as _ from 'lodash';
+import { CurrencyService } from 'src/app/core/services/currency.service';
 import {
   ChartColor,
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
-import { CustomCurrencyPipe } from 'src/app/shared/pipes/custom-currency.pipe';
 
 @Component({
   selector: 'app-category-report',
@@ -36,7 +36,8 @@ export class CategoryReportComponent implements OnChanges {
   chartData: SingleChartData[] = [];
   customColors: ChartColor[] = [];
 
-  constructor() {}
+  constructor(private currencyService: CurrencyService) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.transactions) {
       this.currencyCode = this.transactions?.length
@@ -48,7 +49,10 @@ export class CategoryReportComponent implements OnChanges {
       this.chartData = _.orderBy(
         Object.keys(expensesGroup).map((e) => ({
           name: e,
-          value: _.sumBy(expensesGroup[e], 'amount'),
+          value: this.currencyService.convert(
+            _.sumBy(expensesGroup[e], 'amount'),
+            this.currencyCode
+          ),
         })),
         ['value'],
         ['desc']
@@ -65,7 +69,7 @@ export class CategoryReportComponent implements OnChanges {
   }
 
   formatValue = (value: number): string => {
-    return new CustomCurrencyPipe().transform(value, this.currencyCode);
+    return this.currencyService.format(value, this.currencyCode);
   };
 
   formatPercentage = (value: number): any => {

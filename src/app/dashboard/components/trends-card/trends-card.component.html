@@ -6,5 +6,17 @@
     [results]="chartData"
     [xAxis]="true"
     scheme="forest"
-  ></ngx-charts-line-chart>
+  >
+    <ng-template #tooltipTemplate let-model="model">
+      <div>{{ model.series }} {{ model.name }}</div>
+      <div>{{ model.value | fwCurrency: currencyCode:false }}</div>
+    </ng-template>
+
+    <ng-template #seriesTooltipTemplate let-model="model">
+      <div>
+        {{ model[0].series }} {{ model[0].name }}:
+        {{ model[0].value | fwCurrency: currencyCode:false }}
+      </div>
+    </ng-template>
+  </ngx-charts-line-chart>
 </div>

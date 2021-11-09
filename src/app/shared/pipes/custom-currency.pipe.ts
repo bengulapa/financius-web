@@ -1,25 +1,25 @@
-import { formatCurrency } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import * as data from 'src/assets/data.json';
-import { FinanciusBackup } from '../models/financius.models';
+import { CurrencyService } from 'src/app/core/services/currency.service';
 
 @Pipe({
   name: 'fwCurrency',
 })
 export class CustomCurrencyPipe implements PipeTransform {
-  transform(value: number, currencyCode: string | null): string {
+  constructor(private currencyService: CurrencyService) {}
+
+  transform(
+    value: number,
+    currencyCode: string | null,
+    convert = true
+  ): string {
     if (!currencyCode) {
       return '0';
     }
 
-    const backup: FinanciusBackup = data;
-    const currency = backup.currencies.find((c) => c.code == currencyCode);
+    const balance = convert
+      ? this.currencyService.convert(value, currencyCode)
+      : value;
 
-    if (currency) {
-      const balance = value / Math.pow(10, currency.decimal_count);
-      return formatCurrency(balance, 'en', currency.symbol);
-    } else {
-      return '0';
-    }
+    return balance ? this.currencyService.format(balance, currencyCode) : '0';
   }
 }

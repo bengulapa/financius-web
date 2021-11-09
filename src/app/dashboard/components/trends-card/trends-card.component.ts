@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import * as _ from 'lodash';
+import { CurrencyService } from 'src/app/core/services/currency.service';
 import { MultiChartData } from 'src/app/shared/models/chart.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
@@ -22,8 +23,9 @@ export class TrendsCardComponent implements OnInit {
   transactions!: TransactionsViewModel[] | null;
 
   chartData: MultiChartData[] = [];
+  currencyCode = 'PHP';
 
-  constructor() {}
+  constructor(private currencyService: CurrencyService) {}
 
   ngOnInit(): void {
     const dailyExpenses = _.groupBy(this.transactions, (t) =>
@@ -32,7 +34,10 @@ export class TrendsCardComponent implements OnInit {
 
     const groupedDailyExpenses = Object.keys(dailyExpenses).map((day) => ({
       name: day,
-      value: _.sumBy(dailyExpenses[day], 'amount'),
+      value: this.currencyService.convert(
+        _.sumBy(dailyExpenses[day], 'amount'),
+        this.currencyCode
+      ),
     }));
 
     const date = new Date(),
@@ -42,7 +47,9 @@ export class TrendsCardComponent implements OnInit {
 
     const series = _.range(1, lastDay + 1).map((day) => ({
       name: day.toLocaleString(),
-      value: groupedDailyExpenses[day]?.value || 0,
+      value:
+        groupedDailyExpenses.find((e) => e.name === day.toLocaleString())
+          ?.value || 0,
     }));
 
     this.chartData = [
