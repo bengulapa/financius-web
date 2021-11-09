@@ -1,22 +1,38 @@
 <mat-card>
   <mat-card-title>Category Report</mat-card-title>
-  <mat-card-content #containerRef class="d-flex" style="height: 300px">
-    <h3>{{ title }}</h3>
+  <mat-card-content>
+    <div class="my-3 d-flex align-items-center justify-content-center">
+      <button (click)="periodChange.emit(-1)" mat-icon-button color="accent">
+        <mat-icon>arrow_left</mat-icon>
+      </button>
+      <h3 class="mx-2 mb-0" color="primary">{{ title }}</h3>
+      <button (click)="periodChange.emit(1)" mat-icon-button color="accent">
+        <mat-icon>arrow_right</mat-icon>
+      </button>
+    </div>
 
-    <ngx-charts-advanced-pie-chart
-      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
-      [results]="chartData"
-      [customColors]="customColors"
-      [valueFormatting]="formatValue"
-      [percentageFormatting]="formatPercentage"
-      [animations]="false"
-    >
-      <ng-template #tooltipTemplate let-model="model">
-        <div>
-          {{ model.name }}
-        </div>
-        <div>{{ model.value | fwCurrency: currencyCode }}</div>
-      </ng-template>
-    </ngx-charts-advanced-pie-chart>
+    <ng-container *ngIf="transactions?.length; else empty">
+      <div #containerRef style="height: 300px">
+        <ngx-charts-advanced-pie-chart
+          [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+          [results]="chartData"
+          [customColors]="customColors"
+          [valueFormatting]="formatValue"
+          [percentageFormatting]="formatPercentage"
+          [animations]="false"
+        >
+          <ng-template #tooltipTemplate let-model="model">
+            <div>
+              {{ model.name }}
+            </div>
+            <div>{{ model.value | fwCurrency: currencyCode }}</div>
+          </ng-template>
+        </ngx-charts-advanced-pie-chart>
+      </div>
+    </ng-container>
+
+    <ng-template #empty>
+      <p class="text-center">Nothing to report yet</p>
+    </ng-template>
   </mat-card-content>
 </mat-card>

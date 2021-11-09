@@ -25,30 +25,50 @@ export class ReportsShellComponent implements OnInit {
   expenses$!: Observable<TransactionsViewModel[]>;
 
   title!: string;
+  selectedMonth!: number;
+  selectedYear!: number;
 
   constructor(private transactionsService: TransactionsService) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.transactionsService.getAll();
-
     const currentDate = new Date(),
-      currentMonth = currentDate.getMonth();
+      currentMonth = currentDate.getMonth(),
+      currentYear = currentDate.getFullYear();
 
-    this.title = getLocaleMonthNames(
+    this.selectedMonth = currentMonth;
+    this.selectedYear = currentYear;
+    this.setSelectedPeriod();
+  }
+
+  onPeriodChange(increment: number) {
+    this.selectedMonth += increment;
+
+    if (this.selectedMonth > 11) {
+      this.selectedMonth -= 12;
+      this.selectedYear += 1;
+    } else if (this.selectedMonth < 0) {
+      this.selectedMonth += 12;
+      this.selectedYear -= 1;
+    }
+    this.setSelectedPeriod();
+  }
+
+  private setSelectedPeriod() {
+    this.setTitle();
+
+    this.expenses$ = this.transactionsService.getMonthlyExpenses(
+      this.selectedMonth,
+      this.selectedYear
+    );
+  }
+
+  private setTitle() {
+    const month = getLocaleMonthNames(
       'en',
       FormStyle.Format,
       TranslationWidth.Wide
-    )[currentMonth];
+    )[this.selectedMonth];
 
-    this.expenses$ = this.transactions$.pipe(
-      map((ts) =>
-        ts.filter(
-          (t) =>
-            new Date(t.date).getMonth() === currentMonth &&
-            new Date(t.date).getFullYear() === currentDate.getFullYear() &&
-            t.transactionType === TransactionType.Expense
-        )
-      )
-    );
+    this.title = `${month} ${this.selectedYear}`;
   }
 }

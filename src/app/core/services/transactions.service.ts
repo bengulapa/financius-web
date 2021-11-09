@@ -53,6 +53,23 @@ export class TransactionsService {
     );
   }
 
+  getMonthlyExpenses(
+    month: number,
+    year: number
+  ): Observable<TransactionsViewModel[]> {
+    return of(
+      this.transactions
+        .filter(
+          (t) =>
+            new Date(t.date).getMonth() === month &&
+            new Date(t.date).getFullYear() === year &&
+            t.transaction_type === TransactionType.Expense &&
+            t.include_in_reports
+        )
+        .map((t) => this.mapToViewModel(t))
+    );
+  }
+
   private mapToViewModel(t: Transaction): TransactionsViewModel {
     const tags = this.data.tags;
 
