@@ -2,19 +2,24 @@
 
 <main class="p-3 d-flex">
   <div class="w-50 me-1">
-    <div class="mb-2">
-      <app-overview-card
-        *ngIf="expenses$ | async as expenses"
-        [title]="title"
-        [transactions]="expenses"
-      ></app-overview-card>
-    </div>
+    <mat-card>
+      <mat-card-title>{{ title }}</mat-card-title>
+      <mat-card-content>
+        <div class="mb-4">
+          <app-overview-card
+            *ngIf="expenses$ | async as expenses"
+            [title]="title"
+            [transactions]="expenses"
+          ></app-overview-card>
+        </div>
 
-    <app-trends-card
-      *ngIf="expenses$ | async as expenses"
-      [title]="title"
-      [transactions]="expenses"
-    ></app-trends-card>
+        <app-trends-card
+          *ngIf="expenses$ | async as expenses"
+          [title]="title"
+          [transactions]="expenses"
+        ></app-trends-card>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <div class="w-50 ms-1">
