@@ -25,6 +25,11 @@ const routes: Routes = [
       import('./categories/categories.module').then((m) => m.CategoriesModule),
   },
   {
+    path: 'reports',
+    loadChildren: () =>
+      import('./reports/reports.module').then((m) => m.ReportsModule),
+  },
+  {
     path: 'tags',
     loadChildren: () => import('./tags/tags.module').then((m) => m.TagsModule),
   },

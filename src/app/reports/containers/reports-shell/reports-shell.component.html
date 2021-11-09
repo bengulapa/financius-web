@@ -1,0 +1,13 @@
+<app-main-toolbar></app-main-toolbar>
+
+<main class="p-3">
+  <app-category-report
+    *ngIf="expenses$ | async as expenses; else loading"
+    [transactions]="expenses"
+    [title]="title"
+  ></app-category-report>
+</main>
+
+<ng-template #loading>
+  <mat-progress-bar></mat-progress-bar>
+</ng-template>

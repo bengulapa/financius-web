@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-title>Category Report</mat-card-title>
+  <mat-card-content #containerRef class="d-flex" style="height: 300px">
+    <h3>{{ title }}</h3>
+
+    <ngx-charts-advanced-pie-chart
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      [results]="chartData"
+      [customColors]="customColors"
+      [valueFormatting]="formatValue"
+      [percentageFormatting]="formatPercentage"
+      [animations]="false"
+    >
+      <ng-template #tooltipTemplate let-model="model">
+        <div>
+          {{ model.name }}
+        </div>
+        <div>{{ model.value | fwCurrency: currencyCode }}</div>
+      </ng-template>
+    </ngx-charts-advanced-pie-chart>
+  </mat-card-content>
+</mat-card>
