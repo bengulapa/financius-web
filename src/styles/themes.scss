@@ -1,0 +1,192 @@
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+$primary-palette: (
+  50: #e0f7fa,
+  100: #b3ebf2,
+  200: #80deea,
+  300: #4dd0e1,
+  400: #26c6da,
+  500: #00bcd4,
+  600: #00b6cf,
+  700: #00adc9,
+  800: #00a5c3,
+  900: #0097b9,
+  A100: #e2f9ff,
+  A200: #afeeff,
+  A400: #7ce3ff,
+  A700: #63ddff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$accent-palette: (
+  50: #f9fbe7,
+  100: #f0f5c4,
+  200: #e6ee9c,
+  300: #dce774,
+  400: #d5e157,
+  500: #cddc39,
+  600: #c8d833,
+  700: #c1d32c,
+  800: #bace24,
+  900: #aec517,
+  A100: #fefff7,
+  A200: #f7ffc4,
+  A400: #f0ff91,
+  A700: #ecff78,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$light-primary: mat.define-palette($primary-palette, 500);
+$light-accent: mat.define-palette($accent-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $my-warn,
+    ),
+  )
+);
+
+$dark-primary-palette: (
+  50: #e0f3f4,
+  100: #b3e0e5,
+  200: #80cbd3,
+  300: #4db6c1,
+  400: #26a7b4,
+  500: #0097a7,
+  600: #008f9f,
+  700: #008496,
+  800: #007a8c,
+  900: #00697c,
+  A100: #a9efff,
+  A200: #76e6ff,
+  A400: #43ddff,
+  A700: #2ad8ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$dark-accent-palette: (
+  50: #f5f6e6,
+  100: #e7e9bf,
+  200: #d7da95,
+  300: #c7cb6b,
+  400: #bbbf4b,
+  500: #afb42b,
+  600: #a8ad26,
+  700: #9fa420,
+  800: #969c1a,
+  900: #868c10,
+  A100: #fbffbe,
+  A200: #f8ff8b,
+  A400: #f5ff58,
+  A700: #f4ff3f,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$dark-primary: mat.define-palette($dark-primary-palette, 500);
+$dark-accent: mat.define-palette($dark-accent-palette, A200, A100, A400);
+
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $my-warn,
+    ),
+  )
+);
+
+@include mat.all-component-themes($light-theme);
+
+.dark {
+  @include mat.all-component-themes($dark-theme);
+}
+
+.mat-toolbar a {
+  color: #fff;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.router-link-active {
+  border-bottom: 2px solid mat.get-color-from-palette($light-accent, 500) !important;
+}
+
+.transaction-type-Expense {
+  color: red;
+}
+
+.transaction-type-Income {
+  color: green;
+}
+
+.transaction-type-Transfer {
+  color: gray;
+}

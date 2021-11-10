@@ -1,22 +1,5 @@
-@use "@angular/material" as mat;
 @import url("./bootstrap/bootstrap-reboot.css");
 @import url("./bootstrap/bootstrap-utility.css");
-
-@include mat.core();
-
-$my-primary: mat.define-palette(mat.$indigo-palette, 500);
-$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-$my-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $my-primary,
-      accent: $my-accent,
-    ),
-  )
-);
-
-@include mat.all-component-themes($my-theme);
 
 html,
 body {
@@ -27,26 +10,13 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.mat-toolbar .mat-button {
+  border-radius: 0;
+  margin-right: 0.5rem;
+}
+
 table {
   width: 100%;
-}
-
-.router-link-active {
-  border-bottom: 2px solid red !important;
-}
-
-.total {
-  font-size: 2rem;
-}
-
-.transaction-type-Expense {
-  color: red;
-}
-.transaction-type-Income {
-  color: green;
-}
-.transaction-type-Transfer {
-  color: gray;
 }
 
 .w-30 {
@@ -63,6 +33,10 @@ table {
   padding: 0.1rem 0.25rem;
   border-radius: 2px;
   margin-right: 0.25rem;
+}
+
+.total {
+  font-size: 2rem;
 }
 
 .advanced-pie-legend {
