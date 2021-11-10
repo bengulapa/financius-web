@@ -190,11 +190,9 @@ $light-theme: mat.define-light-theme(
     ),
   )
 );
-@include mat.all-component-themes($light-theme);
 
-.financius-light {
-  @include custom-component-themes($light-theme);
-}
+@include mat.all-component-themes($light-theme);
+@include custom-component-themes($light-theme);
 
 .financius-dark {
   $dark-theme: mat.define-dark-theme(
