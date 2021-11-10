@@ -163,8 +163,25 @@ $dark-theme: mat.define-dark-theme(
 
 @include mat.all-component-themes($light-theme);
 
+$light-background: map-get($light-theme, background);
+$dark-background: map-get($dark-theme, background);
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid mat.get-color-from-palette($light-background, background); /* should match background, can't be transparent */
+}
+::-webkit-scrollbar-track {
+  background-color: #ddd;
+}
+
 .dark {
   @include mat.all-component-themes($dark-theme);
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid mat.get-color-from-palette($dark-background, background); /* should match background, can't be transparent */
+  }
+  ::-webkit-scrollbar-track {
+    background-color: mat.get-color-from-palette($dark-background, background);
+  }
 }
 
 .mat-toolbar a {

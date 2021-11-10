@@ -54,11 +54,9 @@ table {
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  border: 2px solid #fff; /* should match background, can't be transparent */
   background-color: rgba(0, 0, 0, 0.5);
 }
 ::-webkit-scrollbar-track {
   height: 11px;
-  background-color: #ddd;
   border-radius: 8px;
 }
