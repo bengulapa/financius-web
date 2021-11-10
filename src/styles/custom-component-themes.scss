@@ -1,0 +1,29 @@
+@use "~@angular/material" as mat;
+
+@mixin custom-component-themes($theme) {
+  $primary: map-get($theme, "primary");
+  $accent: map-get($theme, "accent");
+  $warn: map-get($theme, "warn");
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $is-dark-theme: map-get($theme, is-dark);
+
+  $background-color: mat.get-color-from-palette($background, background);
+  $color: mat.get-color-from-palette($foreground, text);
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid $background-color; /* should match background, can't be transparent */
+  }
+  ::-webkit-scrollbar-track {
+    background-color: $background-color;
+  }
+
+  .router-link-active {
+    border-bottom: 2px solid mat.get-color-from-palette($accent, 500) !important;
+  }
+
+  .tag {
+    color: mat.get-contrast-color-from-palette($primary, 400);
+    background: #dedede;
+  }
+}

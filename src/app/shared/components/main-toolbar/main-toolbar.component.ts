@@ -13,7 +13,7 @@ import {
 })
 export class MainToolbarComponent implements OnInit {
   get isDarkMode(): boolean {
-    return localStorage.getItem('financius.theme') === 'dark';
+    return localStorage.getItem('financius.theme') === 'financius-dark';
   }
 
   constructor(private renderer: Renderer2) {}
@@ -26,15 +26,17 @@ export class MainToolbarComponent implements OnInit {
 
   toggleDarkMode() {
     if (this.isDarkMode) {
-      this.renderer.removeClass(document.body, 'dark');
-      localStorage.setItem('financius.theme', 'light');
+      this.renderer.removeClass(document.body, 'financius-dark');
+      this.renderer.addClass(document.body, 'financius-light');
+      localStorage.setItem('financius.theme', 'financius-light');
     } else {
       this.setDarkMode();
     }
   }
 
   private setDarkMode() {
-    this.renderer.addClass(document.body, 'dark');
-    localStorage.setItem('financius.theme', 'dark');
+    this.renderer.addClass(document.body, 'financius-dark');
+    this.renderer.removeClass(document.body, 'financius-light');
+    localStorage.setItem('financius.theme', 'financius-dark');
   }
 }
