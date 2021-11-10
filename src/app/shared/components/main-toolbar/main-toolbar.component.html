@@ -23,18 +23,6 @@
         >Transactions</a
       >
       <a
-        [routerLink]="['/categories']"
-        routerLinkActive="router-link-active"
-        mat-button
-        >Categories</a
-      >
-      <a
-        [routerLink]="['/tags']"
-        routerLinkActive="router-link-active"
-        mat-button
-        >Tags</a
-      >
-      <a
         [routerLink]="['/reports']"
         routerLinkActive="router-link-active"
         mat-button
@@ -42,14 +30,30 @@
       >
     </span>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>settings</mat-icon>
+    <button mat-icon-button [matMenuTriggerFor]="menu" color="accent">
+      <mat-icon>more_vert</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu">
       <button (click)="toggleDarkMode()" mat-menu-item>
         <mat-icon>{{ isDarkMode ? "brightness_5" : "bedtime" }}</mat-icon>
         <span>{{ isDarkMode ? "Light" : "Dark" }} Mode</span>
+      </button>
+      <button routerLink="/categories" mat-menu-item>
+        <mat-icon>bookmarks</mat-icon>
+        <span>Categories</span>
+      </button>
+      <button routerLink="/tags" mat-menu-item>
+        <mat-icon>label</mat-icon>
+        <span>Tags</span>
+      </button>
+      <button routerLink="/settings" mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+      <button routerLink="/about" mat-menu-item>
+        <mat-icon>info</mat-icon>
+        <span>About</span>
       </button>
     </mat-menu>
   </nav>
