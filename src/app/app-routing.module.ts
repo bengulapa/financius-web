@@ -33,6 +33,11 @@ const routes: Routes = [
     path: 'tags',
     loadChildren: () => import('./tags/tags.module').then((m) => m.TagsModule),
   },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('./settings/settings.module').then((m) => m.SettingsModule),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 
