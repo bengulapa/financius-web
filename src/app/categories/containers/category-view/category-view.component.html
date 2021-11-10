@@ -1,6 +1,6 @@
 <app-main-toolbar></app-main-toolbar>
 
-<main class="p-3">
+<section class="container">
   <ng-container *ngIf="category$ | async as category; else loading">
     <h2><a routerLink="/categories">Categories</a> / {{ category.title }}</h2>
 
@@ -25,7 +25,7 @@
       </section>
     </div>
   </ng-container>
-</main>
+</section>
 
 <ng-template #loading>
   <mat-progress-bar></mat-progress-bar>

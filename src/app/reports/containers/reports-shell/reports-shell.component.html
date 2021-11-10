@@ -1,13 +1,13 @@
 <app-main-toolbar></app-main-toolbar>
 
-<main class="p-3">
+<section class="container">
   <app-category-report
     *ngIf="expenses$ | async as expenses; else loading"
     [transactions]="expenses"
     [title]="title"
     (periodChange)="onPeriodChange($event)"
   ></app-category-report>
-</main>
+</section>
 
 <ng-template #loading>
   <mat-progress-bar></mat-progress-bar>

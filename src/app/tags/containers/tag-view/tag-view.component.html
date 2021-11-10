@@ -1,6 +1,6 @@
 <app-main-toolbar></app-main-toolbar>
 
-<main class="p-3">
+<section class="container">
   <ng-container *ngIf="tag$ | async as tag; else loading">
     <h2><a routerLink="/tags">Tags</a> / {{ tag.title }}</h2>
 
@@ -31,7 +31,7 @@
       </section>
     </div>
   </ng-container>
-</main>
+</section>
 
 <ng-template #loading>
   <mat-progress-bar></mat-progress-bar>
