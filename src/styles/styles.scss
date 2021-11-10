@@ -10,13 +10,20 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.mat-toolbar .mat-button {
-  border-radius: 0;
-  margin-right: 0.5rem;
+* {
+  &:active,
+  :focus {
+    outline: none !important; // 1
+  }
 }
 
 table {
   width: 100%;
+}
+
+.mat-toolbar .mat-button {
+  border-radius: 0;
+  margin-right: 0.5rem;
 }
 
 .w-30 {
