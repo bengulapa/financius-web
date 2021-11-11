@@ -1,7 +1,20 @@
 <app-main-toolbar></app-main-toolbar>
+<ng-template #loading>
+  <mat-progress-bar></mat-progress-bar>
+</ng-template>
 
 <section class="container">
-  <h2>Tags</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Tags</h2>
+    <button mat-mini-fab (click)="onAddClick()" color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 
-  <app-tags-table [data]="tags$ | async"></app-tags-table>
+  <app-tags-table
+    *ngIf="tags$ | async as tags"
+    [data]="tags"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-tags-table>
 </section>

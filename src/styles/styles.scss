@@ -82,3 +82,9 @@ table {
   height: 11px;
   border-radius: 8px;
 }
+
+.fw-dialog {
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+}

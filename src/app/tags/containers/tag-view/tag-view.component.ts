@@ -29,7 +29,7 @@ export class TagViewComponent implements OnInit {
         return;
       }
 
-      this.tag$ = this.service.get(id);
+      this.tag$ = this.service.getById(id);
       this.transactions$ = this.service.getTransactions(id);
     });
   }

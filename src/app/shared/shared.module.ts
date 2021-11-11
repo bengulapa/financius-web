@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
@@ -20,6 +21,7 @@ import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
     CommonModule,
     MaterialModule,
     NgxChartsModule,
+    ReactiveFormsModule,
 
     MainToolbarComponent,
     TransactionsTableComponent,

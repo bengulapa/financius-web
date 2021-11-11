@@ -1,0 +1,28 @@
+<div class="fw-dialog">
+  <h2 mat-dialog-title>{{ isEditMode ? "Edit" : "Add" }} Tag</h2>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Tag</mat-label>
+      <input matInput formControlName="title" required />
+      <mat-error *ngIf="form.get('title')?.hasError('required')"
+        >Tag is required</mat-error
+      >
+      <mat-error *ngIf="form.get('title')?.hasError('maxlength')"
+        >Tag is too long</mat-error
+      >
+    </mat-form-field>
+  </form>
+
+  <mat-dialog-actions>
+    <button mat-stroked-button [mat-dialog-close]="false">CANCEL</button>
+    <button
+      [disabled]="!form.valid"
+      mat-flat-button
+      color="accent"
+      [mat-dialog-close]="form.value"
+    >
+      {{ isEditMode ? "UPDATE" : "SAVE" }}
+    </button>
+  </mat-dialog-actions>
+</div>
