@@ -228,3 +228,11 @@ $light-theme: mat.define-light-theme(
 .transaction-type-transfer {
   color: $color-neutral;
 }
+
+.toast-success {
+  background-color: $color-positive;
+}
+
+.toast-error {
+  background-color: $color-negative;
+}
