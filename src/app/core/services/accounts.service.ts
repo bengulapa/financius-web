@@ -12,13 +12,13 @@ import { TransactionsService } from './transactions.service';
 @Injectable({ providedIn: 'root' })
 export class AccountsService extends EntityCollectionServiceBase<Account> {
   constructor(
-    private transactionsService: TransactionsService,
-    factory: EntityCollectionServiceElementsFactory
+    factory: EntityCollectionServiceElementsFactory,
+    private transactionsService: TransactionsService
   ) {
     super('Account', factory);
   }
 
-  getCategories() {
+  getAccounts() {
     return this.entities$.pipe(
       map((e) => e.filter((c) => c.modelState === ModelState.Normal))
     );
