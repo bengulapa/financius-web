@@ -7,6 +7,7 @@ import {
   Account,
   Category,
   Currency,
+  Tag,
 } from 'src/app/shared/models/entities.models';
 import {
   FinanciusBackup,
@@ -63,6 +64,8 @@ export class SettingsShellComponent implements OnInit {
     this.importCategories(backup);
 
     this.importCurrencies(backup);
+
+    this.importTags(backup);
   }
 
   private importAccounts(backup: FinanciusBackup) {
@@ -135,7 +138,7 @@ export class SettingsShellComponent implements OnInit {
         this.progressText$.next('');
         this.progressLogs$.next([
           ...this.progressLogs$.value,
-          `${backup.categories.length} categories imported!`,
+          `${backup.categories.length} categories imported`,
         ]);
         this.loading$.next(false);
       });
@@ -172,6 +175,37 @@ export class SettingsShellComponent implements OnInit {
         this.progressLogs$.next([
           ...this.progressLogs$.value,
           `${backup.currencies.length} currencies imported`,
+        ]);
+        this.loading$.next(false);
+      });
+  }
+
+  private importTags(backup: FinanciusBackup) {
+    this.progressText$.next(`Importing tags...`);
+
+    this.dbService
+      .clear(storeNames.Tags)
+      .pipe(
+        switchMap(() => {
+          return this.dbService.bulkAdd(
+            storeNames.Tags,
+            backup.tags.map(
+              (t) =>
+                <Tag>{
+                  id: t.id,
+                  modelState: t.model_state,
+                  syncState: t.sync_state,
+                  name: t.title,
+                }
+            )
+          );
+        })
+      )
+      .subscribe(() => {
+        this.progressText$.next('');
+        this.progressLogs$.next([
+          ...this.progressLogs$.value,
+          `${backup.tags.length} tags imported`,
         ]);
         this.loading$.next(false);
       });
