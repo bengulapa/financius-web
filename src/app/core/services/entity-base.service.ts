@@ -6,9 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ModelState, SyncState } from 'src/app/shared/models/financius.enums';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class EntityBaseService<TEntity>
   implements EntityCollectionDataService<TEntity>
 {
