@@ -35,7 +35,7 @@ export const dbConfig: DBConfig = {
           keypath: 'currency',
           options: { unique: false },
         },
-        { name: 'title', keypath: 'title', options: { unique: false } },
+        { name: 'name', keypath: 'name', options: { unique: false } },
         { name: 'note', keypath: 'note', options: { unique: false } },
         { name: 'balance', keypath: 'balance', options: { unique: false } },
         {
@@ -98,7 +98,7 @@ export const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
-        { name: 'title', keypath: 'title', options: { unique: true } },
+        { name: 'name', keypath: 'name', options: { unique: true } },
       ],
     },
     {
