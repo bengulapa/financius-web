@@ -230,9 +230,9 @@ $light-theme: mat.define-light-theme(
 }
 
 .toast-success {
-  background-color: $color-positive;
+  background-color: $color-positive !important;
 }
 
 .toast-error {
-  background-color: $color-negative;
+  background-color: $color-negative !important;
 }
