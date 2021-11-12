@@ -3,7 +3,11 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { storeNames } from 'src/app/core/store/indexed-db-config';
-import { Account, Currency } from 'src/app/shared/models/entities.models';
+import {
+  Account,
+  Category,
+  Currency,
+} from 'src/app/shared/models/entities.models';
 import {
   FinanciusBackup,
   FinanciusCurrency,
@@ -18,7 +22,8 @@ export class SettingsShellComponent implements OnInit {
   fileName?: string;
   requiredFileType!: string;
   loading$ = new BehaviorSubject<boolean>(false);
-  progressText = new BehaviorSubject<string>('');
+  progressText$ = new BehaviorSubject<string>('');
+  progressLogs$ = new BehaviorSubject<string[]>([]);
 
   constructor(private dbService: NgxIndexedDBService) {}
 
@@ -53,9 +58,13 @@ export class SettingsShellComponent implements OnInit {
   private startImport(backup: FinanciusBackup) {
     this.loading$.next(true);
 
-    // Import account
+    this.importAccounts(backup);
 
-    this.progressText.next(`Importing accounts...`);
+    this.importCategories(backup);
+  }
+
+  private importAccounts(backup: FinanciusBackup) {
+    this.progressText$.next(`Importing accounts...`);
 
     this.dbService
       .clear(storeNames.Accounts)
@@ -87,7 +96,45 @@ export class SettingsShellComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.progressText.next(`${backup.accounts.length} accounts imported!`);
+        this.progressText$.next('');
+        this.progressLogs$.next([
+          `${backup.accounts.length} accounts imported`,
+        ]);
+        this.loading$.next(false);
+      });
+  }
+
+  private importCategories(backup: FinanciusBackup) {
+    this.loading$.next(true);
+    this.progressText$.next(`Importing categories...`);
+
+    this.dbService
+      .clear(storeNames.Categories)
+      .pipe(
+        switchMap(() => {
+          return this.dbService.bulkAdd(
+            storeNames.Categories,
+            backup.categories.map(
+              (a) =>
+                <Category>{
+                  id: a.id,
+                  modelState: a.model_state,
+                  syncState: a.sync_state,
+                  name: a.title,
+                  color: a.color,
+                  transactionType: a.transaction_type,
+                  sortOrder: a.sort_order,
+                }
+            )
+          );
+        })
+      )
+      .subscribe(() => {
+        this.progressText$.next('');
+        this.progressLogs$.next([
+          `${backup.categories.length} categories imported!`,
+          ...this.progressLogs$.value,
+        ]);
         this.loading$.next(false);
       });
   }

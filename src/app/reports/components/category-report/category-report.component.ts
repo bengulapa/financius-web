@@ -60,7 +60,7 @@ export class CategoryReportComponent implements OnChanges {
       this.customColors = Object.keys(expensesGroup).map((e) => ({
         name: e,
         value: new ColorHexPipe().transform(
-          this.transactions?.find((t) => t.category?.title === e)?.category
+          this.transactions?.find((t) => t.category?.name === e)?.category
             ?.color
         ),
       }));

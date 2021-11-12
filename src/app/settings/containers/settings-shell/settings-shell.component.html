@@ -30,7 +30,11 @@
       </div>
 
       <div>
-        {{ progressText | async }}
+        {{ progressText$ | async }}
+
+        <ul *ngFor="let log of progressLogs$ | async">
+          <li>{{ log }}</li>
+        </ul>
 
         <mat-spinner
           *ngIf="loading$ | async"

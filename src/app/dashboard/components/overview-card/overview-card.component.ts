@@ -49,7 +49,7 @@ export class OverviewCardComponent implements OnInit {
     this.customColors = Object.keys(expensesGroup).map((e) => ({
       name: e,
       value: new ColorHexPipe().transform(
-        this.transactions?.find((t) => t.category?.title === e)?.category?.color
+        this.transactions?.find((t) => t.category?.name === e)?.category?.color
       ),
     }));
   }

@@ -21,7 +21,7 @@ export interface Currency extends BaseModel {
 }
 
 export interface Category extends BaseModel {
-  title: string;
+  name: string;
   color: number;
   transactionType: TransactionType;
   sortOrder: number;
