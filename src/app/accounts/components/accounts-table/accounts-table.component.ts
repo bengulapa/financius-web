@@ -1,9 +1,9 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,7 +17,7 @@ import { Account } from 'src/app/shared/models/entities.models';
   styleUrls: ['./accounts-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountsTableComponent implements OnInit, AfterViewInit {
+export class AccountsTableComponent implements OnChanges {
   @Input()
   data: Account[] | null = [];
 
@@ -26,7 +26,7 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns = [
     'name',
-    'currencyCode',
+    'currency',
     'balance',
     'note',
     'includeInTotals',
@@ -35,13 +35,12 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.data || []);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data?.currentValue) {
+      this.dataSource = new MatTableDataSource(this.data || []);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {

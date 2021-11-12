@@ -32,7 +32,7 @@ export interface Tag extends BaseModel {
 }
 
 export interface Account extends BaseModel {
-  currencyCode: string;
+  currency: Currency;
   name: string;
   note: string;
   balance: number;

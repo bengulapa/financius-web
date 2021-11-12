@@ -1,5 +1,13 @@
 import { DBConfig } from 'ngx-indexed-db';
 
+export const storeNames = {
+  Accounts: 'accounts',
+  Categories: 'categories',
+  Currencies: 'currencies',
+  Tags: 'tags',
+  Transactions: 'transactions',
+};
+
 const baseObjectStoreSchema = [
   {
     name: 'modelState',
@@ -18,13 +26,13 @@ export const dbConfig: DBConfig = {
   version: 1,
   objectStoresMeta: [
     {
-      store: 'accounts',
+      store: storeNames.Accounts,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
         {
-          name: 'currencyCode',
-          keypath: 'currencyCode',
+          name: 'currency',
+          keypath: 'currency',
           options: { unique: false },
         },
         { name: 'title', keypath: 'title', options: { unique: true } },
@@ -38,7 +46,7 @@ export const dbConfig: DBConfig = {
       ],
     },
     {
-      store: 'categories',
+      store: storeNames.Categories,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
@@ -57,7 +65,7 @@ export const dbConfig: DBConfig = {
       ],
     },
     {
-      store: 'currencies',
+      store: storeNames.Currencies,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
@@ -86,7 +94,7 @@ export const dbConfig: DBConfig = {
       ],
     },
     {
-      store: 'tags',
+      store: storeNames.Tags,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
@@ -94,7 +102,7 @@ export const dbConfig: DBConfig = {
       ],
     },
     {
-      store: 'transactions',
+      store: storeNames.Transactions,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
