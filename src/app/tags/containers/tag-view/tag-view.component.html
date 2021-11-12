@@ -1,7 +1,13 @@
 <app-main-toolbar></app-main-toolbar>
 
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
 <section class="container">
-  <ng-container *ngIf="tag$ | async as tag; else loading">
+  <ng-container *ngIf="tag$ | async as tag">
     <h2><a routerLink="/tags">Tags</a> / {{ tag.title }}</h2>
 
     <div class="d-flex">
@@ -32,7 +38,3 @@
     </div>
   </ng-container>
 </section>
-
-<ng-template #loading>
-  <mat-progress-bar></mat-progress-bar>
-</ng-template>

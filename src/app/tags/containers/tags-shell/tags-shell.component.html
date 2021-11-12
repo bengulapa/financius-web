@@ -1,7 +1,10 @@
 <app-main-toolbar></app-main-toolbar>
-<ng-template #loading>
-  <mat-progress-bar></mat-progress-bar>
-</ng-template>
+
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
 
 <section class="container">
   <div class="d-flex justify-content-between align-items-center">
@@ -12,8 +15,7 @@
   </div>
 
   <app-tags-table
-    *ngIf="tags$ | async as tags"
-    [data]="tags"
+    [data]="tags$ | async"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
   ></app-tags-table>

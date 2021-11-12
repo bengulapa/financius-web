@@ -1,11 +1,11 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
-  OnInit,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,7 +19,7 @@ import { Tag } from 'src/app/shared/models/financius.models';
   styleUrls: ['./tags-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TagsTableComponent implements OnInit, AfterViewInit {
+export class TagsTableComponent implements OnChanges {
   @Input()
   data: Tag[] | null = [];
 
@@ -36,14 +36,12 @@ export class TagsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.data || []);
-    console.log(this.data);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data?.currentValue) {
+      this.dataSource = new MatTableDataSource(this.data || []);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {

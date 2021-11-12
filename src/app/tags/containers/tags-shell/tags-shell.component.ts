@@ -14,7 +14,8 @@ import { TagFormDialogComponent } from '../tag-form-dialog/tag-form-dialog.compo
   styleUrls: ['./tags-shell.component.scss'],
 })
 export class TagsShellComponent implements OnInit {
-  tags$!: Observable<Tag[]>;
+  tags$?: Observable<Tag[]>;
+  loading$?: Observable<boolean>;
 
   constructor(
     private service: TagsService,
@@ -23,11 +24,9 @@ export class TagsShellComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadTags();
-  }
-
-  private loadTags() {
-    this.tags$ = this.service.getAll();
+    this.tags$ = this.service.entities$;
+    this.loading$ = this.service.loading$;
+    this.service.getAll();
   }
 
   onAddClick() {
@@ -41,14 +40,12 @@ export class TagsShellComponent implements OnInit {
       .pipe(
         switchMap((dialogData: Partial<Tag>) => {
           return this.service.add({
-            title: dialogData.title,
+            title: dialogData.title!,
             id: Guid.newGuid(),
           });
         })
       )
-      .subscribe(() => {
-        this.loadTags();
-      });
+      .subscribe();
   }
 
   onEdit(tag: Partial<Tag>) {
@@ -66,14 +63,11 @@ export class TagsShellComponent implements OnInit {
           return this.service.update(dialogData);
         })
       )
-      .subscribe(() => {
-        this.loadTags();
-      });
+      .subscribe();
   }
 
   onDelete(id: string) {
     this.service.delete(id).subscribe(() => {
-      this.loadTags();
       this.notify.success('Tag has been deleted');
     });
   }

@@ -7,8 +7,8 @@ import {
 
 export interface BaseModel {
   id: string;
-  model_state: ModelState;
-  sync_state: SyncState;
+  model_state?: ModelState;
+  sync_state?: SyncState;
 }
 
 export interface Currency extends BaseModel {

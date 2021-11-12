@@ -12,7 +12,8 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 })
 export class TagViewComponent implements OnInit {
   transactions$!: Observable<TransactionsViewModel[]>;
-  tag$!: Observable<Tag | null>;
+  tag$?: Observable<Tag>;
+  loading$?: Observable<boolean>;
 
   constructor(
     private service: TagsService,
@@ -29,7 +30,8 @@ export class TagViewComponent implements OnInit {
         return;
       }
 
-      this.tag$ = this.service.getById(id);
+      this.loading$ = this.service.loading$;
+      this.tag$ = this.service.getByKey(id);
       this.transactions$ = this.service.getTransactions(id);
     });
   }

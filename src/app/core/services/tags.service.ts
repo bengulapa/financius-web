@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable, of } from 'rxjs';
+import {
+  EntityCollectionServiceBase,
+  EntityCollectionServiceElementsFactory,
+} from '@ngrx/data';
+import { Observable } from 'rxjs';
 import { ModelState } from 'src/app/shared/models/financius.enums';
 import { FinanciusBackup, Tag } from 'src/app/shared/models/financius.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 import * as data from 'src/assets/data.json';
-import { sortByName } from '../utilities/sort.helpers';
-import { EntityBaseService } from './entity-base.service';
 import { TransactionsService } from './transactions.service';
 
 @Injectable({ providedIn: 'root' })
-export class TagsService extends EntityBaseService<Tag> {
-  readonly storeName = 'tags';
-
+export class TagsService extends EntityCollectionServiceBase<Tag> {
   data: FinanciusBackup = data;
   tags: Tag[] = this.data.tags.filter(
     (c) => c.model_state === ModelState.Normal
@@ -20,9 +19,9 @@ export class TagsService extends EntityBaseService<Tag> {
 
   constructor(
     private transactionsService: TransactionsService,
-    dbService: NgxIndexedDBService
+    factory: EntityCollectionServiceElementsFactory
   ) {
-    super(dbService);
+    super('Tag', factory);
   }
 
   getTransactions(tagId: string): Observable<TransactionsViewModel[]> {
