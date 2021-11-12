@@ -39,7 +39,7 @@ export class OverviewCardComponent implements OnInit {
     this.currencyCode = 'PHP';
     this.totalExpense = _.sumBy(this.transactions, 'amount');
 
-    const expensesGroup = _.groupBy(this.transactions, 'category.title');
+    const expensesGroup = _.groupBy(this.transactions, 'category.name');
 
     this.pieData = Object.keys(expensesGroup).map((e) => ({
       name: e,

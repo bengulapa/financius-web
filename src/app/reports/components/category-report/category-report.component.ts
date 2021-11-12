@@ -14,7 +14,6 @@ import {
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
 @Component({
@@ -43,15 +42,15 @@ export class CategoryReportComponent implements OnChanges {
     if (changes.transactions?.currentValue) {
       this.currencyCode = 'PHP';
 
-      const expensesGroup = _.groupBy(this.transactions, 'category.title');
+      const expensesGroup = _.groupBy(this.transactions, 'category.name');
 
       this.chartData = _.orderBy(
         Object.keys(expensesGroup).map((e) => ({
           name: e,
-          value: this.currencyService.convert(
-            _.sumBy(expensesGroup[e], 'amount'),
-            this.currencyCode
-          ),
+          value: _.sumBy(expensesGroup[e], 'amount'),
+          extra: {
+            symbol: 'P',
+          },
         })),
         ['value'],
         ['desc']

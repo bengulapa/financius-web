@@ -35,10 +35,7 @@ export class TrendsCardComponent implements OnInit {
 
     const groupedDailyExpenses = Object.keys(dailyExpenses).map((day) => ({
       name: day,
-      value: this.currencyService.convert(
-        _.sumBy(dailyExpenses[day], 'amount'),
-        this.currencyCode
-      ),
+      value: _.sumBy(dailyExpenses[day], 'amount'),
     }));
 
     const date = new Date(),
@@ -51,6 +48,7 @@ export class TrendsCardComponent implements OnInit {
       value:
         groupedDailyExpenses.find((e) => e.name === day.toLocaleString())
           ?.value || 0,
+      extra: { symbol: 'P' },
     }));
 
     this.chartData = [
