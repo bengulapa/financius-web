@@ -61,6 +61,8 @@ export class SettingsShellComponent implements OnInit {
     this.importAccounts(backup);
 
     this.importCategories(backup);
+
+    this.importCurrencies(backup);
   }
 
   private importAccounts(backup: FinanciusBackup) {
@@ -132,8 +134,44 @@ export class SettingsShellComponent implements OnInit {
       .subscribe(() => {
         this.progressText$.next('');
         this.progressLogs$.next([
-          `${backup.categories.length} categories imported!`,
           ...this.progressLogs$.value,
+          `${backup.categories.length} categories imported!`,
+        ]);
+        this.loading$.next(false);
+      });
+  }
+
+  private importCurrencies(backup: FinanciusBackup) {
+    this.progressText$.next(`Importing currencies...`);
+
+    this.dbService
+      .clear(storeNames.Currencies)
+      .pipe(
+        switchMap(() => {
+          return this.dbService.bulkAdd(
+            storeNames.Currencies,
+            backup.currencies.map(
+              (c) =>
+                <Currency>{
+                  id: c.id,
+                  modelState: c.model_state,
+                  syncState: c.sync_state,
+                  code: c.code,
+                  symbol: c.symbol,
+                  symbolPosition: c.symbol_position,
+                  decimalCount: c.decimal_count,
+                  decimalSeparator: c.decimal_separator,
+                  groupSeparator: c.group_separator,
+                }
+            )
+          );
+        })
+      )
+      .subscribe(() => {
+        this.progressText$.next('');
+        this.progressLogs$.next([
+          ...this.progressLogs$.value,
+          `${backup.currencies.length} currencies imported`,
         ]);
         this.loading$.next(false);
       });
