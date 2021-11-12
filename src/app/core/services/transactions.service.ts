@@ -15,15 +15,17 @@ import { Transaction } from 'src/app/shared/models/entities.models';
 @Injectable({ providedIn: 'root' })
 export class TransactionsService extends EntityCollectionServiceBase<Transaction> {
   get transactions$(): Observable<Transaction[]> {
-    return this.entities$.pipe(
-      map((e) =>
-        e.filter(
-          (t) =>
-            t.transactionState === TransactionState.Confirmed &&
-            t.modelState === ModelState.Normal
+    return super
+      .getAll()
+      .pipe(
+        map((e) =>
+          e.filter(
+            (t) =>
+              t.transactionState === TransactionState.Confirmed &&
+              t.modelState === ModelState.Normal
+          )
         )
-      )
-    );
+      );
   }
 
   constructor(factory: EntityCollectionServiceElementsFactory) {

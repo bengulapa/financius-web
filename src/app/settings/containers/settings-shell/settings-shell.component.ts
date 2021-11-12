@@ -227,25 +227,33 @@ export class SettingsShellComponent implements OnInit {
         switchMap(() => {
           return this.dbService.bulkAdd(
             storeNames.Transactions,
-            backup.transactions.map(
-              (t) =>
-                <Transaction>{
-                  id: t.id,
-                  modelState: t.model_state,
-                  syncState: t.sync_state,
-                  accountFrom: this.getAccount(t.account_from_id, backup),
-                  accountTo: this.getAccount(t.account_to_id, backup),
-                  category: this.getCategory(t.category_id, backup.categories),
-                  tags: this.getTags(t.tag_ids, backup.tags),
-                  date: t.date,
-                  amount: t.amount,
-                  exchangeRate: t.exchange_rate,
-                  note: t.note,
-                  transactionState: t.transaction_state,
-                  transactionType: t.transaction_type,
-                  includeInReports: t.include_in_reports,
-                }
-            )
+            backup.transactions.map((t) => {
+              const accountFrom = this.getAccount(t.account_from_id, backup);
+              const accountTo = this.getAccount(t.account_to_id, backup);
+              const currency = accountFrom?.currency || accountTo?.currency;
+
+              return <Transaction>{
+                id: t.id,
+                modelState: t.model_state,
+                syncState: t.sync_state,
+                accountFrom,
+                accountTo,
+                category: this.getCategory(t.category_id, backup.categories),
+                tags: this.getTags(t.tag_ids, backup.tags),
+                date: t.date,
+                amount: this.convert(
+                  t.amount,
+                  currency?.code || null,
+                  backup.currencies
+                ),
+                currency,
+                exchangeRate: t.exchange_rate,
+                note: t.note,
+                transactionState: t.transaction_state,
+                transactionType: t.transaction_type,
+                includeInReports: t.include_in_reports,
+              };
+            })
           );
         })
       )
@@ -262,7 +270,7 @@ export class SettingsShellComponent implements OnInit {
   // Financius exports amount without decimal, this converts it back based on the decimal_count property
   private convert(
     value: number,
-    code: string,
+    code: string | null,
     currencies: FinanciusCurrency[]
   ): number {
     if (!code) {

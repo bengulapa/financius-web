@@ -117,6 +117,11 @@ export const dbConfig: DBConfig = {
           options: { unique: false },
         },
         {
+          name: 'currency',
+          keypath: 'cacurrencytegory',
+          options: { unique: false },
+        },
+        {
           name: 'category',
           keypath: 'category',
           options: { unique: false },

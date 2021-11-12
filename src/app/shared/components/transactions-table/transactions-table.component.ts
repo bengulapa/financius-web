@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,7 +18,7 @@ import { Transaction } from '../../models/entities.models';
   styleUrls: ['./transactions-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsTableComponent implements OnInit {
+export class TransactionsTableComponent implements OnChanges {
   @Input()
   data?: Transaction[] | null;
 
@@ -31,10 +32,12 @@ export class TransactionsTableComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.data || []);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data?.currentValue) {
+      this.dataSource = new MatTableDataSource(this.data || []);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {

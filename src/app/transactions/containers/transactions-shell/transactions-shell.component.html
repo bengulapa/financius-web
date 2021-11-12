@@ -1,5 +1,11 @@
 <app-main-toolbar></app-main-toolbar>
 
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
 <section class="container">
   <h2>Transactions</h2>
 

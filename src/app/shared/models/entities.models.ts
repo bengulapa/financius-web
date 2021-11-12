@@ -43,6 +43,7 @@ export interface Transaction extends BaseModel {
   accountFrom?: Account;
   accountTo?: Account;
   category: Category;
+  currency: Currency;
   tags: Tag[];
   date: number;
   amount: number;
