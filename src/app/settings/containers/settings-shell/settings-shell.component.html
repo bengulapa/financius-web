@@ -1,3 +1,43 @@
 <app-main-toolbar></app-main-toolbar>
 
-<section class="p-3"></section>
+<section class="p-3">
+  <h2>Settings</h2>
+
+  <mat-card>
+    <mat-card-title>Your Data</mat-card-title>
+    <mat-card-content>
+      <h3>Backup</h3>
+
+      <input
+        type="file"
+        class="d-none"
+        [accept]="requiredFileType"
+        (change)="onFileSelected($event)"
+        #fileUpload
+      />
+      <div class="file-upload mx-auto">
+        <button
+          mat-flat-button
+          color="primary"
+          class="upload-btn"
+          (click)="fileUpload.click()"
+        >
+          IMPORT FINANCIUS BACKUP
+          <mat-icon>cloud_upload</mat-icon>
+        </button>
+
+        {{ fileName }}
+      </div>
+
+      <div>
+        {{ progressText | async }}
+
+        <mat-spinner
+          *ngIf="loading$ | async"
+          color="accent"
+          mode="indeterminate"
+        ></mat-spinner>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>
