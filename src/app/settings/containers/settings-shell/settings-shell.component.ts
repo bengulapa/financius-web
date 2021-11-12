@@ -8,10 +8,13 @@ import {
   Category,
   Currency,
   Tag,
+  Transaction,
 } from 'src/app/shared/models/entities.models';
 import {
   FinanciusBackup,
+  FinanciusCategory,
   FinanciusCurrency,
+  FinanciusTag,
 } from 'src/app/shared/models/financius.models';
 
 @Component({
@@ -33,7 +36,6 @@ export class SettingsShellComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    console.log(event);
     const file: File = event?.target?.files[0];
 
     if (!file) {
@@ -66,6 +68,8 @@ export class SettingsShellComponent implements OnInit {
     this.importCurrencies(backup);
 
     this.importTags(backup);
+
+    this.importTransactions(backup);
   }
 
   private importAccounts(backup: FinanciusBackup) {
@@ -83,7 +87,7 @@ export class SettingsShellComponent implements OnInit {
                   id: a.id,
                   modelState: a.model_state,
                   syncState: a.sync_state,
-                  currency: this.mapCurrency(
+                  currency: this.getCurrency(
                     a.currency_code,
                     backup.currencies
                   ),
@@ -145,6 +149,7 @@ export class SettingsShellComponent implements OnInit {
   }
 
   private importCurrencies(backup: FinanciusBackup) {
+    this.loading$.next(true);
     this.progressText$.next(`Importing currencies...`);
 
     this.dbService
@@ -181,6 +186,7 @@ export class SettingsShellComponent implements OnInit {
   }
 
   private importTags(backup: FinanciusBackup) {
+    this.loading$.next(true);
     this.progressText$.next(`Importing tags...`);
 
     this.dbService
@@ -211,6 +217,48 @@ export class SettingsShellComponent implements OnInit {
       });
   }
 
+  private importTransactions(backup: FinanciusBackup) {
+    this.loading$.next(true);
+    this.progressText$.next(`Importing transactions...`);
+
+    this.dbService
+      .clear(storeNames.Transactions)
+      .pipe(
+        switchMap(() => {
+          return this.dbService.bulkAdd(
+            storeNames.Transactions,
+            backup.transactions.map(
+              (t) =>
+                <Transaction>{
+                  id: t.id,
+                  modelState: t.model_state,
+                  syncState: t.sync_state,
+                  accountFrom: this.getAccount(t.account_from_id, backup),
+                  accountTo: this.getAccount(t.account_to_id, backup),
+                  category: this.getCategory(t.category_id, backup.categories),
+                  tags: this.getTags(t.tag_ids, backup.tags),
+                  date: t.date,
+                  amount: t.amount,
+                  exchangeRate: t.exchange_rate,
+                  note: t.note,
+                  transactionState: t.transaction_state,
+                  transactionType: t.transaction_type,
+                  includeInReports: t.include_in_reports,
+                }
+            )
+          );
+        })
+      )
+      .subscribe(() => {
+        this.progressText$.next('');
+        this.progressLogs$.next([
+          ...this.progressLogs$.value,
+          `${backup.transactions.length} transactions imported`,
+        ]);
+        this.loading$.next(false);
+      });
+  }
+
   // Financius exports amount without decimal, this converts it back based on the decimal_count property
   private convert(
     value: number,
@@ -226,7 +274,26 @@ export class SettingsShellComponent implements OnInit {
     return currency ? value / Math.pow(10, currency.decimal_count) : 0;
   }
 
-  private mapCurrency(
+  private getAccount(
+    accountId: string | null,
+    backup: FinanciusBackup
+  ): Account | null {
+    const account = backup.accounts.find((a) => a.id === accountId);
+    return account
+      ? <Account>{
+          id: account.id,
+          modelState: account.model_state,
+          syncState: account.sync_state,
+          currency: this.getCurrency(account.currency_code, backup.currencies),
+          name: account.title,
+          note: account.note,
+          balance: account.balance,
+          includeInTotals: account.include_in_totals,
+        }
+      : null;
+  }
+
+  private getCurrency(
     code: string,
     currencies: FinanciusCurrency[]
   ): Currency | null {
@@ -244,5 +311,38 @@ export class SettingsShellComponent implements OnInit {
           decimalCount: currency.decimal_count,
         }
       : null;
+  }
+
+  private getCategory(
+    categoryId: string | null,
+    categories: FinanciusCategory[]
+  ): Category | null {
+    const category = categories.find((c) => c.id === categoryId);
+
+    return category
+      ? <Category>{
+          id: category.id,
+          modelState: category.model_state,
+          syncState: category.sync_state,
+          name: category.title,
+          color: category.color,
+          transactionType: category.transaction_type,
+          sortOrder: category.sort_order,
+        }
+      : null;
+  }
+
+  private getTags(tagIds: string[], tags: FinanciusTag[]): Tag[] {
+    return tags
+      .filter((t) => tagIds.includes(t.id))
+      .map(
+        (t) =>
+          <Tag>{
+            id: t.id,
+            modelState: t.model_state,
+            syncState: t.sync_state,
+            name: t.title,
+          }
+      );
   }
 }
