@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TagsService } from 'src/app/core/services/tags.service';
-import { Tag } from 'src/app/shared/models/financius.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Tag, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-tag-view',
@@ -11,7 +10,7 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
   styleUrls: ['./tag-view.component.scss'],
 })
 export class TagViewComponent implements OnInit {
-  transactions$!: Observable<TransactionsViewModel[]>;
+  transactions$!: Observable<Transaction[]>;
   tag$?: Observable<Tag>;
   loading$?: Observable<boolean>;
 

@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TagsService } from 'src/app/core/services/tags.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
-import { Tag } from 'src/app/shared/models/financius.models';
+import { Tag } from 'src/app/shared/models/entities.models';
 import { TagFormDialogComponent } from '../tag-form-dialog/tag-form-dialog.component';
 
 @Component({
@@ -40,7 +40,7 @@ export class TagsShellComponent implements OnInit {
       .pipe(
         switchMap((dialogData: Partial<Tag>) => {
           return this.service.add({
-            title: dialogData.title!,
+            name: dialogData.name!,
             id: Guid.newGuid(),
           });
         })

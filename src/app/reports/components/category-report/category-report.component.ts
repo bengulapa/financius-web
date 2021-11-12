@@ -8,11 +8,12 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { CurrencyService } from 'src/app/core/services/currency.service';
+import { CurrenciesService } from 'src/app/core/services/currency.service';
 import {
   ChartColor,
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
+import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
@@ -27,7 +28,7 @@ export class CategoryReportComponent implements OnChanges {
   title!: string;
 
   @Input()
-  transactions!: TransactionsViewModel[] | null;
+  transactions?: Transaction[];
 
   @Output()
   periodChange = new EventEmitter<number>();
@@ -36,13 +37,11 @@ export class CategoryReportComponent implements OnChanges {
   chartData: SingleChartData[] = [];
   customColors: ChartColor[] = [];
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrenciesService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.transactions) {
-      this.currencyCode = this.transactions?.length
-        ? this.transactions[0].currencyCode
-        : '';
+    if (changes.transactions?.currentValue) {
+      this.currencyCode = 'PHP';
 
       const expensesGroup = _.groupBy(this.transactions, 'category.title');
 

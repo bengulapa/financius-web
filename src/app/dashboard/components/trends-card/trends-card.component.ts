@@ -5,8 +5,9 @@ import {
   OnInit,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { CurrencyService } from 'src/app/core/services/currency.service';
+import { CurrenciesService } from 'src/app/core/services/currency.service';
 import { MultiChartData } from 'src/app/shared/models/chart.models';
+import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
 @Component({
@@ -20,12 +21,12 @@ export class TrendsCardComponent implements OnInit {
   title!: string;
 
   @Input()
-  transactions!: TransactionsViewModel[] | null;
+  transactions!: Transaction[] | null;
 
   chartData: MultiChartData[] = [];
   currencyCode = 'PHP';
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrenciesService) {}
 
   ngOnInit(): void {
     const dailyExpenses = _.groupBy(this.transactions, (t) =>

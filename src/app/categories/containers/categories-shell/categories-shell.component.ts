@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategoriesService } from 'src/app/core/services/categories.service';
-import { Category } from 'src/app/shared/models/financius.models';
+import { Category } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-categories-shell',

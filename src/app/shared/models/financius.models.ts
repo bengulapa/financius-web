@@ -5,13 +5,13 @@ import {
   TransactionType,
 } from './financius.enums';
 
-export interface BaseModel {
+export interface FinanciusBaseModel {
   id: string;
   model_state?: ModelState;
   sync_state?: SyncState;
 }
 
-export interface Currency extends BaseModel {
+export interface FinanciusCurrency extends FinanciusBaseModel {
   code: string;
   symbol: string;
   symbol_position: number;
@@ -20,18 +20,18 @@ export interface Currency extends BaseModel {
   decimal_count: number;
 }
 
-export interface Category extends BaseModel {
+export interface FinanciusCategory extends FinanciusBaseModel {
   title: string;
   color: number;
   transaction_type: TransactionType;
   sort_order: number;
 }
 
-export interface Tag extends BaseModel {
+export interface FinanciusTag extends FinanciusBaseModel {
   title: string;
 }
 
-export interface Account extends BaseModel {
+export interface FinanciusAccount extends FinanciusBaseModel {
   currency_code: string;
   title: string;
   note: string;
@@ -39,7 +39,7 @@ export interface Account extends BaseModel {
   include_in_totals: boolean;
 }
 
-export interface Transaction extends BaseModel {
+export interface FinanciusTransaction extends FinanciusBaseModel {
   account_from_id: string | null;
   account_to_id: string | null;
   category_id: string | null;
@@ -56,9 +56,9 @@ export interface Transaction extends BaseModel {
 export interface FinanciusBackup {
   version: number;
   timestamp: number;
-  currencies: Currency[];
-  categories: Category[];
-  tags: Tag[];
-  accounts: Account[];
-  transactions: Transaction[];
+  currencies: FinanciusCurrency[];
+  categories: FinanciusCategory[];
+  tags: FinanciusTag[];
+  accounts: FinanciusAccount[];
+  transactions: FinanciusTransaction[];
 }

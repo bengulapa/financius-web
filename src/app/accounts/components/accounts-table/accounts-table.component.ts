@@ -9,7 +9,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Account } from 'src/app/shared/models/financius.models';
+import { Account } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-accounts-table',
@@ -25,11 +25,11 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns = [
-    'title',
-    'currency_code',
+    'name',
+    'currencyCode',
     'balance',
     'note',
-    'include_in_totals',
+    'includeInTotals',
     'actions',
   ];
 

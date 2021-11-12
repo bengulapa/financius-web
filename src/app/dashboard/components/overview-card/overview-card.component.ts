@@ -10,7 +10,7 @@ import {
   ChartColor,
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Transaction } from 'src/app/shared/models/entities.models';
 import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
 @Component({
@@ -24,7 +24,7 @@ export class OverviewCardComponent implements OnInit {
   title!: string;
 
   @Input()
-  transactions!: TransactionsViewModel[] | null;
+  transactions!: Transaction[] | null;
 
   totalExpense: number = 0;
   currencyCode!: string | null;
@@ -36,9 +36,7 @@ export class OverviewCardComponent implements OnInit {
 
   ngOnInit(): void {
     // TODO: Group per currency code?
-    this.currencyCode = this.transactions
-      ? this.transactions[0].currencyCode
-      : '';
+    this.currencyCode = 'PHP';
     this.totalExpense = _.sumBy(this.transactions, 'amount');
 
     const expensesGroup = _.groupBy(this.transactions, 'category.title');

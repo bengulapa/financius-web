@@ -8,7 +8,7 @@
 
 <section class="container">
   <ng-container *ngIf="tag$ | async as tag">
-    <h2><a routerLink="/tags">Tags</a> / {{ tag.title }}</h2>
+    <h2><a routerLink="/tags">Tags</a> / {{ tag.name }}</h2>
 
     <div class="d-flex">
       <section class="w-30 me-1">

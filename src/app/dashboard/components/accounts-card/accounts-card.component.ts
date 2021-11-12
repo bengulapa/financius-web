@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Account } from 'src/app/shared/models/financius.models';
+import { Account } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-accounts-card',
@@ -22,7 +22,7 @@ export class AccountsCardComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.activeAccounts = this.accounts.filter((a) => a.include_in_totals);
+    this.activeAccounts = this.accounts.filter((a) => a.includeInTotals);
   }
 
   onAccountClicked(accountId: string) {

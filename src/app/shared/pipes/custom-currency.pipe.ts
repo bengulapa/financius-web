@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CurrencyService } from 'src/app/core/services/currency.service';
+import { CurrenciesService } from 'src/app/core/services/currency.service';
 
 @Pipe({
   name: 'fwCurrency',
 })
 export class CustomCurrencyPipe implements PipeTransform {
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrenciesService) {}
 
   transform(
     value: number,

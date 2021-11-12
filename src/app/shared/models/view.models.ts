@@ -1,5 +1,5 @@
 import { TransactionType } from './financius.enums';
-import { Category } from './financius.models';
+import { Category } from './entities.models';
 
 export interface TransactionsViewModel {
   date: Date;

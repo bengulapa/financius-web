@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
-import { Category } from 'src/app/shared/models/financius.models';
+import { Category } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-categories-table',
@@ -25,7 +25,7 @@ export class CategoriesTableComponent implements OnInit, AfterViewInit {
   dataSource!: MatTableDataSource<Category>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns = ['color', 'title', 'transaction_type', 'actions'];
+  displayedColumns = ['color', 'title', 'transactionType', 'actions'];
   TransactionType = TransactionType;
   constructor() {}
 

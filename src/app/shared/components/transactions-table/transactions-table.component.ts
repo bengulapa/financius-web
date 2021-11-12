@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Transaction } from '../../models/entities.models';
 
 @Component({
   selector: 'app-transactions-table',
@@ -19,12 +19,12 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 })
 export class TransactionsTableComponent implements OnInit {
   @Input()
-  data: TransactionsViewModel[] | null = [];
+  data?: Transaction[] | null;
 
   @Input()
   displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
 
-  dataSource!: MatTableDataSource<TransactionsViewModel>;
+  dataSource!: MatTableDataSource<Transaction>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   TransactionType = TransactionType;

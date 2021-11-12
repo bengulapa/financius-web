@@ -11,7 +11,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Tag } from 'src/app/shared/models/financius.models';
+import { Tag } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-tags-table',
@@ -24,7 +24,7 @@ export class TagsTableComponent implements OnChanges {
   data: Tag[] | null = [];
 
   @Input()
-  displayedColumns = ['title', 'actions'];
+  displayedColumns = ['name', 'actions'];
 
   @Output()
   edit = new EventEmitter<Partial<Tag>>();

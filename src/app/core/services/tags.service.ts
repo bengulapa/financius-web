@@ -4,19 +4,12 @@ import {
   EntityCollectionServiceElementsFactory,
 } from '@ngrx/data';
 import { Observable } from 'rxjs';
+import { Tag, Transaction } from 'src/app/shared/models/entities.models';
 import { ModelState } from 'src/app/shared/models/financius.enums';
-import { FinanciusBackup, Tag } from 'src/app/shared/models/financius.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
-import * as data from 'src/assets/data.json';
 import { TransactionsService } from './transactions.service';
 
 @Injectable({ providedIn: 'root' })
 export class TagsService extends EntityCollectionServiceBase<Tag> {
-  data: FinanciusBackup = data;
-  tags: Tag[] = this.data.tags.filter(
-    (c) => c.model_state === ModelState.Normal
-  );
-
   constructor(
     private transactionsService: TransactionsService,
     factory: EntityCollectionServiceElementsFactory
@@ -24,7 +17,11 @@ export class TagsService extends EntityCollectionServiceBase<Tag> {
     super('Tag', factory);
   }
 
-  getTransactions(tagId: string): Observable<TransactionsViewModel[]> {
+  getTags(): Observable<Tag[]> {
+    return super.getWithQuery(`modelState=${ModelState.Normal}`);
+  }
+
+  getTransactions(tagId: string): Observable<Transaction[]> {
     return this.transactionsService.getByTag(tagId);
   }
 }

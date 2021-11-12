@@ -1,17 +1,24 @@
 import { formatCurrency } from '@angular/common';
 import { Injectable } from '@angular/core';
 import {
-  Currency,
+  EntityCollectionServiceBase,
+  EntityCollectionServiceElementsFactory,
+} from '@ngrx/data';
+import { Currency } from 'src/app/shared/models/entities.models';
+import {
   FinanciusBackup,
+  FinanciusCurrency,
 } from 'src/app/shared/models/financius.models';
 import * as data from 'src/assets/data.json';
 
 @Injectable({ providedIn: 'root' })
-export class CurrencyService {
+export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
   data: FinanciusBackup = data;
-  currencies: Currency[] = this.data.currencies;
+  currencies: FinanciusCurrency[] = this.data.currencies;
 
-  constructor() {}
+  constructor(factory: EntityCollectionServiceElementsFactory) {
+    super('Currency', factory);
+  }
 
   convert(value: number, code: string | null): number {
     if (!code) {

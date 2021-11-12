@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-transactions-shell',
@@ -9,11 +9,11 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
   styleUrls: ['./transactions-shell.component.scss'],
 })
 export class TransactionsShellComponent implements OnInit {
-  transactions$!: Observable<TransactionsViewModel[]>;
+  transactions$?: Observable<Transaction[]>;
 
   constructor(private service: TransactionsService) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.service.getAll();
+    this.transactions$ = this.service.getTransactions();
   }
 }

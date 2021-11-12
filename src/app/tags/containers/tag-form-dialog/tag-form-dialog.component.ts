@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Tag } from 'src/app/shared/models/financius.models';
+import { Tag } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-tag-form-dialog',
@@ -19,7 +19,7 @@ export class TagFormDialogComponent implements OnInit {
 
     this.form = new FormGroup({
       id: new FormControl(this.data.tag?.id || ''),
-      title: new FormControl(this.data.tag?.title || ''),
+      name: new FormControl(this.data.tag?.name || ''),
     });
   }
 }

@@ -20,8 +20,8 @@ export class EntityBaseService<TEntity>
     this.dbService
       .add(this.name, {
         ...entity,
-        model_state: ModelState.Normal,
-        sync_state: SyncState.None,
+        modelState: ModelState.Normal,
+        syncState: SyncState.None,
       })
       .subscribe();
 
@@ -32,8 +32,8 @@ export class EntityBaseService<TEntity>
     let updatedEntity = this.dbService
       .update(this.name, {
         ...update.changes,
-        model_state: ModelState.Normal,
-        sync_state: SyncState.None,
+        modelState: ModelState.Normal,
+        syncState: SyncState.None,
       })
       .pipe(
         map((e) => {

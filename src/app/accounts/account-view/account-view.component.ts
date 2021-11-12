@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/core/services/accounts.service';
-import { Account } from 'src/app/shared/models/financius.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Account, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-account-view',
@@ -11,7 +10,7 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
   styleUrls: ['./account-view.component.scss'],
 })
 export class AccountViewComponent implements OnInit {
-  transactions$!: Observable<TransactionsViewModel[]>;
+  transactions$!: Observable<Transaction[]>;
   account$!: Observable<Account | null>;
 
   constructor(
@@ -29,7 +28,7 @@ export class AccountViewComponent implements OnInit {
         return;
       }
 
-      this.account$ = this.service.get(id);
+      this.account$ = this.service.getByKey(id);
       this.transactions$ = this.service.getTransactions(id);
     });
   }

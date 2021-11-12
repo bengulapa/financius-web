@@ -4,11 +4,11 @@
   <form [formGroup]="form">
     <mat-form-field appearance="fill" class="w-100 mb-3">
       <mat-label>Tag</mat-label>
-      <input matInput formControlName="title" required />
-      <mat-error *ngIf="form.get('title')?.hasError('required')"
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="form.get('name')?.hasError('required')"
         >Tag is required</mat-error
       >
-      <mat-error *ngIf="form.get('title')?.hasError('maxlength')"
+      <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
         >Tag is too long</mat-error
       >
     </mat-form-field>

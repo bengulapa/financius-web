@@ -9,8 +9,8 @@
         (selectedChange)="onAccountClicked(account.id)"
       >
         <div class="d-flex justify-content-between w-100">
-          <span>{{ account.title }}</span>
-          <span>{{ account.balance | fwCurrency: account.currency_code }}</span>
+          <span>{{ account.name }}</span>
+          <span>{{ account.balance | fwCurrency: account.currencyCode }}</span>
         </div>
       </mat-list-option>
     </mat-selection-list>

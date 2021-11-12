@@ -8,9 +8,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
-import { Account } from 'src/app/shared/models/financius.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
 @Component({
   selector: 'app-dashboard-shell',
@@ -19,8 +18,8 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 })
 export class DashboardShellComponent implements OnInit {
   accounts$!: Observable<Account[]>;
-  transactions$!: Observable<TransactionsViewModel[]>;
-  expenses$!: Observable<TransactionsViewModel[]>;
+  transactions$!: Observable<Transaction[]>;
+  expenses$!: Observable<Transaction[]>;
   title!: string;
 
   constructor(
@@ -30,7 +29,7 @@ export class DashboardShellComponent implements OnInit {
 
   ngOnInit(): void {
     this.accounts$ = this.accountsService.getAll();
-    this.transactions$ = this.transactionsService.getAll();
+    this.transactions$ = this.transactionsService.getTransactions();
 
     const currentDate = new Date(),
       currentMonth = currentDate.getMonth();

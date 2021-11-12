@@ -4,16 +4,9 @@ import {
   TranslationWidth,
 } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { LegendPosition } from '@swimlane/ngx-charts';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
-import {
-  ChartColor,
-  SingleChartData,
-} from 'src/app/shared/models/chart.models';
-import { TransactionType } from 'src/app/shared/models/financius.enums';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
+import { Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-reports-shell',
@@ -21,8 +14,8 @@ import { TransactionsViewModel } from 'src/app/shared/models/view.models';
   styleUrls: ['./reports-shell.component.scss'],
 })
 export class ReportsShellComponent implements OnInit {
-  transactions$!: Observable<TransactionsViewModel[]> | null;
-  expenses$!: Observable<TransactionsViewModel[]>;
+  transactions$!: Observable<Transaction[]> | null;
+  expenses$!: Observable<Transaction[]>;
 
   title!: string;
   selectedMonth!: number;

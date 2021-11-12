@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/core/services/accounts.service';
-import { Account } from 'src/app/shared/models/financius.models';
+import { Account } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-accounts-shell',
