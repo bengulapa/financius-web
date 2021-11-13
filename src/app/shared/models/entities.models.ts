@@ -44,8 +44,8 @@ export interface Transaction extends BaseModel {
   accountTo?: Account;
   category: Category;
   currency: Currency;
-  tags: Tag[];
-  date: number;
+  tags?: Tag[];
+  date: string;
   amount: number;
   exchangeRate: number;
   note: string;

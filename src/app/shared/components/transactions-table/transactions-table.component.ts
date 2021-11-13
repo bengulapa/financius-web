@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -26,7 +28,21 @@ export class TransactionsTableComponent implements OnChanges {
   loading?: boolean | null = false;
 
   @Input()
-  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
+  displayedColumns = [
+    'date',
+    'category',
+    'tags',
+    'note',
+    'amount',
+    'account',
+    'actions',
+  ];
+
+  @Output()
+  edit = new EventEmitter<Partial<Transaction>>();
+
+  @Output()
+  delete = new EventEmitter<string>();
 
   dataSource!: MatTableDataSource<Transaction>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;

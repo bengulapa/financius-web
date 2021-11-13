@@ -44,7 +44,7 @@ export interface FinanciusTransaction extends FinanciusBaseModel {
   account_to_id: string | null;
   category_id: string | null;
   tag_ids: string[];
-  date: number;
+  date: string;
   amount: number;
   exchange_rate: number;
   note: string;

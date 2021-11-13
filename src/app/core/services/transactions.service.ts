@@ -55,7 +55,7 @@ export class TransactionsService extends EntityCollectionServiceBase<Transaction
 
   getByTag(tagId: string): Observable<Transaction[]> {
     return this.transactions$.pipe(
-      map((ts) => ts.filter((t) => t.tags.map((t) => t.id).includes(tagId)))
+      map((ts) => ts.filter((t) => t.tags?.map((t) => t.id).includes(tagId)))
     );
   }
 

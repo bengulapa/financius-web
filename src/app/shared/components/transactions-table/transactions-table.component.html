@@ -10,6 +10,8 @@
     mat-table
     [dataSource]="dataSource"
     matSort
+    matSortActive="date"
+    matSortDirection="desc"
     class="table mat-elevation-z8"
   >
     <ng-container matColumnDef="date">
@@ -67,6 +69,19 @@
             ? row.accountFrom.name + " → " + row.accountTo.name
             : row.accountFrom?.name || row.accountTo?.name
         }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td class="w-10" mat-cell *matCellDef="let row">
+        <button mat-icon-button (click)="edit.emit(row)" color="accent">
+          <mat-icon matTooltip="Edit">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="delete.emit(row.id)" color="warn">
+          <mat-icon matTooltip="Delete">delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 
