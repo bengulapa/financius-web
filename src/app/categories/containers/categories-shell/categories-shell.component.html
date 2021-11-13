@@ -1,14 +1,16 @@
 <app-main-toolbar></app-main-toolbar>
 
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
 <section class="container">
   <h2>Categories</h2>
 
   <app-categories-table
-    *ngIf="categories$ | async as categories; else loading"
+    *ngIf="categories$ | async as categories"
     [data]="categories"
   ></app-categories-table>
-
-  <ng-template #loading>
-    <mat-progress-bar></mat-progress-bar>
-  </ng-template>
 </section>

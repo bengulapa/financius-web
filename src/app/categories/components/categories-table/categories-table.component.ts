@@ -25,7 +25,7 @@ export class CategoriesTableComponent implements OnInit, AfterViewInit {
   dataSource!: MatTableDataSource<Category>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns = ['color', 'title', 'transactionType', 'actions'];
+  displayedColumns = ['color', 'name', 'transactionType', 'actions'];
   TransactionType = TransactionType;
   constructor() {}
 

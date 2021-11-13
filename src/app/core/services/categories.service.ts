@@ -19,9 +19,9 @@ export class CategoriesService extends EntityCollectionServiceBase<Category> {
   }
 
   getCategories() {
-    return this.entities$.pipe(
-      map((e) => e.filter((c) => c.modelState === ModelState.Normal))
-    );
+    return super
+      .getAll()
+      .pipe(map((e) => e.filter((c) => c.modelState === ModelState.Normal)));
   }
 
   getTransactions(categoryId: string): Observable<Transaction[]> {
