@@ -15,7 +15,7 @@
   </div>
 
   <app-tags-table
-    [data]="tags$ | async"
+    [data]="entities$ | async"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
   ></app-tags-table>

@@ -9,6 +9,8 @@
   mat-table
   [dataSource]="dataSource"
   matSort
+  matSortActive="name"
+  matSortDirection="asc"
   class="table mat-elevation-z8"
 >
   <ng-container matColumnDef="name">
@@ -41,7 +43,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
   <tr class="mat-row" *matNoDataRow>
-    <td class="mat-cell" colspan="4">No tag found.</td>
+    <td class="mat-cell" colspan="4">No tag found</td>
   </tr>
 </table>
 <mat-paginator

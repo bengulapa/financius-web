@@ -4,6 +4,7 @@ import {
   EntityCollectionServiceElementsFactory,
 } from '@ngrx/data';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Tag, Transaction } from 'src/app/shared/models/entities.models';
 import { ModelState } from 'src/app/shared/models/financius.enums';
 import { TransactionsService } from './transactions.service';
@@ -18,7 +19,9 @@ export class TagsService extends EntityCollectionServiceBase<Tag> {
   }
 
   getTags(): Observable<Tag[]> {
-    return super.getWithQuery(`modelState=${ModelState.Normal}`);
+    return super
+      .getAll()
+      .pipe(map((e) => e.filter((t) => t.modelState === ModelState.Normal)));
   }
 
   getTransactions(tagId: string): Observable<Transaction[]> {

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TagsService } from 'src/app/core/services/tags.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
+import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Tag } from 'src/app/shared/models/entities.models';
 import { TagFormDialogComponent } from '../tag-form-dialog/tag-form-dialog.component';
 
@@ -13,20 +13,21 @@ import { TagFormDialogComponent } from '../tag-form-dialog/tag-form-dialog.compo
   templateUrl: './tags-shell.component.html',
   styleUrls: ['./tags-shell.component.scss'],
 })
-export class TagsShellComponent implements OnInit {
-  tags$?: Observable<Tag[]>;
-  loading$?: Observable<boolean>;
-
+export class TagsShellComponent
+  extends EntityBaseComponent<Tag>
+  implements OnInit
+{
   constructor(
     private service: TagsService,
     private dialog: MatDialog,
     private notify: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.tags$ = this.service.entities$;
+    this.entities$ = this.service.getTags();
     this.loading$ = this.service.loading$;
-    this.service.getAll();
   }
 
   onAddClick() {
