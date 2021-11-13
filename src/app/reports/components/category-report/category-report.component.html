@@ -32,7 +32,7 @@
     </ng-container>
 
     <ng-template #empty>
-      <p class="text-center">Nothing to report yet</p>
+      <p *ngIf="!loading" class="text-center">Nothing to report yet</p>
     </ng-template>
   </mat-card-content>
 </mat-card>

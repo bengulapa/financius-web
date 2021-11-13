@@ -1,14 +1,16 @@
 <app-main-toolbar></app-main-toolbar>
 
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
 <section class="container">
   <app-category-report
-    *ngIf="expenses$ | async as expenses; else loading"
-    [transactions]="expenses"
+    [transactions]="expenses$ | async"
+    [loading]="loading$ | async"
     [title]="title"
     (periodChange)="onPeriodChange($event)"
   ></app-category-report>
 </section>
-
-<ng-template #loading>
-  <mat-progress-bar></mat-progress-bar>
-</ng-template>

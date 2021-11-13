@@ -6,6 +6,7 @@ import {
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -13,15 +14,19 @@ import { Transaction } from 'src/app/shared/models/entities.models';
   templateUrl: './reports-shell.component.html',
   styleUrls: ['./reports-shell.component.scss'],
 })
-export class ReportsShellComponent implements OnInit {
-  transactions$!: Observable<Transaction[]> | null;
-  expenses$!: Observable<Transaction[]>;
+export class ReportsShellComponent
+  extends EntityBaseComponent<Transaction>
+  implements OnInit
+{
+  expenses$?: Observable<Transaction[]>;
 
   title!: string;
   selectedMonth!: number;
   selectedYear!: number;
 
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(private transactionsService: TransactionsService) {
+    super();
+  }
 
   ngOnInit(): void {
     const currentDate = new Date(),
@@ -31,6 +36,8 @@ export class ReportsShellComponent implements OnInit {
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
     this.setSelectedPeriod();
+
+    this.loading$ = this.transactionsService.loading$;
   }
 
   onPeriodChange(increment: number) {

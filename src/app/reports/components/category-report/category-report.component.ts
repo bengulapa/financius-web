@@ -27,7 +27,10 @@ export class CategoryReportComponent implements OnChanges {
   title!: string;
 
   @Input()
-  transactions?: Transaction[];
+  transactions?: Transaction[] | null;
+
+  @Input()
+  loading?: boolean | null = false;
 
   @Output()
   periodChange = new EventEmitter<number>();
