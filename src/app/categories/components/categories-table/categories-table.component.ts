@@ -1,16 +1,16 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { Category } from 'src/app/shared/models/entities.models';
+import { TransactionType } from 'src/app/shared/models/financius.enums';
 
 @Component({
   selector: 'app-categories-table',
@@ -18,7 +18,7 @@ import { Category } from 'src/app/shared/models/entities.models';
   styleUrls: ['./categories-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoriesTableComponent implements OnInit, AfterViewInit {
+export class CategoriesTableComponent implements OnChanges {
   @Input()
   data: Category[] | null = [];
 
@@ -27,15 +27,15 @@ export class CategoriesTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns = ['color', 'name', 'transactionType', 'actions'];
   TransactionType = TransactionType;
+
   constructor() {}
 
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.data || []);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data?.currentValue) {
+      this.dataSource = new MatTableDataSource(this.data || []);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {

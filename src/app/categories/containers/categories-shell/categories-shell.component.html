@@ -9,8 +9,5 @@
 <section class="container">
   <h2>Categories</h2>
 
-  <app-categories-table
-    *ngIf="categories$ | async as categories"
-    [data]="categories"
-  ></app-categories-table>
+  <app-categories-table [data]="entities$ | async"></app-categories-table>
 </section>

@@ -9,7 +9,5 @@
 <section class="container">
   <h2>Transactions</h2>
 
-  <app-transactions-table
-    [data]="transactions$ | async"
-  ></app-transactions-table>
+  <app-transactions-table [data]="entities$ | async"></app-transactions-table>
 </section>

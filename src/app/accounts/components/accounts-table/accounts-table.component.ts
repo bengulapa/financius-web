@@ -33,8 +33,6 @@ export class AccountsTableComponent implements OnChanges {
     'actions',
   ];
 
-  constructor() {}
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data?.currentValue) {
       this.dataSource = new MatTableDataSource(this.data || []);

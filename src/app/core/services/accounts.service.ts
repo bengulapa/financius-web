@@ -19,9 +19,9 @@ export class AccountsService extends EntityCollectionServiceBase<Account> {
   }
 
   getAccounts() {
-    return this.entities$.pipe(
-      map((e) => e.filter((c) => c.modelState === ModelState.Normal))
-    );
+    return super
+      .getAll()
+      .pipe(map((e) => e.filter((c) => c.modelState === ModelState.Normal)));
   }
 
   getTransactions(accountId: string): Observable<Transaction[]> {
