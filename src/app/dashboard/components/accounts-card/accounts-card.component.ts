@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 import { Account } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -22,7 +23,11 @@ export class AccountsCardComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.activeAccounts = this.accounts.filter((a) => a.includeInTotals);
+    this.activeAccounts = _.orderBy(
+      this.accounts.filter((a) => a.includeInTotals),
+      ['balance', 'name'],
+      ['desc', 'asc']
+    );
   }
 
   onAccountClicked(accountId: string) {

@@ -5,19 +5,23 @@
     <mat-card>
       <mat-card-title>{{ title }}</mat-card-title>
       <mat-card-content>
-        <div class="mb-4">
-          <app-overview-card
-            *ngIf="expenses$ | async as expenses"
+        <ng-container *ngIf="expenses$ | async as expenses; else loading">
+          <div class="mb-4">
+            <app-overview-card
+              [title]="title"
+              [transactions]="expenses"
+            ></app-overview-card>
+          </div>
+
+          <app-trends-card
             [title]="title"
             [transactions]="expenses"
-          ></app-overview-card>
-        </div>
+          ></app-trends-card>
+        </ng-container>
 
-        <app-trends-card
-          *ngIf="expenses$ | async as expenses"
-          [title]="title"
-          [transactions]="expenses"
-        ></app-trends-card>
+        <ng-template #loading>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </ng-template>
       </mat-card-content>
     </mat-card>
   </div>

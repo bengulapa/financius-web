@@ -5,11 +5,9 @@ import {
 } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
-import { TransactionType } from 'src/app/shared/models/financius.enums';
 
 @Component({
   selector: 'app-dashboard-shell',
@@ -28,11 +26,12 @@ export class DashboardShellComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.accounts$ = this.accountsService.getAll();
+    this.accounts$ = this.accountsService.getAccounts();
     this.transactions$ = this.transactionsService.getTransactions();
 
     const currentDate = new Date(),
-      currentMonth = currentDate.getMonth();
+      currentMonth = currentDate.getMonth(),
+      currentYear = currentDate.getFullYear();
 
     this.title = getLocaleMonthNames(
       'en',
@@ -40,15 +39,9 @@ export class DashboardShellComponent implements OnInit {
       TranslationWidth.Wide
     )[currentMonth];
 
-    this.expenses$ = this.transactions$.pipe(
-      map((ts) =>
-        ts.filter(
-          (t) =>
-            new Date(t.date).getMonth() === currentMonth &&
-            new Date(t.date).getFullYear() === currentDate.getFullYear() &&
-            t.transactionType === TransactionType.Expense
-        )
-      )
+    this.expenses$ = this.transactionsService.getMonthlyExpenses(
+      currentMonth,
+      currentYear
     );
   }
 }
