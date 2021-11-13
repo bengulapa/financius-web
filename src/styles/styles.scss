@@ -21,6 +21,10 @@ table {
   width: 100%;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .mat-toolbar .mat-button {
   border-radius: 0;
   margin-right: 0.5rem;

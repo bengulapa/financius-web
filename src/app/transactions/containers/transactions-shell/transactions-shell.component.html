@@ -9,5 +9,8 @@
 <section class="container">
   <h2>Transactions</h2>
 
-  <app-transactions-table [data]="entities$ | async"></app-transactions-table>
+  <app-transactions-table
+    [data]="entities$ | async"
+    [loading]="loading$ | async"
+  ></app-transactions-table>
 </section>

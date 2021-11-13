@@ -23,6 +23,9 @@ export class TransactionsTableComponent implements OnChanges {
   data?: Transaction[] | null;
 
   @Input()
+  loading?: boolean | null = false;
+
+  @Input()
   displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account'];
 
   dataSource!: MatTableDataSource<Transaction>;
