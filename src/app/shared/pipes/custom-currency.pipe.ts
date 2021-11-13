@@ -8,7 +8,7 @@ export class CustomCurrencyPipe implements PipeTransform {
   constructor(private currencyService: CurrenciesService) {}
 
   transform(value: number, currencyCode: string | null): string {
-    if (!currencyCode) {
+    if (!value || !currencyCode) {
       return '0';
     }
 

@@ -25,7 +25,7 @@
             <div>
               {{ model.name }}
             </div>
-            <div>{{ model.value | fwCurrency: model.extra.symbol }}</div>
+            <div>{{ model.value | fwCurrency: currencyCode }}</div>
           </ng-template>
         </ngx-charts-advanced-pie-chart>
       </div>

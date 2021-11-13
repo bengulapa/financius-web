@@ -5,10 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { CurrenciesService } from 'src/app/core/services/currency.service';
 import { MultiChartData } from 'src/app/shared/models/chart.models';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import { TransactionsViewModel } from 'src/app/shared/models/view.models';
 
 @Component({
   selector: 'app-trends-card',
@@ -26,7 +24,7 @@ export class TrendsCardComponent implements OnInit {
   chartData: MultiChartData[] = [];
   currencyCode = 'PHP';
 
-  constructor(private currencyService: CurrenciesService) {}
+  constructor() {}
 
   ngOnInit(): void {
     const dailyExpenses = _.groupBy(this.transactions, (t) =>
