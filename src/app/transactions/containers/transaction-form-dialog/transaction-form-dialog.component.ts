@@ -29,10 +29,6 @@ export class TransactionFormDialogComponent implements OnInit {
   categories$?: Observable<Category[]>;
   tags$?: Observable<Tag[]>;
 
-  get selectedTransactionType(): TransactionType {
-    return this.form.get('transactionType')?.value;
-  }
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { transaction: Transaction },
     private formHelpers: FormHelpers,
@@ -41,7 +37,6 @@ export class TransactionFormDialogComponent implements OnInit {
     private categoriesService: CategoriesService,
     private tagsService: TagsService
   ) {
-    // TODO sort
     this.accounts$ = this.accountsService.getAccounts();
     this.categories$ = this.categoriesService.getCategories();
     this.tags$ = this.tagsService.getTags();
