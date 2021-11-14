@@ -6,15 +6,18 @@
     [accounts]="accounts$ | async"
     [categories]="categories$ | async"
     [tags]="tags$ | async"
+    (accountSelected)="onAccountSelected($event)"
+    (categorySelected)="onCategorySelected($event)"
+    (tagsSelected)="onTagsSelected($event)"
   ></app-transaction-form>
 
   <mat-dialog-actions>
     <button mat-stroked-button mat-dialog-close>CANCEL</button>
     <button
-      [disabled]="!form.valid"
+      [disabled]="!form.valid || form.pristine"
       mat-flat-button
       color="accent"
-      [mat-dialog-close]="form.value"
+      (click)="close()"
     >
       {{ isEditMode ? "UPDATE" : "SAVE" }}
     </button>

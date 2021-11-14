@@ -26,7 +26,8 @@ export class TagsShellComponent
   }
 
   ngOnInit(): void {
-    this.entities$ = this.service.getTags();
+    this.service.getTags();
+    this.entities$ = this.service.entities$;
     this.loading$ = this.service.loading$;
   }
 

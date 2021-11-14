@@ -18,5 +18,6 @@
     [data]="entities$ | async"
     [loading]="loading$ | async"
     (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
   ></app-transactions-table>
 </section>

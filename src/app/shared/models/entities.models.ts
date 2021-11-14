@@ -40,12 +40,12 @@ export interface Account extends BaseModel {
 }
 
 export interface Transaction extends BaseModel {
-  accountFrom?: Account;
-  accountTo?: Account;
-  category: Category;
-  currency: Currency;
+  accountFrom: Account | null;
+  accountTo: Account | null;
+  category: Category | null;
+  currency: Currency | null;
   tags?: Tag[];
-  date: string;
+  date: number;
   amount: number;
   exchangeRate: number;
   note: string;

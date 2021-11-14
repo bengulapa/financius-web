@@ -8,15 +8,15 @@ import {
   Transaction,
 } from 'src/app/shared/models/entities.models';
 import {
-  TransactionType,
   TransactionState,
+  TransactionType,
 } from 'src/app/shared/models/financius.enums';
 
 @Injectable({ providedIn: 'root' })
 export class FormHelpers {
   constructor(private fb: FormBuilder) {}
 
-  createAccountForm(account?: Account): FormGroup {
+  createAccountForm(account: Account | null): FormGroup {
     return this.fb.group({
       id: account?.id || '',
       name: [account?.name || '', Validators.required],
@@ -27,7 +27,7 @@ export class FormHelpers {
     });
   }
 
-  createCategoryForm(category: Category): FormGroup {
+  createCategoryForm(category: Category | null): FormGroup {
     return this.fb.group({
       id: category?.id || '',
       name: [category?.name || '', Validators.required],
@@ -36,7 +36,7 @@ export class FormHelpers {
     });
   }
 
-  createCurrencyForm(currency?: Currency): FormGroup {
+  createCurrencyForm(currency?: Currency | null): FormGroup {
     return this.fb.group({
       id: currency?.id || '',
       code: [currency?.code || '', Validators.required],
@@ -55,37 +55,25 @@ export class FormHelpers {
     });
   }
 
-  createTransactionFormX(transaction: Transaction): FormGroup {
-    return this.fb.group({
-      id: transaction?.id || '',
-      accountFrom: this.createAccountForm(transaction?.accountFrom),
-      accountTo: this.createAccountForm(transaction?.accountTo),
-      category: this.createCategoryForm(transaction?.category),
-      tags: this.createTagsForm(transaction?.tags),
-      date: transaction?.date || new Date(),
-      amount: transaction?.amount || 0,
-      note: transaction?.note || '',
-      transactionType: transaction?.transactionType || TransactionType.Expense,
-      transactionState:
-        transaction?.transactionState === TransactionState.Confirmed,
-      includeInReports: transaction?.includeInReports || true,
-    });
-  }
-
   createTransactionForm(transaction: Transaction): FormGroup {
     const form = this.fb.group({
       id: transaction?.id || '',
-      categoryId: transaction?.category?.id,
+      category: transaction?.category,
+      categoryId: [transaction?.category?.id, Validators.required],
+      accountFrom: transaction?.accountFrom,
       accountFromId: transaction?.accountFrom?.id,
+      accountTo: transaction?.accountTo,
       accountToId: transaction?.accountTo?.id,
+      tags: [transaction?.tags],
       tagIds: [transaction?.tags?.map((t) => t.id)] || [],
       date: transaction?.date ? new Date(transaction?.date) : new Date(),
       amount: transaction?.amount || 0,
       note: transaction?.note || '',
       transactionType: transaction?.transactionType || TransactionType.Expense,
       transactionState:
-        transaction?.transactionState === TransactionState.Confirmed,
+        transaction?.transactionState === TransactionState.Confirmed || true,
       includeInReports: transaction?.includeInReports || true,
+      exchangeRate: transaction?.exchangeRate || 1.0,
     });
 
     return form;

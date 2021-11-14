@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -29,6 +31,15 @@ export class TransactionFormComponent implements OnChanges {
   @Input()
   tags?: Tag[] | null;
 
+  @Output()
+  categorySelected = new EventEmitter<Category>();
+
+  @Output()
+  accountSelected = new EventEmitter<{ account: Account; isFrom: boolean }>();
+
+  @Output()
+  tagsSelected = new EventEmitter<Tag[]>();
+
   TransactionType = TransactionType;
 
   get selectedTransactionType(): TransactionType {
@@ -53,5 +64,23 @@ export class TransactionFormComponent implements OnChanges {
     if (changes.tags?.currentValue?.length) {
       this.tags = _.orderBy(this.tags, ['name'], ['asc']);
     }
+  }
+
+  setCategory(id: string) {
+    const category = this.categories?.find((c) => c.id === id);
+    this.categorySelected.emit(category);
+  }
+
+  setAccount(id: string, isFrom: boolean) {
+    const account = this.accounts?.find((c) => c.id === id)!;
+    this.accountSelected.emit({
+      account,
+      isFrom,
+    });
+  }
+
+  setTags(ids: string[]) {
+    const tags = this.tags?.filter((t) => ids.includes(t.id));
+    this.tagsSelected.emit(tags);
   }
 }

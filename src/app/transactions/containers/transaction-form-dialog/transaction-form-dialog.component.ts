@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { CategoriesService } from 'src/app/core/services/categories.service';
 import { TagsService } from 'src/app/core/services/tags.service';
-import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { FormHelpers } from 'src/app/core/utilities/form.helpers';
 import {
   Account,
@@ -31,8 +30,8 @@ export class TransactionFormDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { transaction: Transaction },
+    public dialogRef: MatDialogRef<TransactionFormDialogComponent>,
     private formHelpers: FormHelpers,
-    private transactionsService: TransactionsService,
     private accountsService: AccountsService,
     private categoriesService: CategoriesService,
     private tagsService: TagsService
@@ -47,5 +46,37 @@ export class TransactionFormDialogComponent implements OnInit {
 
     const transaction = this.data.transaction;
     this.form = this.formHelpers.createTransactionForm(transaction);
+  }
+
+  onAccountSelected(event: { account: Account; isFrom: boolean }) {
+    this.form.patchValue({
+      accountFrom: event.isFrom
+        ? event.account
+        : this.form.get('accountFrom')?.value,
+      accountTo: !event.isFrom
+        ? event.account
+        : this.form.get('accountTo')?.value,
+    });
+  }
+
+  onCategorySelected(category: Category) {
+    this.form.patchValue({ category });
+  }
+
+  onTagsSelected(tags: Tag[]) {
+    this.form.patchValue({ tags });
+  }
+
+  close() {
+    const formValue = { ...this.form.value };
+    // remove id fk property
+    delete formValue.accountFromId;
+    delete formValue.accountToId;
+    delete formValue.categoryId;
+    delete formValue.tagIds;
+
+    this.dialogRef.close({
+      ...formValue,
+    });
   }
 }
