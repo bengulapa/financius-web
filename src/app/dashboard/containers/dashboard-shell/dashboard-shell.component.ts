@@ -1,12 +1,8 @@
-import {
-  FormStyle,
-  getLocaleMonthNames,
-  TranslationWidth,
-} from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -27,17 +23,12 @@ export class DashboardShellComponent implements OnInit {
 
   ngOnInit(): void {
     this.accounts$ = this.accountsService.getAccounts();
-    this.transactions$ = this.transactionsService.getTransactions();
 
     const currentDate = new Date(),
       currentMonth = currentDate.getMonth(),
       currentYear = currentDate.getFullYear();
 
-    this.title = getLocaleMonthNames(
-      'en',
-      FormStyle.Format,
-      TranslationWidth.Wide
-    )[currentMonth];
+    this.title = getLocaleMonthName(currentMonth);
 
     this.expenses$ = this.transactionsService.getMonthlyExpenses(
       currentMonth,

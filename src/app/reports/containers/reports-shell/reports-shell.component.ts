@@ -1,11 +1,7 @@
-import {
-  FormStyle,
-  getLocaleMonthNames,
-  TranslationWidth,
-} from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Transaction } from 'src/app/shared/models/entities.models';
 
@@ -63,12 +59,8 @@ export class ReportsShellComponent
   }
 
   private setTitle() {
-    const month = getLocaleMonthNames(
-      'en',
-      FormStyle.Format,
-      TranslationWidth.Wide
-    )[this.selectedMonth];
-
-    this.title = `${month} ${this.selectedYear}`;
+    this.title = `${getLocaleMonthName(this.selectedMonth)} ${
+      this.selectedYear
+    }`;
   }
 }
