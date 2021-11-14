@@ -6,9 +6,6 @@
     [accounts]="accounts$ | async"
     [categories]="categories$ | async"
     [tags]="tags$ | async"
-    (accountSelected)="onAccountSelected($event)"
-    (categorySelected)="onCategorySelected($event)"
-    (tagsSelected)="onTagsSelected($event)"
   ></app-transaction-form>
 
   <mat-dialog-actions>

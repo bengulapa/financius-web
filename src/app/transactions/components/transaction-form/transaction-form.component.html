@@ -75,9 +75,7 @@
     <mat-label>Account</mat-label>
     <mat-select
       formControlName="accountFromId"
-      (selectionChange)="
-        setAccount($event.value, selectedTransactionType, true)
-      "
+      (selectionChange)="setAccount($event.value, true)"
     >
       <mat-option
         [class.text-muted]="!account.includeInTotals"
@@ -100,7 +98,7 @@
     <mat-label>Account</mat-label>
     <mat-select
       formControlName="accountToId"
-      (selectionChange)="setAccount($event.value, selectedTransactionType)"
+      (selectionChange)="setAccount($event.value)"
     >
       <mat-option
         [class.text-muted]="!account.includeInTotals"

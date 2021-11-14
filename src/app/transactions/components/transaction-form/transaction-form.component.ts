@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Input,
   OnChanges,
-  Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
@@ -30,19 +28,6 @@ export class TransactionFormComponent implements OnChanges {
 
   @Input()
   tags?: Tag[] | null;
-
-  @Output()
-  categorySelected = new EventEmitter<Category | null>();
-
-  @Output()
-  accountSelected = new EventEmitter<{
-    account: Account;
-    type: TransactionType;
-    isFrom?: boolean;
-  }>();
-
-  @Output()
-  tagsSelected = new EventEmitter<Tag[]>();
 
   TransactionType = TransactionType;
   selectedTransactionType!: TransactionType;
@@ -92,7 +77,6 @@ export class TransactionFormComponent implements OnChanges {
       case TransactionType.Income:
         this.setCategoryGroups(type);
         categoryInput.setValidators(Validators.required);
-        categoryInput.updateValueAndValidity();
         accountToInput.setValidators(Validators.required);
         accountFromInput.setValidators(null);
         break;
@@ -100,7 +84,6 @@ export class TransactionFormComponent implements OnChanges {
       case TransactionType.Transfer:
         this.setCategory(null);
         categoryInput.setValidators(null);
-        categoryInput.updateValueAndValidity();
         accountFromInput.setValidators(Validators.required);
         accountToInput.setValidators(Validators.required);
         break;
@@ -113,24 +96,42 @@ export class TransactionFormComponent implements OnChanges {
   }
 
   setCategory(id: string | null) {
-    this.categorySelected.emit(
-      id ? this.categories?.find((c) => c.id === id) || null : null
-    );
+    this.form.patchValue({
+      category: id ? this.categories?.find((c) => c.id === id) || null : null,
+    });
   }
 
-  setAccount(id: string, type: TransactionType, isFrom?: boolean) {
+  setAccount(id: string, isFrom?: boolean) {
     const account = this.accounts?.find((c) => c.id === id)!;
-    this.accountSelected.emit({
-      account,
-      type,
-      isFrom,
-    });
+
+    switch (this.selectedTransactionType) {
+      default:
+      case TransactionType.Expense:
+        this.form.patchValue({
+          accountFrom: account,
+          accountTo: null,
+        });
+        break;
+
+      case TransactionType.Income:
+        this.form.patchValue({
+          accountFrom: null,
+          accountTo: account,
+        });
+        break;
+
+      case TransactionType.Transfer:
+        this.form.patchValue({
+          accountFrom: isFrom ? account : this.form.get('accountFrom')?.value,
+          accountTo: !isFrom ? account : this.form.get('accountTo')?.value,
+        });
+        break;
+    }
   }
 
   setTags(ids: string[]) {
     const tags = this.tags?.filter((t) => ids.includes(t.id));
-    this.tagsSelected.emit(tags);
-    console.log(this.form);
+    this.form.patchValue({ tags });
   }
 
   private setCategoryGroups(type: TransactionType) {
