@@ -59,7 +59,7 @@ export class FormHelpers {
     const form = this.fb.group({
       id: transaction?.id || '',
       category: transaction?.category,
-      categoryId: [transaction?.category?.id, Validators.required],
+      categoryId: transaction?.category?.id,
       accountFrom: transaction?.accountFrom,
       accountFromId: transaction?.accountFrom?.id,
       accountTo: transaction?.accountTo,

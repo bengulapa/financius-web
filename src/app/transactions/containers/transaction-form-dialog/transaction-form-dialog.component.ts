@@ -48,18 +48,41 @@ export class TransactionFormDialogComponent implements OnInit {
     this.form = this.formHelpers.createTransactionForm(transaction);
   }
 
-  onAccountSelected(event: { account: Account; isFrom: boolean }) {
-    this.form.patchValue({
-      accountFrom: event.isFrom
-        ? event.account
-        : this.form.get('accountFrom')?.value,
-      accountTo: !event.isFrom
-        ? event.account
-        : this.form.get('accountTo')?.value,
-    });
+  onAccountSelected(event: {
+    account: Account;
+    type: TransactionType;
+    isFrom?: boolean;
+  }) {
+    switch (event.type) {
+      default:
+      case TransactionType.Expense:
+        this.form.patchValue({
+          accountFrom: event.account,
+          accountTo: null,
+        });
+        break;
+
+      case TransactionType.Income:
+        this.form.patchValue({
+          accountFrom: null,
+          accountTo: event.account,
+        });
+        break;
+
+      case TransactionType.Transfer:
+        this.form.patchValue({
+          accountFrom: event.isFrom
+            ? event.account
+            : this.form.get('accountFrom')?.value,
+          accountTo: !event.isFrom
+            ? event.account
+            : this.form.get('accountTo')?.value,
+        });
+        break;
+    }
   }
 
-  onCategorySelected(category: Category) {
+  onCategorySelected(category: Category | null) {
     this.form.patchValue({ category });
   }
 

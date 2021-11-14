@@ -2,6 +2,7 @@
   <mat-button-toggle-group
     class="mx-auto mb-2"
     formControlName="transactionType"
+    (change)="onTransactionTypeChange($event.value)"
   >
     <mat-button-toggle
       *ngFor="let type of TransactionType | enumArray"
@@ -12,14 +13,14 @@
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
     <mat-label>Amount</mat-label>
-    <input matInput formControlName="amount" required />
+    <input type="number" matInput formControlName="amount" required />
     <mat-error *ngIf="form.get('amount')?.hasError('required')"
       >Amount is required</mat-error
     >
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
-    <mat-label>Choose a date</mat-label>
+    <mat-label>Date</mat-label>
     <input matInput [matDatepicker]="picker" formControlName="date" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
@@ -38,9 +39,15 @@
       formControlName="categoryId"
       (selectionChange)="setCategory($event.value)"
     >
-      <mat-option *ngFor="let category of categories" [value]="category.id">
-        {{ category.name }}
-      </mat-option>
+      <mat-optgroup *ngFor="let group of categoryGroups" [label]="group.name">
+        <mat-option
+          [style.color]="category.color | colorHex"
+          *ngFor="let category of group.categories"
+          [value]="category.id"
+        >
+          {{ category.name }}
+        </mat-option>
+      </mat-optgroup>
     </mat-select>
   </mat-form-field>
 
@@ -68,7 +75,9 @@
     <mat-label>Account</mat-label>
     <mat-select
       formControlName="accountFromId"
-      (selectionChange)="setAccount($event.value, true)"
+      (selectionChange)="
+        setAccount($event.value, selectedTransactionType, true)
+      "
     >
       <mat-option
         [class.text-muted]="!account.includeInTotals"
@@ -91,7 +100,7 @@
     <mat-label>Account</mat-label>
     <mat-select
       formControlName="accountToId"
-      (selectionChange)="setAccount($event.value, false)"
+      (selectionChange)="setAccount($event.value, selectedTransactionType)"
     >
       <mat-option
         [class.text-muted]="!account.includeInTotals"
