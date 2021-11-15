@@ -8,10 +8,10 @@ import {
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
-import { EntityBaseService } from './entity-base.service';
+import { EntityBaseDataService } from './entity-base.service';
 
 @Injectable({ providedIn: 'root' })
-export class TransactionsService extends EntityBaseService<Transaction> {
+export class TransactionsService extends EntityBaseDataService<Transaction> {
   get transactions$(): Observable<Transaction[]> {
     return super
       .getAll()

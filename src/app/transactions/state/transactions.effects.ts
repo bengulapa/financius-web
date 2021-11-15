@@ -29,6 +29,74 @@ export class TransactionsEffects {
     )
   );
 
+  add$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TransactionActions.add),
+      mergeMap((action) =>
+        this.service.add(action.transaction).pipe(
+          map(
+            (transaction) => TransactionActions.addSuccess({ transaction }),
+            catchError((err: any) => {
+              const errorMessage =
+                'An error occurred while adding a transaction.';
+              this.notify.error(errorMessage);
+              console.log(err);
+              return of(TransactionActions.addFail({ errorMessage }));
+            })
+          )
+        )
+      )
+    )
+  );
+
+  update$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TransactionActions.update),
+      mergeMap((action) =>
+        this.service
+          .update({ id: action.transaction.id, changes: action.transaction })
+          .pipe(
+            map(
+              (transaction) =>
+                TransactionActions.updateSuccess({
+                  transaction: { id: transaction.id, changes: transaction },
+                }),
+              catchError((err: any) => {
+                const errorMessage =
+                  'An error occurred while updating a transaction.';
+                this.notify.error(errorMessage);
+                console.log(err);
+                return of(TransactionActions.updateFail({ errorMessage }));
+              })
+            )
+          )
+      )
+    )
+  );
+
+  remove$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TransactionActions.remove),
+      mergeMap((action) =>
+        this.service.delete(action.transaction.id).pipe(
+          map(
+            () =>
+              TransactionActions.removeSuccess({
+                transaction: action.transaction,
+              }),
+            catchError((err: any) => {
+              const errorMessage =
+                'An error occurred while removing a transaction.';
+              this.notify.error(errorMessage);
+              console.log(err);
+              return of(TransactionActions.removeFail({ errorMessage }));
+            })
+          )
+        )
+      )
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private service: TransactionsService,

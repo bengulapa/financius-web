@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { mergeMap, switchMap } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
@@ -42,14 +42,15 @@ export class TransactionsShellComponent implements OnInit {
       })
       .afterClosed()
       .pipe(
-        switchMap((dialogData: Transaction) => {
+        mergeMap((dialogData: Transaction) => {
           if (!dialogData) {
             return of();
           }
 
           // Update account 1st then save to updated account on the transaction
-
-          return this.updateAccounts(this.createTransactionObject(dialogData));
+          this.facade.add(this.createTransactionObject(dialogData));
+          return of();
+          // return this.updateAccounts(this.createTransactionObject(dialogData));
         })
       )
       .subscribe();
@@ -72,12 +73,11 @@ export class TransactionsShellComponent implements OnInit {
             return of();
           }
 
-          this.service.update({
-            id: dialogData.id,
-            changes: this.createTransactionObject(dialogData, dialogData.id),
-          });
-
-          return this.updateAccounts(dialogData);
+          this.facade.update(
+            this.createTransactionObject(dialogData, dialogData.id)
+          );
+          return of();
+          //return this.updateAccounts(dialogData);
         })
       )
       .subscribe();
@@ -87,8 +87,10 @@ export class TransactionsShellComponent implements OnInit {
     this.service
       .getById(id)
       .pipe(
-        switchMap((t) => {
-          return this.updateAccounts(t, true);
+        switchMap((transaction) => {
+          //return this.updateAccounts(t, true);
+          this.facade.delete(transaction);
+          return of();
         })
       )
       .subscribe(() => {

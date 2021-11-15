@@ -71,3 +71,55 @@ export class EntityBaseService<TEntity>
     throw new Error('Method not implemented.');
   }
 }
+
+@Injectable()
+export class EntityBaseDataService<TEntity> {
+  name!: string;
+
+  constructor(private dbService: NgxIndexedDBService) {}
+
+  add(entity: TEntity): Observable<TEntity> {
+    const newEntity = {
+      ...entity,
+      modelState: ModelState.Normal,
+      syncState: SyncState.None,
+    };
+
+    this.dbService.add(this.name, newEntity);
+
+    return of(newEntity);
+  }
+
+  update(update: Update<TEntity>): Observable<TEntity> {
+    let updatedEntity = this.dbService
+      .update(this.name, {
+        ...update.changes,
+        modelState: ModelState.Normal,
+        syncState: SyncState.None,
+      })
+      .pipe(
+        map((e) => {
+          const entityToUpdate = e.find((e) => (e as any).id === update.id);
+
+          return <TEntity>{
+            ...entityToUpdate,
+            ...update.changes,
+          };
+        })
+      );
+
+    return updatedEntity;
+  }
+
+  delete(key: string | number) {
+    return this.dbService.deleteByKey(this.name, key);
+  }
+
+  getAll(): Observable<TEntity[]> {
+    return this.dbService.getAll(this.name);
+  }
+
+  getById(id: string): Observable<TEntity> {
+    return this.dbService.getByID(this.name, id);
+  }
+}
