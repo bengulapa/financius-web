@@ -6,12 +6,12 @@ import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
-import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Transaction } from 'src/app/shared/models/entities.models';
 import {
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
+import { TransactionsFacade } from '../../state/transactions.facade';
 import { TransactionFormDialogComponent } from '../transaction-form-dialog/transaction-form-dialog.component';
 
 @Component({
@@ -19,23 +19,17 @@ import { TransactionFormDialogComponent } from '../transaction-form-dialog/trans
   templateUrl: './transactions-shell.component.html',
   styleUrls: ['./transactions-shell.component.scss'],
 })
-export class TransactionsShellComponent
-  extends EntityBaseComponent<Transaction>
-  implements OnInit
-{
+export class TransactionsShellComponent implements OnInit {
   constructor(
+    public facade: TransactionsFacade,
     private service: TransactionsService,
     private accountsService: AccountsService,
     private dialog: MatDialog,
     private notify: NotificationService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.service.getTransactions();
-    this.entities$ = this.service.entities$;
-    this.loading$ = this.service.loading$;
+    this.facade.retrieve();
   }
 
   onAddClick() {
@@ -78,9 +72,10 @@ export class TransactionsShellComponent
             return of();
           }
 
-          this.service.update(
-            this.createTransactionObject(dialogData, dialogData.id)
-          );
+          this.service.update({
+            id: dialogData.id,
+            changes: this.createTransactionObject(dialogData, dialogData.id),
+          });
 
           return this.updateAccounts(dialogData);
         })
@@ -90,7 +85,7 @@ export class TransactionsShellComponent
 
   onDelete(id: string) {
     this.service
-      .getByKey(id)
+      .getById(id)
       .pipe(
         switchMap((t) => {
           return this.updateAccounts(t, true);

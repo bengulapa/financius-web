@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import {
-  EntityCollectionServiceBase,
-  EntityCollectionServiceElementsFactory,
-} from '@ngrx/data';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Transaction } from 'src/app/shared/models/entities.models';
 import {
   ModelState,
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { EntityBaseService } from './entity-base.service';
 
 @Injectable({ providedIn: 'root' })
-export class TransactionsService extends EntityCollectionServiceBase<Transaction> {
+export class TransactionsService extends EntityBaseService<Transaction> {
   get transactions$(): Observable<Transaction[]> {
     return super
       .getAll()
@@ -28,8 +26,9 @@ export class TransactionsService extends EntityCollectionServiceBase<Transaction
       );
   }
 
-  constructor(factory: EntityCollectionServiceElementsFactory) {
-    super('Transaction', factory);
+  constructor(dbService: NgxIndexedDBService) {
+    super(dbService);
+    super.name = 'transactions';
   }
 
   getTransactions(): Observable<Transaction[]> {

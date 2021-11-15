@@ -1,7 +1,7 @@
 <app-main-toolbar></app-main-toolbar>
 
 <mat-progress-bar
-  *ngIf="loading$ | async"
+  *ngIf="facade.loading$ | async"
   color="accent"
   mode="indeterminate"
 ></mat-progress-bar>
@@ -15,8 +15,8 @@
   </div>
 
   <app-transactions-table
-    [data]="entities$ | async"
-    [loading]="loading$ | async"
+    [data]="facade.entities$ | async"
+    [loading]="facade.loading$ | async"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
   ></app-transactions-table>

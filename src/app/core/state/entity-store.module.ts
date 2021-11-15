@@ -37,17 +37,11 @@ export class EntityStoreModule {
     const tagsDataService = new EntityBaseService<Tag>(dbService);
     tagsDataService.name = storeNames.Tags;
 
-    const transactionsDataService = new EntityBaseService<Transaction>(
-      dbService
-    );
-    transactionsDataService.name = storeNames.Transactions;
-
     entityDataService.registerServices({
       Account: accountsDataServiceDataService,
       Category: categoriesDataService,
       Currency: currenciesDataService,
       Tag: tagsDataService,
-      Transaction: transactionsDataService,
     });
   }
 }

@@ -33,7 +33,7 @@ export class ReportsShellComponent
     this.selectedYear = currentYear;
     this.setSelectedPeriod();
 
-    this.loading$ = this.transactionsService.loading$;
+    // this.loading$ = this.transactionsService.loading$;
   }
 
   onPeriodChange(increment: number) {
