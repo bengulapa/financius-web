@@ -5,18 +5,22 @@ import {
 } from 'src/app/shared/models/financius.enums';
 import * as fromReducer from './transactions.reducer';
 
+const { selectAll } = fromReducer.transactionsAdapter.getSelectors();
+
 const getState = createFeatureSelector<fromReducer.TransactionsState>(
   fromReducer.featureKey
 );
 
+const selectAllTransactions = createSelector(getState, selectAll);
+
 export const transactionsQuery = {
   getLoading: createSelector(getState, (state) => state.loading),
-  getActiveTransactions: createSelector(getState, (state) =>
-    state.transactions.filter(
+  getActiveTransactions: createSelector(selectAllTransactions, (transactions) =>
+    transactions?.filter(
       (t) =>
         t.modelState === ModelState.Normal &&
         t.transactionState === TransactionState.Confirmed
     )
   ),
-  getTransactions: createSelector(getState, (state) => state.transactions),
+  getTransactions: selectAllTransactions,
 };
