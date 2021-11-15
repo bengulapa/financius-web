@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { storeNames } from 'src/app/core/store/indexed-db-config';
+import { storeNames } from 'src/app/core/state/indexed-db-config';
 import {
   Account,
   Category,

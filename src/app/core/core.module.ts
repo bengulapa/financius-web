@@ -7,9 +7,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { environment } from 'src/environments/environment';
 import { SharedModule } from '../shared/shared.module';
-import { entityConfig } from './store/entity-metadata';
-import { EntityStoreModule } from './store/entity-store.module';
-import { dbConfig } from './store/indexed-db-config';
+import { entityConfig } from './state/entity-metadata';
+import { EntityStoreModule } from './state/entity-store.module';
+import { dbConfig } from './state/indexed-db-config';
 
 @NgModule({
   declarations: [],
