@@ -16,7 +16,6 @@
 
   <app-transactions-table
     [data]="facade.entities$ | async"
-    [loading]="facade.loading$ | async"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
   ></app-transactions-table>
