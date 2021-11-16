@@ -1,17 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  exhaustMap,
+  filter,
+  map,
+  mergeMap,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { TransactionActions } from './transactions.actions';
+import { TransactionsState } from './transactions.reducer';
+import { transactionsQuery } from './transactions.selectors';
 
 @Injectable()
 export class TransactionsEffects {
   retrieve$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionActions.retrieve),
-      mergeMap(() =>
+      // Don't load if we've already loaded.
+      withLatestFrom(this.store.select(transactionsQuery.getEntitiesLoaded)),
+      filter(([_, loaded]) => !loaded),
+      // Don't handle more than one load request at a time.
+      exhaustMap(() =>
         this.service.getAll().pipe(
           map(
             (transactions) =>
@@ -109,6 +124,7 @@ export class TransactionsEffects {
   constructor(
     private actions$: Actions,
     private service: TransactionsService,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private store: Store<TransactionsState>
   ) {}
 }

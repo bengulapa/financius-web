@@ -1,4 +1,4 @@
-import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createEntityAdapter, EntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { BaseEntityState } from 'src/app/core/state/core.reducers';
 import { Transaction } from 'src/app/shared/models/entities.models';
@@ -14,12 +14,16 @@ export const transactionsAdapter: EntityAdapter<Transaction> =
 export const initialState: TransactionsState =
   transactionsAdapter.getInitialState({
     loading: false,
+    entitiesLoaded: false,
   });
 
 export const transactionsReducer = createReducer(
   initialState,
+  on(TransactionActions.retrieve, (state) => ({
+    ...state,
+    loading: !state.entitiesLoaded,
+  })),
   on(
-    TransactionActions.retrieve,
     TransactionActions.add,
     TransactionActions.update,
     TransactionActions.remove,
@@ -43,6 +47,7 @@ export const transactionsReducer = createReducer(
     transactionsAdapter.setAll(transactions, {
       ...state,
       loading: false,
+      entitiesLoaded: true,
     })
   ),
   on(TransactionActions.addSuccess, (state, { transaction }) =>
