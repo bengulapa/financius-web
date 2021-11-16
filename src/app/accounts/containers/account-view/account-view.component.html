@@ -1,7 +1,7 @@
 <app-main-toolbar></app-main-toolbar>
 
 <mat-progress-bar
-  *ngIf="loading$ | async"
+  *ngIf="facade.loading$ | async"
   color="accent"
   mode="indeterminate"
 ></mat-progress-bar>
@@ -9,7 +9,8 @@
 <section class="container">
   <ng-container>
     <h2>
-      <a routerLink="/accounts">Accounts</a> / {{ (account$ | async)?.name }}
+      <a routerLink="/accounts">Accounts</a> /
+      {{ (facade.account$ | async)?.name }}
     </h2>
 
     <div class="d-flex">
@@ -25,8 +26,8 @@
           <mat-card-title>Transactions</mat-card-title>
           <mat-card-content>
             <app-transactions-table
-              [data]="transactions$ | async"
-              [loading]="loading$ | async"
+              [data]="facade.transactions$ | async"
+              [loading]="facade.loading$ | async"
               [displayedColumns]="[
                 'date',
                 'category',

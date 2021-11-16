@@ -22,8 +22,8 @@ export class AccountsTableComponent implements OnChanges {
   data: Account[] | null = [];
 
   dataSource!: MatTableDataSource<Account>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
   displayedColumns = [
     'name',
     'currency',

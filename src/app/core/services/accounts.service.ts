@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import {
-  EntityCollectionServiceBase,
-  EntityCollectionServiceElementsFactory,
-} from '@ngrx/data';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { ModelState } from 'src/app/shared/models/financius.enums';
+import { EntityBaseDataService } from './entity-base.service';
 import { TransactionsService } from './transactions.service';
 
 @Injectable({ providedIn: 'root' })
-export class AccountsService extends EntityCollectionServiceBase<Account> {
+export class AccountsService extends EntityBaseDataService<Account> {
+  readonly name = 'accounts';
+
   constructor(
-    factory: EntityCollectionServiceElementsFactory,
+    dbService: NgxIndexedDBService,
     private transactionsService: TransactionsService
   ) {
-    super('Account', factory);
+    super(dbService);
   }
 
   getAccounts() {

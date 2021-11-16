@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { SharedModule } from '../shared/shared.module';
-import { AccountViewComponent } from './containers/account-view/account-view.component';
 import { AccountsTableComponent } from './components/accounts-table/accounts-table.component';
+import { AccountViewComponent } from './containers/account-view/account-view.component';
 import { AccountsShellComponent } from './containers/accounts-shell/accounts-shell.component';
+import { AccountsEffects } from './state/accounts.effects';
+import * as fromReducer from './state/accounts.reducer';
 
 @NgModule({
   declarations: [
@@ -23,6 +27,8 @@ import { AccountsShellComponent } from './containers/accounts-shell/accounts-she
         component: AccountViewComponent,
       },
     ]),
+    StoreModule.forFeature(fromReducer.featureKey, fromReducer.accountsReducer),
+    EffectsModule.forFeature([AccountsEffects]),
   ],
 })
 export class AccountsModule {}

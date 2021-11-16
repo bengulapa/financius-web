@@ -1,29 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AccountsService } from 'src/app/core/services/accounts.service';
-import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
-import { Account, Transaction } from 'src/app/shared/models/entities.models';
+import { TransactionsFacade } from 'src/app/transactions/state/transactions.facade';
+import { AccountsFacade } from '../../state/accounts.facade';
 
 @Component({
   selector: 'app-account-view',
   templateUrl: './account-view.component.html',
   styleUrls: ['./account-view.component.scss'],
 })
-export class AccountViewComponent
-  extends EntityBaseComponent<Account>
-  implements OnInit
-{
-  transactions$!: Observable<Transaction[]>;
-  account$!: Observable<Account | null>;
-
+export class AccountViewComponent implements OnInit {
   constructor(
-    private service: AccountsService,
+    public facade: AccountsFacade,
+    public transactionsFacade: TransactionsFacade,
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -34,9 +25,7 @@ export class AccountViewComponent
         return;
       }
 
-      this.account$ = this.service.getByKey(id);
-      this.transactions$ = this.service.getTransactions(id);
-      this.loading$ = this.service.loading$;
+      this.facade.getByKey(id);
     });
   }
 }

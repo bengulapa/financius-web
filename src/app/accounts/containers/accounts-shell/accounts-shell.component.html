@@ -1,7 +1,7 @@
 <app-main-toolbar></app-main-toolbar>
 
 <mat-progress-bar
-  *ngIf="loading$ | async"
+  *ngIf="facade.loading$ | async"
   color="accent"
   mode="indeterminate"
 ></mat-progress-bar>
@@ -9,5 +9,5 @@
 <section class="container">
   <h2>Accounts</h2>
 
-  <app-accounts-table [data]="entities$ | async"></app-accounts-table>
+  <app-accounts-table [data]="facade.entities$ | async"></app-accounts-table>
 </section>
