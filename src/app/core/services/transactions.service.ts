@@ -12,6 +12,8 @@ import { EntityBaseDataService } from './entity-base.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsService extends EntityBaseDataService<Transaction> {
+  readonly name = 'transactions';
+
   get transactions$(): Observable<Transaction[]> {
     return super
       .getAll()
@@ -28,7 +30,6 @@ export class TransactionsService extends EntityBaseDataService<Transaction> {
 
   constructor(dbService: NgxIndexedDBService) {
     super(dbService);
-    super.name = 'transactions';
   }
 
   getTransactions(): Observable<Transaction[]> {

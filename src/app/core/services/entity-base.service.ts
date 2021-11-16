@@ -73,8 +73,8 @@ export class EntityBaseService<TEntity>
 }
 
 @Injectable()
-export class EntityBaseDataService<TEntity> {
-  name!: string;
+export abstract class EntityBaseDataService<TEntity> {
+  abstract name: string;
 
   constructor(private dbService: NgxIndexedDBService) {}
 

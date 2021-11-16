@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { MaterialModule } from './material.module';
@@ -17,6 +18,7 @@ import { EnumArrayPipe } from './pipes/enum-array.pipe';
     CustomCurrencyPipe,
     ColorHexPipe,
     EnumArrayPipe,
+    CustomDialogComponent,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, NgxChartsModule],
   exports: [

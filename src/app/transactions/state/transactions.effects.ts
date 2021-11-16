@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { TransactionActions } from './transactions.actions';
@@ -95,6 +95,15 @@ export class TransactionsEffects {
         )
       )
     )
+  );
+
+  removeSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TransactionActions.removeSuccess),
+        tap(() => this.notify.success('Transaction has been deleted'))
+      ),
+    { dispatch: false }
   );
 
   constructor(

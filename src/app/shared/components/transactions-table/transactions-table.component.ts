@@ -42,7 +42,7 @@ export class TransactionsTableComponent implements OnChanges {
   edit = new EventEmitter<Partial<Transaction>>();
 
   @Output()
-  delete = new EventEmitter<string>();
+  delete = new EventEmitter<Transaction>();
 
   dataSource!: MatTableDataSource<Transaction>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
