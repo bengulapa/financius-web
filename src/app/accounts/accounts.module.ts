@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedModule } from '../shared/shared.module';
+import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { AccountsTableComponent } from './components/accounts-table/accounts-table.component';
 import { AccountViewComponent } from './containers/account-view/account-view.component';
 import { AccountsShellComponent } from './containers/accounts-shell/accounts-shell.component';
@@ -14,6 +15,7 @@ import * as fromReducer from './state/accounts.reducer';
     AccountsShellComponent,
     AccountsTableComponent,
     AccountViewComponent,
+    AccountDetailsComponent,
   ],
   imports: [
     SharedModule,

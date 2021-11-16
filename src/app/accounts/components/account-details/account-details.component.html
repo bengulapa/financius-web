@@ -1,0 +1,34 @@
+<h2>
+  <a routerLink="/accounts">Accounts</a> /
+  {{ account?.name }}
+</h2>
+
+<div class="d-flex">
+  <section class="w-30 me-1">
+    <mat-card *ngIf="account">
+      <mat-card-title>Details</mat-card-title>
+      <mat-card-content>
+        <p class="mt-4">Name: {{ account.name }}</p>
+        <p>
+          Balance: {{ account.balance | fwCurrency: account.currency.code }}
+        </p>
+        <p>Currency: {{ account.currency.code }}</p>
+        <p>Include in Totals?: {{ account.includeInTotals ? "Yes" : "No" }}</p>
+        <p *ngIf="account.note as note">Note: {{ note }}</p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <section class="w-70 ms-1">
+    <mat-card>
+      <mat-card-title>Transactions</mat-card-title>
+      <mat-card-content>
+        <app-transactions-table
+          [data]="transactions"
+          [loading]="loading"
+          [displayedColumns]="['date', 'category', 'tags', 'note', 'amount']"
+        ></app-transactions-table>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

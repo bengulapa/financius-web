@@ -8,37 +8,10 @@
 
 <section class="container">
   <ng-container>
-    <h2>
-      <a routerLink="/accounts">Accounts</a> /
-      {{ (facade.account$ | async)?.name }}
-    </h2>
-
-    <div class="d-flex">
-      <section class="w-30 me-1">
-        <mat-card>
-          <mat-card-title>Details</mat-card-title>
-          <mat-card-content> </mat-card-content>
-        </mat-card>
-      </section>
-
-      <section class="w-70 ms-1">
-        <mat-card>
-          <mat-card-title>Transactions</mat-card-title>
-          <mat-card-content>
-            <app-transactions-table
-              [data]="facade.transactions$ | async"
-              [loading]="facade.loading$ | async"
-              [displayedColumns]="[
-                'date',
-                'category',
-                'tags',
-                'note',
-                'amount'
-              ]"
-            ></app-transactions-table>
-          </mat-card-content>
-        </mat-card>
-      </section>
-    </div>
+    <app-account-details
+      [account]="facade.account$ | async"
+      [transactions]="facade.transactions$ | async"
+      [loading]="transactionsFacade.loading$ | async"
+    ></app-account-details>
   </ng-container>
 </section>
