@@ -39,7 +39,7 @@ export class TransactionsTableComponent implements OnChanges {
   ];
 
   @Output()
-  edit = new EventEmitter<Partial<Transaction>>();
+  edit = new EventEmitter<Transaction>();
 
   @Output()
   delete = new EventEmitter<Transaction>();

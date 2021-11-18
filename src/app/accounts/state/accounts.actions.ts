@@ -52,6 +52,11 @@ export namespace AccountActions {
     props<{ account: Account }>()
   );
 
+  export const updateAccountBalance = createAction(
+    `[Transaction]-${prefix} Update Balance`,
+    props<{ account: Account; amount: number }>()
+  );
+
   export const updateSuccess = createAction(
     `${prefix} Update Success`,
     props<{ account: Update<Account> }>()

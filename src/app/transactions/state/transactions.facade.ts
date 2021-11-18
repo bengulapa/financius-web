@@ -21,8 +21,8 @@ export class TransactionsFacade {
     this.store.dispatch(TransactionActions.add({ transaction }));
   }
 
-  update(transaction: Transaction) {
-    this.store.dispatch(TransactionActions.update({ transaction }));
+  update(old: Transaction, update: Transaction) {
+    this.store.dispatch(TransactionActions.update({ old, update }));
   }
 
   delete(transaction: Transaction) {

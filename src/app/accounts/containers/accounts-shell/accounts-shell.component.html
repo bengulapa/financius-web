@@ -9,5 +9,7 @@
 <section class="container">
   <h2>Accounts</h2>
 
-  <app-accounts-table [data]="facade.entities$ | async"></app-accounts-table>
+  <app-accounts-table
+    [data]="facade.activeAccounts$ | async"
+  ></app-accounts-table>
 </section>

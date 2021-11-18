@@ -34,12 +34,12 @@ export namespace TransactionActions {
 
   export const update = createAction(
     `${key} Update`,
-    props<{ transaction: Transaction }>()
+    props<{ old: Transaction; update: Transaction }>()
   );
 
   export const updateSuccess = createAction(
     `${key} Update Success`,
-    props<{ transaction: Update<Transaction> }>()
+    props<{ old: Transaction; transaction: Update<Transaction> }>()
   );
 
   export const updateFail = createAction(

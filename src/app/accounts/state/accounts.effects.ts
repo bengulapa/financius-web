@@ -14,6 +14,7 @@ import {
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Account } from 'src/app/shared/models/entities.models';
+import { TransactionsFacade } from 'src/app/transactions/state/transactions.facade';
 import { AccountActions } from './accounts.actions';
 import { getEntitiesLoaded } from './accounts.selectors';
 
@@ -23,7 +24,7 @@ export class AccountsEffects {
     this.actions$.pipe(
       ofType(AccountActions.retrieve),
       withLatestFrom(this.store.select(getEntitiesLoaded)),
-      filter((_, loaded) => !loaded),
+      filter(([_, loaded]) => !loaded),
       exhaustMap(() =>
         this.service.getAll().pipe(
           map(
@@ -105,6 +106,37 @@ export class AccountsEffects {
     )
   );
 
+  updateFromTransaction$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.updateAccountBalance),
+      mergeMap((action) => {
+        return this.service
+          .update({
+            id: action.account.id,
+            changes: {
+              ...action.account!,
+              balance: action.amount,
+            },
+          })
+          .pipe(
+            map(
+              (account) =>
+                AccountActions.updateSuccess({
+                  account: { id: account.id, changes: account },
+                }),
+              catchError((err: any) => {
+                const errorMessage =
+                  'An error occurred while updating a account.';
+                this.notify.error(errorMessage);
+                console.log(err);
+                return of(AccountActions.updateFail({ errorMessage }));
+              })
+            )
+          );
+      })
+    )
+  );
+
   remove$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AccountActions.remove),
@@ -132,6 +164,7 @@ export class AccountsEffects {
     private store: Store<Account>,
     private actions$: Actions,
     private service: AccountsService,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private transactionsFacade: TransactionsFacade
   ) {}
 }

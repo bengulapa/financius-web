@@ -8,11 +8,12 @@ import {
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
+import { storeNames } from '../state/indexed-db-config';
 import { EntityBaseDataService } from './entity-base.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsService extends EntityBaseDataService<Transaction> {
-  readonly name = 'transactions';
+  readonly name = storeNames.Transactions;
 
   get transactions$(): Observable<Transaction[]> {
     return super

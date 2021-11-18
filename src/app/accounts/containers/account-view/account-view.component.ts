@@ -17,6 +17,8 @@ export class AccountViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.transactionsFacade.retrieve();
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
 

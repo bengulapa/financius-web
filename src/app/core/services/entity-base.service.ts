@@ -76,7 +76,7 @@ export class EntityBaseService<TEntity>
 export abstract class EntityBaseDataService<TEntity> {
   abstract name: string;
 
-  constructor(private dbService: NgxIndexedDBService) {}
+  constructor(protected dbService: NgxIndexedDBService) {}
 
   add(entity: TEntity): Observable<TEntity> {
     const newEntity = {
@@ -85,7 +85,7 @@ export abstract class EntityBaseDataService<TEntity> {
       syncState: SyncState.None,
     };
 
-    this.dbService.add(this.name, newEntity);
+    this.dbService.add(this.name, newEntity).subscribe();
 
     return of(newEntity);
   }
@@ -107,6 +107,8 @@ export abstract class EntityBaseDataService<TEntity> {
           };
         })
       );
+
+    updatedEntity.subscribe();
 
     return updatedEntity;
   }

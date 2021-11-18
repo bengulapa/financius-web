@@ -29,7 +29,7 @@ export class AccountsTableComponent implements OnChanges {
     'currency',
     'balance',
     'note',
-    'includeInTotals',
+    //'includeInTotals',
     'actions',
   ];
 

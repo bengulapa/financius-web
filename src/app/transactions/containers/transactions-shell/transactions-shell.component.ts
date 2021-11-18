@@ -47,7 +47,7 @@ export class TransactionsShellComponent implements OnInit {
       .subscribe();
   }
 
-  onEdit(transaction: Partial<Transaction>) {
+  onEdit(transaction: Transaction) {
     this.dialog
       .open(TransactionFormDialogComponent, {
         disableClose: true,
@@ -65,6 +65,7 @@ export class TransactionsShellComponent implements OnInit {
           }
 
           this.facade.update(
+            transaction,
             this.createTransactionObject(dialogData, dialogData.id)
           );
           return of();

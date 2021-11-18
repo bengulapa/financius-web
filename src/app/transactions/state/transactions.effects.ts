@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import * as _ from 'lodash';
 import { of } from 'rxjs';
 import {
   catchError,
@@ -11,8 +12,11 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
+import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { Transaction } from 'src/app/shared/models/entities.models';
+import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TransactionActions } from './transactions.actions';
 import { TransactionsState } from './transactions.reducer';
 import { transactionsQuery } from './transactions.selectors';
@@ -64,29 +68,66 @@ export class TransactionsEffects {
     )
   );
 
+  updateTransactionAccountOnAdd$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TransactionActions.addSuccess),
+        withLatestFrom(
+          this.store.select(transactionsQuery.getActiveTransactions)
+        ),
+        tap(([{ transaction }, transactions]) => {
+          this.updateTransactionAccount(transaction, transactions);
+        })
+      ),
+    { dispatch: false }
+  );
+
   update$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionActions.update),
-      mergeMap((action) =>
-        this.service
-          .update({ id: action.transaction.id, changes: action.transaction })
-          .pipe(
-            map(
-              (transaction) =>
-                TransactionActions.updateSuccess({
-                  transaction: { id: transaction.id, changes: transaction },
-                }),
-              catchError((err: any) => {
-                const errorMessage =
-                  'An error occurred while updating a transaction.';
-                this.notify.error(errorMessage);
-                console.log(err);
-                return of(TransactionActions.updateFail({ errorMessage }));
-              })
-            )
+      mergeMap(({ old, update }) =>
+        this.service.update({ id: old.id, changes: update }).pipe(
+          map(
+            (transaction) =>
+              TransactionActions.updateSuccess({
+                old,
+                transaction: { id: transaction.id, changes: transaction },
+              }),
+            catchError((err: any) => {
+              const errorMessage =
+                'An error occurred while updating a transaction.';
+              this.notify.error(errorMessage);
+              console.log(err);
+              return of(TransactionActions.updateFail({ errorMessage }));
+            })
           )
+        )
       )
     )
+  );
+
+  updateTransactionAccountOnUpdate$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TransactionActions.updateSuccess),
+        withLatestFrom(
+          this.store.select(transactionsQuery.getActiveTransactions)
+        ),
+        tap(([{ old, transaction }, transactions]) => {
+          if (
+            old.accountFrom?.id !== transaction.changes.accountFrom?.id ||
+            old.accountTo?.id !== transaction.changes.accountTo?.id
+          ) {
+            this.updateTransactionAccount(old, transactions);
+          }
+
+          this.updateTransactionAccount(
+            <Transaction>transaction.changes,
+            transactions
+          );
+        })
+      ),
+    { dispatch: false }
   );
 
   remove$ = createEffect(() =>
@@ -116,7 +157,13 @@ export class TransactionsEffects {
     () =>
       this.actions$.pipe(
         ofType(TransactionActions.removeSuccess),
-        tap(() => this.notify.success('Transaction has been deleted'))
+        withLatestFrom(
+          this.store.select(transactionsQuery.getActiveTransactions)
+        ),
+        tap(([{ transaction }, transactions]) => {
+          this.updateTransactionAccount(transaction, transactions);
+          this.notify.success('Transaction has been deleted');
+        })
       ),
     { dispatch: false }
   );
@@ -124,7 +171,59 @@ export class TransactionsEffects {
   constructor(
     private actions$: Actions,
     private service: TransactionsService,
+    private accountsFacade: AccountsFacade,
     private notify: NotificationService,
     private store: Store<TransactionsState>
   ) {}
+
+  private updateTransactionAccount(
+    transaction: Transaction,
+    transactions: Transaction[]
+  ) {
+    switch (transaction.transactionType) {
+      case TransactionType.Expense:
+        {
+          const account = transaction.accountFrom!;
+          const amount = this.getAccountTotal(transactions, account.id);
+          this.accountsFacade.updateAccountBalance(account, amount);
+        }
+        break;
+
+      case TransactionType.Income:
+        {
+          const account = transaction.accountTo!;
+          const amount = this.getAccountTotal(transactions, account.id);
+          this.accountsFacade.updateAccountBalance(account, amount);
+        }
+        break;
+
+      case TransactionType.Transfer:
+        {
+          const accountFrom = transaction.accountFrom!;
+          const amountFromSum = this.getAccountTotal(
+            transactions,
+            accountFrom.id
+          );
+          this.accountsFacade.updateAccountBalance(accountFrom, amountFromSum);
+
+          const accountTo = transaction.accountTo!;
+          const amountToSum = this.getAccountTotal(transactions, accountTo.id);
+          this.accountsFacade.updateAccountBalance(accountTo, amountToSum);
+        }
+        break;
+    }
+  }
+
+  private getAccountTotal(transactions: Transaction[], accountId: string) {
+    const fromSum = _.sumBy(
+        transactions.filter((t) => t.accountFrom?.id === accountId),
+        'amount'
+      ),
+      toSum = _.sumBy(
+        transactions.filter((t) => t.accountTo?.id === accountId),
+        'amount'
+      );
+
+    return Math.round(toSum) - Math.round(fromSum);
+  }
 }

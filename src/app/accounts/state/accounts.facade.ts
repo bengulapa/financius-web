@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
-import { transactionsQuery } from 'src/app/transactions/state/transactions.selectors';
 import { AccountActions } from './accounts.actions';
 import { AccountsState } from './accounts.reducer';
 import * as accountsQuery from './accounts.selectors';
@@ -29,18 +28,18 @@ export class AccountsFacade {
     this.store.dispatch(AccountActions.getByKey({ key }));
   }
 
-  getTransactions(categoryId: string) {
-    return this.store.select(
-      transactionsQuery.getAccountTransactions({ categoryId })
-    );
-  }
-
   add(account: Account) {
     this.store.dispatch(AccountActions.add({ account }));
   }
 
   update(account: Account) {
     this.store.dispatch(AccountActions.update({ account }));
+  }
+
+  updateAccountBalance(account: Account, amount: number) {
+    this.store.dispatch(
+      AccountActions.updateAccountBalance({ account, amount })
+    );
   }
 
   delete(account: Account) {
