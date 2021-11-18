@@ -264,6 +264,7 @@ export class SettingsShellComponent implements OnInit {
           `${backup.transactions.length} transactions imported`,
         ]);
         this.loading$.next(false);
+        location.reload();
       });
   }
 
