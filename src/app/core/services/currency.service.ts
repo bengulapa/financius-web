@@ -4,7 +4,9 @@ import {
   EntityCollectionServiceBase,
   EntityCollectionServiceElementsFactory,
 } from '@ngrx/data';
+import { Observable, of } from 'rxjs';
 import { Currency } from 'src/app/shared/models/entities.models';
+import * as _ from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
@@ -98,7 +100,7 @@ export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
       decimalCount: 2,
     },
     {
-      id: 'abcc54ba-28b9-46d2-972d-410d963b31ec',
+      id: '91c6554e-a2db-45c5-8084-06392fc69db9',
       modelState: 1,
       syncState: 1,
       code: 'AUD',
@@ -112,6 +114,10 @@ export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
 
   constructor(factory: EntityCollectionServiceElementsFactory) {
     super('Currency', factory);
+  }
+
+  getCurrencies(): Observable<Currency[]> {
+    return of(_.sortBy(this.currencies, 'code'));
   }
 
   format(value: number, currencyCode: string | null): string {
