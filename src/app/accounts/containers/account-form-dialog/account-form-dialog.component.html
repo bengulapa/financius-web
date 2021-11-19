@@ -1,0 +1,20 @@
+<div class="fw-dialog">
+  <h2 mat-dialog-title>{{ isEditMode ? "Edit" : "Add" }} Account</h2>
+
+  <app-account-form
+    [form]="form"
+    [currencies]="currencies$ | async"
+  ></app-account-form>
+
+  <mat-dialog-actions>
+    <button mat-stroked-button mat-dialog-close>CANCEL</button>
+    <button
+      [disabled]="!form.valid || form.pristine"
+      mat-flat-button
+      color="accent"
+      (click)="close()"
+    >
+      {{ isEditMode ? "UPDATE" : "SAVE" }}
+    </button>
+  </mat-dialog-actions>
+</div>

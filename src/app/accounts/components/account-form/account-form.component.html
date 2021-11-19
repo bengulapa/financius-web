@@ -1,0 +1,38 @@
+<form [formGroup]="form">
+  <mat-form-field appearance="fill" class="w-100 mb-2">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" required />
+    <mat-error *ngIf="form.get('name')?.hasError('required')"
+      >Name is required</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-100 mb-2">
+    <mat-label>Balance</mat-label>
+    <input type="number" matInput formControlName="balance" required />
+    <mat-error *ngIf="form.get('balance')?.hasError('required')"
+      >Balance is required</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-100 mb-2">
+    <mat-label>Currency</mat-label>
+    <mat-select
+      formControlName="currencyCode"
+      (selectionChange)="setCurrency($event.value)"
+    >
+      <mat-option *ngFor="let currency of currencies" [value]="currency.code">
+        {{ currency.code }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-100 mb-2">
+    <mat-label>Note</mat-label>
+    <textarea matInput formControlName="note"></textarea>
+  </mat-form-field>
+
+  <mat-checkbox class="w-100 mb-3" formControlName="includeInTotals"
+    >Include in totals?</mat-checkbox
+  >
+</form>

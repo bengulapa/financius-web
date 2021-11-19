@@ -9,6 +9,8 @@ import { AccountViewComponent } from './containers/account-view/account-view.com
 import { AccountsShellComponent } from './containers/accounts-shell/accounts-shell.component';
 import { AccountsEffects } from './state/accounts.effects';
 import * as fromReducer from './state/accounts.reducer';
+import { AccountFormDialogComponent } from './containers/account-form-dialog/account-form-dialog.component';
+import { AccountFormComponent } from './components/account-form/account-form.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import * as fromReducer from './state/accounts.reducer';
     AccountsTableComponent,
     AccountViewComponent,
     AccountDetailsComponent,
+    AccountFormDialogComponent,
+    AccountFormComponent,
   ],
   imports: [
     SharedModule,

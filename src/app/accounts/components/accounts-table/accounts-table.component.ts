@@ -10,6 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Account } from 'src/app/shared/models/entities.models';
+import { TableBaseComponent } from 'src/app/shared/table-base.component';
 
 @Component({
   selector: 'app-accounts-table',
@@ -17,19 +18,16 @@ import { Account } from 'src/app/shared/models/entities.models';
   styleUrls: ['./accounts-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountsTableComponent implements OnChanges {
-  @Input()
-  data: Account[] | null = [];
-
-  dataSource!: MatTableDataSource<Account>;
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+export class AccountsTableComponent
+  extends TableBaseComponent<Account>
+  implements OnChanges
+{
   displayedColumns = [
     'name',
-    'currency',
+    'currencyCode',
     'balance',
     'note',
-    //'includeInTotals',
+    'includeInTotals',
     'actions',
   ];
 
@@ -38,15 +36,6 @@ export class AccountsTableComponent implements OnChanges {
       this.dataSource = new MatTableDataSource(this.data || []);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
     }
   }
 }

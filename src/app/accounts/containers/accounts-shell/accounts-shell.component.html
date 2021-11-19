@@ -7,9 +7,16 @@
 ></mat-progress-bar>
 
 <section class="container">
-  <h2>Accounts</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Accounts</h2>
+    <button mat-mini-fab (click)="onAddClick()" color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 
   <app-accounts-table
-    [data]="facade.activeAccounts$ | async"
+    [data]="facade.entities$ | async"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
   ></app-accounts-table>
 </section>
