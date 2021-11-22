@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Currency } from 'src/app/shared/models/entities.models';
 
@@ -6,17 +6,14 @@ import { Currency } from 'src/app/shared/models/entities.models';
   selector: 'app-account-form',
   templateUrl: './account-form.component.html',
   styleUrls: ['./account-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountFormComponent implements OnChanges {
+export class AccountFormComponent {
   @Input()
   form!: FormGroup;
 
   @Input()
   currencies?: Currency[] | null;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    throw new Error('Method not implemented.');
-  }
 
   setCurrency(code: string | null) {
     this.form.patchValue({

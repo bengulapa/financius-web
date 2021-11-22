@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -12,7 +7,7 @@ import { Account, Transaction } from 'src/app/shared/models/entities.models';
   styleUrls: ['./account-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountDetailsComponent implements OnInit {
+export class AccountDetailsComponent {
   @Input()
   account!: Account | null;
 
@@ -21,8 +16,4 @@ export class AccountDetailsComponent implements OnInit {
 
   @Input()
   loading?: boolean | null;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
