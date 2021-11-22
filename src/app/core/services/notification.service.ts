@@ -44,4 +44,18 @@ export class NotificationService {
       },
     });
   }
+
+  info(data: DialogData) {
+    return this.dialog.open(CustomDialogComponent, {
+      disableClose: true,
+      autoFocus: false,
+      width: '400px',
+      data: {
+        ...data,
+        okButtonColor: data.okButtonColor || 'primary',
+        okButtonText: data.okButtonText || 'OK',
+        hideCancelButton: true,
+      },
+    });
+  }
 }
