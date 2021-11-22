@@ -5,6 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ColorHexPipe implements PipeTransform {
   transform(value: number | undefined): string {
-    return value ? '#' + (value * -1).toString(16) : '';
+    if (!value) {
+      return '';
+    }
+
+    return '#' + (value! & 0x00ffffff).toString(16).padStart(6, '0');
   }
 }
