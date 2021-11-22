@@ -1,11 +1,10 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { tap } from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, forkJoin, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { storeNames } from 'src/app/core/state/indexed-db-config';
-import { Guid } from 'src/app/core/utilities/uuid.utils';
 import {
   Account,
   Category,
@@ -14,10 +13,12 @@ import {
   Transaction,
 } from 'src/app/shared/models/entities.models';
 import {
+  FinanciusAccount,
   FinanciusBackup,
   FinanciusCategory,
   FinanciusCurrency,
   FinanciusTag,
+  FinanciusTransaction,
 } from 'src/app/shared/models/financius.models';
 
 @Component({
@@ -62,6 +63,43 @@ export class SettingsShellComponent implements OnInit {
     reader.readAsText(file);
   }
 
+  onExportClick() {
+    forkJoin([
+      this.dbService.getAll<{ id: string; version: number; timestamp: number }>(
+        storeNames.Metadata
+      ),
+      this.dbService
+        .getAll<Currency>(storeNames.Currencies)
+        .pipe(map((c) => this.mapToFinanciusCurrency(c))),
+      this.dbService
+        .getAll<Category>(storeNames.Categories)
+        .pipe(map((c) => this.mapToFinanciusCategory(c))),
+      this.dbService
+        .getAll<Tag>(storeNames.Tags)
+        .pipe(map((t) => this.mapToFinanciusTag(t))),
+      this.dbService
+        .getAll<Account>(storeNames.Accounts)
+        .pipe(map((a) => this.mapToFinanciusAccount(a))),
+      this.dbService
+        .getAll<Transaction>(storeNames.Transactions)
+        .pipe(map((t) => this.mapToFinanciusTransaction(t))),
+    ]).subscribe(
+      ([metadata, currencies, categories, tags, accounts, transactions]) => {
+        const backupMetadata = metadata.find((m) => m.id === 'backup');
+
+        this.downloadJson({
+          version: (backupMetadata?.version || 0) + 1,
+          timestamp: new Date().getTime(),
+          currencies,
+          categories,
+          tags,
+          accounts,
+          transactions,
+        });
+      }
+    );
+  }
+
   private startImport(backup: FinanciusBackup) {
     this.loading$.next(true);
 
@@ -85,7 +123,7 @@ export class SettingsShellComponent implements OnInit {
   private informSuccess(backup: FinanciusBackup) {
     return this.notify
       .info({
-        title: 'Import Restored!',
+        title: 'Backup Restored!',
         content: `<ul class="text-start">
         <li>${backup.accounts.length} accounts</li>
         <li>${backup.transactions.length} transactions</li>
@@ -230,7 +268,7 @@ export class SettingsShellComponent implements OnInit {
     return this.dbService.clear(storeNames.Metadata).pipe(
       switchMap(() => {
         return this.dbService.add(storeNames.Metadata, {
-          id: backup.timestamp,
+          id: 'backup',
           version: backup.version,
           timestamp: backup.timestamp,
         });
@@ -251,6 +289,17 @@ export class SettingsShellComponent implements OnInit {
     const currency = currencies.find((c) => c.code == code);
 
     return currency ? value / Math.pow(10, currency.decimal_count) : 0;
+  }
+
+  private convertToFinanciusAmount(
+    value: number,
+    decimalCount: number
+  ): number {
+    if (!decimalCount) {
+      return 0;
+    }
+
+    return value * Math.pow(10, decimalCount);
   }
 
   private getAccount(
@@ -323,5 +372,110 @@ export class SettingsShellComponent implements OnInit {
             name: t.title,
           }
       );
+  }
+
+  private mapToFinanciusTransaction(t: Transaction[]): FinanciusTransaction[] {
+    return t.map(
+      (tr) =>
+        <FinanciusTransaction>{
+          id: tr.id,
+          model_state: tr.modelState,
+          sync_state: tr.syncState,
+          account_from_id: tr.accountFrom?.id || null,
+          account_to_id: tr.accountTo?.id || null,
+          category_id: tr.category?.id || null,
+          tag_ids: tr.tags?.map((t) => t.id),
+          date: tr.date,
+          amount: this.convertToFinanciusAmount(
+            tr.amount,
+            tr.currency?.decimalCount!
+          ),
+          exchange_rate: tr.exchangeRate,
+          note: tr.note,
+          transaction_state: tr.transactionState,
+          transaction_type: tr.transactionType,
+          include_in_reports: tr.includeInReports,
+        }
+    );
+  }
+
+  private mapToFinanciusTag(t: Tag[]): FinanciusTag[] {
+    return t.map(
+      (tag) =>
+        <FinanciusTag>{
+          id: tag.id,
+          model_state: tag.modelState,
+          sync_state: tag.syncState,
+          title: tag.name,
+        }
+    );
+  }
+
+  private mapToFinanciusCategory(c: Category[]): FinanciusCategory[] {
+    return c.map(
+      (fc) =>
+        <FinanciusCategory>{
+          id: fc.id,
+          model_state: fc.modelState,
+          sync_state: fc.syncState,
+          title: fc.name,
+          color: fc.color,
+          transaction_type: fc.transactionType,
+          sort_order: fc.sortOrder,
+        }
+    );
+  }
+
+  private mapToFinanciusCurrency(c: Currency[]): FinanciusCurrency[] {
+    return c.map(
+      (fc) =>
+        <FinanciusCurrency>{
+          id: fc.id,
+          model_state: fc.modelState,
+          sync_state: fc.syncState,
+          code: fc.code,
+          symbol: fc.symbol,
+          symbol_position: fc.symbolPosition,
+          decimal_separator: fc.decimalSeparator,
+          group_separator: fc.groupSeparator,
+          decimal_count: fc.decimalCount,
+        }
+    );
+  }
+
+  private mapToFinanciusAccount(a: Account[]): FinanciusAccount[] {
+    return a.map(
+      (ac) =>
+        <FinanciusAccount>{
+          id: ac.id,
+          model_state: ac.modelState,
+          sync_state: ac.syncState,
+          currency_code: ac.currency.code,
+          title: ac.name,
+          note: ac.note,
+          balance: this.convertToFinanciusAmount(
+            ac.balance,
+            ac.currency.decimalCount
+          ),
+          include_in_totals: ac.includeInTotals,
+        }
+    );
+  }
+
+  private downloadJson(backup: FinanciusBackup) {
+    var sJson = JSON.stringify(backup);
+    var element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/json;charset=UTF-8,' + encodeURIComponent(sJson)
+    );
+    element.setAttribute(
+      'download',
+      `Financius ${formatDate(backup.timestamp, 'yyyy-MM-dd Hmmss', 'en')}.json`
+    );
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click(); // simulate click
+    document.body.removeChild(element);
   }
 }
