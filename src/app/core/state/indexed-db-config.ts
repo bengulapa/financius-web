@@ -157,7 +157,8 @@ export const dbConfig: DBConfig = {
       store: storeNames.Metadata,
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
-        { name: 'backup', keypath: 'backup', options: { unique: false } },
+        { name: 'type', keypath: 'type', options: { unique: false } },
+        { name: 'value', keypath: 'value', options: { unique: false } },
       ],
     },
   ],
