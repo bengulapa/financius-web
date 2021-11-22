@@ -23,10 +23,9 @@ export class AccountsCardComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.activeAccounts = _.orderBy(
+    this.activeAccounts = _.sortBy(
       this.accounts.filter((a) => a.includeInTotals),
-      ['balance', 'name'],
-      ['desc', 'asc']
+      'name'
     );
   }
 
