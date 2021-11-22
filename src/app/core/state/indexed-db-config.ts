@@ -6,6 +6,7 @@ export const storeNames = {
   Currencies: 'currencies',
   Tags: 'tags',
   Transactions: 'transactions',
+  Metadata: 'metadata',
 };
 
 const baseObjectStoreSchema = [
@@ -150,6 +151,13 @@ export const dbConfig: DBConfig = {
           keypath: 'includeInReports',
           options: { unique: false },
         },
+      ],
+    },
+    {
+      store: storeNames.Metadata,
+      storeConfig: { keyPath: 'id', autoIncrement: false },
+      storeSchema: [
+        { name: 'backup', keypath: 'backup', options: { unique: false } },
       ],
     },
   ],
