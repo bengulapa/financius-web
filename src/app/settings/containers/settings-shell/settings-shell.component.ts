@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { tap } from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { storeNames } from 'src/app/core/state/indexed-db-config';
+import { Guid } from 'src/app/core/utilities/uuid.utils';
 import {
   Account,
   Category,
@@ -26,10 +29,11 @@ export class SettingsShellComponent implements OnInit {
   fileName?: string;
   requiredFileType!: string;
   loading$ = new BehaviorSubject<boolean>(false);
-  progressText$ = new BehaviorSubject<string>('');
-  progressLogs$ = new BehaviorSubject<string[]>([]);
 
-  constructor(private dbService: NgxIndexedDBService) {}
+  constructor(
+    private dbService: NgxIndexedDBService,
+    private notify: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.requiredFileType = 'application/json';
@@ -61,211 +65,177 @@ export class SettingsShellComponent implements OnInit {
   private startImport(backup: FinanciusBackup) {
     this.loading$.next(true);
 
-    this.importAccounts(backup);
+    forkJoin([
+      this.importAccounts(backup),
+      this.importCategories(backup),
+      this.importCurrencies(backup),
+      this.importTags(backup),
+      this.importTransactions(backup),
+      this.importMetadata(backup),
+    ])
+      .pipe(
+        switchMap(() => {
+          this.loading$.next(false);
+          return this.informSuccess(backup);
+        })
+      )
+      .subscribe(() => location.reload());
+  }
 
-    this.importCategories(backup);
-
-    this.importCurrencies(backup);
-
-    this.importTags(backup);
-
-    this.importTransactions(backup);
+  private informSuccess(backup: FinanciusBackup) {
+    return this.notify
+      .info({
+        title: 'Import Restored!',
+        content: `<ul class="text-start">
+        <li>${backup.accounts.length} accounts</li>
+        <li>${backup.transactions.length} transactions</li>
+        <li>${backup.categories.length} categories</li>
+        <li>${backup.tags.length} tags</li>
+        <li>${backup.currencies.length} currencies</li>
+      `,
+      })
+      .afterClosed();
   }
 
   private importAccounts(backup: FinanciusBackup) {
-    this.progressText$.next(`Importing accounts...`);
-
-    this.dbService
-      .clear(storeNames.Accounts)
-      .pipe(
-        switchMap(() => {
-          return this.dbService.bulkAdd(
-            storeNames.Accounts,
-            backup.accounts.map(
-              (a) =>
-                <Account>{
-                  id: a.id,
-                  modelState: a.model_state,
-                  syncState: a.sync_state,
-                  currency: this.getCurrency(
-                    a.currency_code,
-                    backup.currencies
-                  ),
-                  name: a.title,
-                  note: a.note,
-                  balance: this.convert(
-                    a.balance,
-                    a.currency_code,
-                    backup.currencies
-                  ),
-                  includeInTotals: a.include_in_totals,
-                }
-            )
-          );
-        })
-      )
-      .subscribe(() => {
-        this.progressText$.next('');
-        this.progressLogs$.next([
-          `${backup.accounts.length} accounts imported`,
-        ]);
-        this.loading$.next(false);
-      });
+    return this.dbService.clear(storeNames.Accounts).pipe(
+      switchMap(() => {
+        return this.dbService.bulkAdd(
+          storeNames.Accounts,
+          backup.accounts.map(
+            (a) =>
+              <Account>{
+                id: a.id,
+                modelState: a.model_state,
+                syncState: a.sync_state,
+                currency: this.getCurrency(a.currency_code, backup.currencies),
+                name: a.title,
+                note: a.note,
+                balance: this.convert(
+                  a.balance,
+                  a.currency_code,
+                  backup.currencies
+                ),
+                includeInTotals: a.include_in_totals,
+              }
+          )
+        );
+      })
+    );
   }
 
   private importCategories(backup: FinanciusBackup) {
-    this.loading$.next(true);
-    this.progressText$.next(`Importing categories...`);
-
-    this.dbService
-      .clear(storeNames.Categories)
-      .pipe(
-        switchMap(() => {
-          return this.dbService.bulkAdd(
-            storeNames.Categories,
-            backup.categories.map(
-              (a) =>
-                <Category>{
-                  id: a.id,
-                  modelState: a.model_state,
-                  syncState: a.sync_state,
-                  name: a.title,
-                  color: a.color,
-                  transactionType: a.transaction_type,
-                  sortOrder: a.sort_order,
-                }
-            )
-          );
-        })
-      )
-      .subscribe(() => {
-        this.progressText$.next('');
-        this.progressLogs$.next([
-          ...this.progressLogs$.value,
-          `${backup.categories.length} categories imported`,
-        ]);
-        this.loading$.next(false);
-      });
+    return this.dbService.clear(storeNames.Categories).pipe(
+      switchMap(() => {
+        return this.dbService.bulkAdd(
+          storeNames.Categories,
+          backup.categories.map(
+            (a) =>
+              <Category>{
+                id: a.id,
+                modelState: a.model_state,
+                syncState: a.sync_state,
+                name: a.title,
+                color: a.color,
+                transactionType: a.transaction_type,
+                sortOrder: a.sort_order,
+              }
+          )
+        );
+      })
+    );
   }
 
   private importCurrencies(backup: FinanciusBackup) {
-    this.loading$.next(true);
-    this.progressText$.next(`Importing currencies...`);
-
-    this.dbService
-      .clear(storeNames.Currencies)
-      .pipe(
-        switchMap(() => {
-          return this.dbService.bulkAdd(
-            storeNames.Currencies,
-            backup.currencies.map(
-              (c) =>
-                <Currency>{
-                  id: c.id,
-                  modelState: c.model_state,
-                  syncState: c.sync_state,
-                  code: c.code,
-                  symbol: c.symbol,
-                  symbolPosition: c.symbol_position,
-                  decimalCount: c.decimal_count,
-                  decimalSeparator: c.decimal_separator,
-                  groupSeparator: c.group_separator,
-                }
-            )
-          );
-        })
-      )
-      .subscribe(() => {
-        this.progressText$.next('');
-        this.progressLogs$.next([
-          ...this.progressLogs$.value,
-          `${backup.currencies.length} currencies imported`,
-        ]);
-        this.loading$.next(false);
-      });
+    return this.dbService.clear(storeNames.Currencies).pipe(
+      switchMap(() => {
+        return this.dbService.bulkAdd(
+          storeNames.Currencies,
+          backup.currencies.map(
+            (c) =>
+              <Currency>{
+                id: c.id,
+                modelState: c.model_state,
+                syncState: c.sync_state,
+                code: c.code,
+                symbol: c.symbol,
+                symbolPosition: c.symbol_position,
+                decimalCount: c.decimal_count,
+                decimalSeparator: c.decimal_separator,
+                groupSeparator: c.group_separator,
+              }
+          )
+        );
+      })
+    );
   }
 
   private importTags(backup: FinanciusBackup) {
-    this.loading$.next(true);
-    this.progressText$.next(`Importing tags...`);
-
-    this.dbService
-      .clear(storeNames.Tags)
-      .pipe(
-        switchMap(() => {
-          return this.dbService.bulkAdd(
-            storeNames.Tags,
-            backup.tags.map(
-              (t) =>
-                <Tag>{
-                  id: t.id,
-                  modelState: t.model_state,
-                  syncState: t.sync_state,
-                  name: t.title,
-                }
-            )
-          );
-        })
-      )
-      .subscribe(() => {
-        this.progressText$.next('');
-        this.progressLogs$.next([
-          ...this.progressLogs$.value,
-          `${backup.tags.length} tags imported`,
-        ]);
-        this.loading$.next(false);
-      });
-  }
-
-  private importTransactions(backup: FinanciusBackup) {
-    this.loading$.next(true);
-    this.progressText$.next(`Importing transactions...`);
-
-    this.dbService
-      .clear(storeNames.Transactions)
-      .pipe(
-        switchMap(() => {
-          return this.dbService.bulkAdd(
-            storeNames.Transactions,
-            backup.transactions.map((t) => {
-              const accountFrom = this.getAccount(t.account_from_id, backup);
-              const accountTo = this.getAccount(t.account_to_id, backup);
-              const currency = accountFrom?.currency || accountTo?.currency;
-
-              return <Transaction>{
+    return this.dbService.clear(storeNames.Tags).pipe(
+      switchMap(() => {
+        return this.dbService.bulkAdd(
+          storeNames.Tags,
+          backup.tags.map(
+            (t) =>
+              <Tag>{
                 id: t.id,
                 modelState: t.model_state,
                 syncState: t.sync_state,
-                accountFrom,
-                accountTo,
-                category: this.getCategory(t.category_id, backup.categories),
-                tags: this.getTags(t.tag_ids, backup.tags),
-                date: t.date,
-                amount: this.convert(
-                  t.amount,
-                  currency?.code || null,
-                  backup.currencies
-                ),
-                currency,
-                exchangeRate: t.exchange_rate,
-                note: t.note,
-                transactionState: t.transaction_state,
-                transactionType: t.transaction_type,
-                includeInReports: t.include_in_reports,
-              };
-            })
-          );
-        })
-      )
-      .subscribe(() => {
-        this.progressText$.next('');
-        this.progressLogs$.next([
-          ...this.progressLogs$.value,
-          `${backup.transactions.length} transactions imported`,
-        ]);
-        this.loading$.next(false);
-        location.reload();
-      });
+                name: t.title,
+              }
+          )
+        );
+      })
+    );
+  }
+
+  private importTransactions(backup: FinanciusBackup) {
+    return this.dbService.clear(storeNames.Transactions).pipe(
+      switchMap(() => {
+        return this.dbService.bulkAdd(
+          storeNames.Transactions,
+          backup.transactions.map((t) => {
+            const accountFrom = this.getAccount(t.account_from_id, backup);
+            const accountTo = this.getAccount(t.account_to_id, backup);
+            const currency = accountFrom?.currency || accountTo?.currency;
+
+            return <Transaction>{
+              id: t.id,
+              modelState: t.model_state,
+              syncState: t.sync_state,
+              accountFrom,
+              accountTo,
+              category: this.getCategory(t.category_id, backup.categories),
+              tags: this.getTags(t.tag_ids, backup.tags),
+              date: t.date,
+              amount: this.convert(
+                t.amount,
+                currency?.code || null,
+                backup.currencies
+              ),
+              currency,
+              exchangeRate: t.exchange_rate,
+              note: t.note,
+              transactionState: t.transaction_state,
+              transactionType: t.transaction_type,
+              includeInReports: t.include_in_reports,
+            };
+          })
+        );
+      })
+    );
+  }
+
+  private importMetadata(backup: FinanciusBackup) {
+    return this.dbService.clear(storeNames.Metadata).pipe(
+      switchMap(() => {
+        return this.dbService.add(storeNames.Metadata, {
+          id: backup.timestamp,
+          version: backup.version,
+          timestamp: backup.timestamp,
+        });
+      })
+    );
   }
 
   // Financius exports amount without decimal, this converts it back based on the decimal_count property

@@ -5,7 +5,7 @@
 
   <mat-card>
     <mat-card-title>Your Data</mat-card-title>
-    <mat-card-content>
+    <mat-card-content class="py-3">
       <h3>Backup</h3>
 
       <input
@@ -15,31 +15,25 @@
         (change)="onFileSelected($event)"
         #fileUpload
       />
-      <div class="file-upload mx-auto">
+      <div class="d-flex align-items-center">
         <button
+          [disabled]="loading$ | async"
           mat-flat-button
           color="primary"
           class="upload-btn"
           (click)="fileUpload.click()"
         >
-          IMPORT FINANCIUS BACKUP
+          RESTORE FINANCIUS BACKUP
           <mat-icon>cloud_upload</mat-icon>
         </button>
 
-        {{ fileName }}
-      </div>
-
-      <div>
-        {{ progressText$ | async }}
-
-        <ul *ngFor="let log of progressLogs$ | async">
-          <li>{{ log }}</li>
-        </ul>
+        <span class="mx-2">{{ fileName }}</span>
 
         <mat-spinner
           *ngIf="loading$ | async"
           color="accent"
           mode="indeterminate"
+          diameter="24"
         ></mat-spinner>
       </div>
     </mat-card-content>
