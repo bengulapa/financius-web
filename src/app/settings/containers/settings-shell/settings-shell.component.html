@@ -6,26 +6,32 @@
   <mat-card>
     <mat-card-title>Your Data</mat-card-title>
     <mat-card-content class="py-3">
-      <h3>Backup</h3>
+      <h3>Financius Backup</h3>
 
-      <div class="d-flex align-items-center mb-3">
+      <!--       <div class="d-flex align-items-center mb-3">
         <input
           type="file"
           class="d-none"
           [accept]="requiredFileType"
           (change)="onFileSelected($event)"
-          #fileUpload
+          #fileUpload1
         />
         <button
           [disabled]="loading$ | async"
           mat-flat-button
           color="primary"
-          (click)="fileUpload.click()"
+          (click)="fileUpload1.click()"
         >
-          RESTORE FINANCIUS BACKUP
+          IMPORT BACKUP
           <mat-icon>cloud_upload</mat-icon>
         </button>
 
+        <ng-container *ngIf="fileUpload1.value">
+          <ng-template *ngTemplateOutlet="hasFile"></ng-template>
+        </ng-container>
+      </div> -->
+
+      <ng-template #hasFile>
         <span class="mx-2">{{ fileName }}</span>
 
         <mat-spinner
@@ -34,6 +40,29 @@
           mode="indeterminate"
           diameter="24"
         ></mat-spinner>
+      </ng-template>
+
+      <div class="d-flex align-items-center mb-3">
+        <input
+          type="file"
+          class="d-none"
+          [accept]="requiredFileType"
+          (change)="onFileSelected($event, false)"
+          #fileUpload2
+        />
+        <button
+          [disabled]="loading$ | async"
+          mat-flat-button
+          color="warn"
+          (click)="fileUpload2.click()"
+        >
+          CLEAR & RESTORE
+          <mat-icon>cloud_upload</mat-icon>
+        </button>
+
+        <ng-container *ngIf="fileUpload2.value">
+          <ng-template *ngTemplateOutlet="hasFile"></ng-template>
+        </ng-container>
       </div>
 
       <div class="d-flex align-items-center">
@@ -43,7 +72,7 @@
           color="primary"
           (click)="onExportClick()"
         >
-          EXPORT FINANCIUS BACKUP
+          EXPORT BACKUP
           <mat-icon>cloud_download</mat-icon>
         </button>
       </div>
