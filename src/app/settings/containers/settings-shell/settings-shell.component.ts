@@ -20,6 +20,7 @@ import {
   FinanciusTag,
   FinanciusTransaction,
 } from 'src/app/shared/models/financius.models';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-settings-shell',
@@ -65,9 +66,6 @@ export class SettingsShellComponent implements OnInit {
 
   onExportClick() {
     forkJoin([
-      this.dbService.getAll<{ id: string; version: number; timestamp: number }>(
-        storeNames.Metadata
-      ),
       this.dbService
         .getAll<Currency>(storeNames.Currencies)
         .pipe(map((c) => this.mapToFinanciusCurrency(c))),
@@ -83,21 +81,17 @@ export class SettingsShellComponent implements OnInit {
       this.dbService
         .getAll<Transaction>(storeNames.Transactions)
         .pipe(map((t) => this.mapToFinanciusTransaction(t))),
-    ]).subscribe(
-      ([metadata, currencies, categories, tags, accounts, transactions]) => {
-        const backupMetadata = metadata.find((m) => m.id === 'backup');
-
-        this.downloadJson({
-          version: (backupMetadata?.version || 0) + 1,
-          timestamp: new Date().getTime(),
-          currencies,
-          categories,
-          tags,
-          accounts,
-          transactions,
-        });
-      }
-    );
+    ]).subscribe(([currencies, categories, tags, accounts, transactions]) => {
+      this.downloadJson({
+        version: environment.version,
+        timestamp: new Date().getTime(),
+        currencies,
+        categories,
+        tags,
+        accounts,
+        transactions,
+      });
+    });
   }
 
   private startImport(backup: FinanciusBackup) {
