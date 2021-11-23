@@ -14,7 +14,6 @@ import {
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
 @Component({
   selector: 'app-category-report',
@@ -61,10 +60,9 @@ export class CategoryReportComponent implements OnChanges {
 
       this.customColors = Object.keys(expensesGroup).map((e) => ({
         name: e,
-        value: new ColorHexPipe().transform(
+        value:
           this.transactions?.find((t) => t.category?.name === e)?.category
-            ?.color
-        ),
+            ?.color || '',
       }));
     }
   }

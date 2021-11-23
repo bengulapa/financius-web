@@ -41,7 +41,7 @@
     >
       <mat-optgroup *ngFor="let group of categoryGroups" [label]="group.name">
         <mat-option
-          [style.color]="category.color | colorHex"
+          [style.color]="category.color"
           *ngFor="let category of group.categories"
           [value]="category.id"
         >

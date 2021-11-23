@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, combineLatest, forkJoin, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
+import { ColorService } from 'src/app/core/services/color.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { storeNames } from 'src/app/core/state/indexed-db-config';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
@@ -35,6 +36,7 @@ export class SettingsShellComponent implements OnInit {
 
   constructor(
     private dbService: NgxIndexedDBService,
+    private colorService: ColorService,
     private notify: NotificationService
   ) {}
 
@@ -182,19 +184,20 @@ export class SettingsShellComponent implements OnInit {
   private importCategories(backup: FinanciusBackup) {
     return this.dbService.bulkAdd(
       storeNames.Categories,
-      backup.categories.map(
-        (a) =>
-          <Category>{
-            id: a.id,
-            modelState: a.model_state,
-            syncState: a.sync_state,
-            name: a.title,
-            color: a.color,
-            transactionType: a.transaction_type,
-            sortOrder: a.sort_order,
-          }
-      )
+      backup.categories.map((a) => this.mapToCategory(a))
     );
+  }
+
+  private mapToCategory(a: FinanciusCategory): Category {
+    return <Category>{
+      id: a.id,
+      modelState: a.model_state,
+      syncState: a.sync_state,
+      name: a.title,
+      color: this.colorService.argbToHex(a.color),
+      transactionType: a.transaction_type,
+      sortOrder: a.sort_order,
+    };
   }
 
   private importCurrencies(backup: FinanciusBackup) {
@@ -347,17 +350,7 @@ export class SettingsShellComponent implements OnInit {
   ): Category | null {
     const category = categories.find((c) => c.id === categoryId);
 
-    return category
-      ? <Category>{
-          id: category.id,
-          modelState: category.model_state,
-          syncState: category.sync_state,
-          name: category.title,
-          color: category.color,
-          transactionType: category.transaction_type,
-          sortOrder: category.sort_order,
-        }
-      : null;
+    return category ? this.mapToCategory(category) : null;
   }
 
   private getTags(tagIds: string[], tags: FinanciusTag[]): Tag[] {
@@ -419,7 +412,7 @@ export class SettingsShellComponent implements OnInit {
           model_state: fc.modelState,
           sync_state: fc.syncState,
           title: fc.name,
-          color: fc.color,
+          color: this.colorService.hexToSigned24Bit(fc.color),
           transaction_type: fc.transactionType,
           sort_order: fc.sortOrder,
         }

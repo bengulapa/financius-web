@@ -7,7 +7,6 @@ import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { MaterialModule } from './material.module';
-import { ColorHexPipe } from './pipes/color-hex.pipe';
 import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
 import { EnumArrayPipe } from './pipes/enum-array.pipe';
 
@@ -16,7 +15,6 @@ import { EnumArrayPipe } from './pipes/enum-array.pipe';
     MainToolbarComponent,
     TransactionsTableComponent,
     CustomCurrencyPipe,
-    ColorHexPipe,
     EnumArrayPipe,
     CustomDialogComponent,
   ],
@@ -31,7 +29,6 @@ import { EnumArrayPipe } from './pipes/enum-array.pipe';
     TransactionsTableComponent,
 
     CustomCurrencyPipe,
-    ColorHexPipe,
     EnumArrayPipe,
   ],
 })

@@ -11,7 +11,6 @@ import {
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import { ColorHexPipe } from 'src/app/shared/pipes/color-hex.pipe';
 
 @Component({
   selector: 'app-overview-card',
@@ -32,8 +31,6 @@ export class OverviewCardComponent implements OnInit {
   LegendPosition = LegendPosition;
   customColors: ChartColor[] = [];
 
-  constructor() {}
-
   ngOnInit(): void {
     // TODO: Group per currency code?
     this.currencyCode = 'PHP';
@@ -48,9 +45,9 @@ export class OverviewCardComponent implements OnInit {
 
     this.customColors = Object.keys(expensesGroup).map((e) => ({
       name: e,
-      value: new ColorHexPipe().transform(
-        this.transactions?.find((t) => t.category?.name === e)?.category?.color
-      ),
+      value:
+        this.transactions?.find((t) => t.category?.name === e)?.category
+          ?.color || '',
     }));
   }
 }
