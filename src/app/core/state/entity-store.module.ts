@@ -1,20 +1,14 @@
 import { NgModule } from '@angular/core';
 import { EntityDataService } from '@ngrx/data';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import {
-  Account,
-  Category,
-  Currency,
-  Tag,
-  Transaction,
-} from 'src/app/shared/models/entities.models';
-import { EntityBaseService } from '../services/entity-base.service';
+import { Category, Currency, Tag } from 'src/app/shared/models/entities.models';
+import { EntityBaseDataService } from '../services/entity-base-data.service';
 import { storeNames } from './indexed-db-config';
 
 @NgModule({
   declarations: [],
   imports: [],
-  providers: [EntityBaseService],
+  providers: [EntityBaseDataService],
 })
 export class EntityStoreModule {
   constructor(
@@ -23,22 +17,20 @@ export class EntityStoreModule {
   ) {
     // Use custom data service to save to IndexedDB
     // Instantiate instead of new once to avoid the issue where the name is overwritten by the last
-    const accountsDataServiceDataService = new EntityBaseService<Account>(
+    const categoriesDataService = new EntityBaseDataService<Category>(
       dbService
     );
-    accountsDataServiceDataService.name = storeNames.Accounts;
-
-    const categoriesDataService = new EntityBaseService<Category>(dbService);
     categoriesDataService.name = storeNames.Categories;
 
-    const currenciesDataService = new EntityBaseService<Currency>(dbService);
+    const currenciesDataService = new EntityBaseDataService<Currency>(
+      dbService
+    );
     currenciesDataService.name = storeNames.Currencies;
 
-    const tagsDataService = new EntityBaseService<Tag>(dbService);
+    const tagsDataService = new EntityBaseDataService<Tag>(dbService);
     tagsDataService.name = storeNames.Tags;
 
     entityDataService.registerServices({
-      Account: accountsDataServiceDataService,
       Category: categoriesDataService,
       Currency: currenciesDataService,
       Tag: tagsDataService,

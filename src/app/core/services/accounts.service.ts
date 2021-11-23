@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { ModelState } from 'src/app/shared/models/financius.enums';
-import { EntityBaseDataService } from './entity-base.service';
+import { EntityBaseService } from './entity-base.service';
 import { TransactionsService } from './transactions.service';
 
 @Injectable({ providedIn: 'root' })
-export class AccountsService extends EntityBaseDataService<Account> {
+export class AccountsService extends EntityBaseService<Account> {
   readonly name = 'accounts';
 
   constructor(

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EntityCollectionDataService, QueryParams } from '@ngrx/data';
 import { Update } from '@ngrx/entity';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable, of } from 'rxjs';
@@ -6,21 +7,23 @@ import { map } from 'rxjs/operators';
 import { ModelState, SyncState } from 'src/app/shared/models/financius.enums';
 
 @Injectable()
-export abstract class EntityBaseService<TEntity> {
-  abstract name: string;
+export class EntityBaseDataService<TEntity>
+  implements EntityCollectionDataService<TEntity>
+{
+  name!: string;
 
-  constructor(protected dbService: NgxIndexedDBService) {}
+  constructor(private dbService: NgxIndexedDBService) {}
 
   add(entity: TEntity): Observable<TEntity> {
-    const newEntity = {
-      ...entity,
-      modelState: ModelState.Normal,
-      syncState: SyncState.None,
-    };
+    this.dbService
+      .add(this.name, {
+        ...entity,
+        modelState: ModelState.Normal,
+        syncState: SyncState.None,
+      })
+      .subscribe();
 
-    this.dbService.add(this.name, newEntity).subscribe();
-
-    return of(newEntity);
+    return of(entity);
   }
 
   update(update: Update<TEntity>): Observable<TEntity> {
@@ -47,7 +50,9 @@ export abstract class EntityBaseService<TEntity> {
   }
 
   delete(key: string | number) {
-    return this.dbService.deleteByKey(this.name, key);
+    this.dbService.deleteByKey(this.name, key).subscribe();
+
+    return of(key);
   }
 
   getAll(): Observable<TEntity[]> {
@@ -56,5 +61,13 @@ export abstract class EntityBaseService<TEntity> {
 
   getById(id: string): Observable<TEntity> {
     return this.dbService.getByID(this.name, id);
+  }
+
+  getWithQuery(params: string | QueryParams): Observable<TEntity[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  upsert(entity: TEntity): Observable<TEntity> {
+    throw new Error('Method not implemented.');
   }
 }
