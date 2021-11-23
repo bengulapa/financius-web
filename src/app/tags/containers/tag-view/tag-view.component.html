@@ -10,31 +10,14 @@
   <ng-container *ngIf="tag$ | async as tag">
     <h2><a routerLink="/tags">Tags</a> / {{ tag.name }}</h2>
 
-    <div class="d-flex">
-      <section class="w-30 me-1">
-        <mat-card>
-          <mat-card-title>Details</mat-card-title>
-          <mat-card-content> </mat-card-content>
-        </mat-card>
-      </section>
-
-      <section class="w-70 ms-1">
-        <mat-card>
-          <mat-card-title>Transactions</mat-card-title>
-          <mat-card-content>
-            <app-transactions-table
-              [data]="transactions$ | async"
-              [displayedColumns]="[
-                'date',
-                'category',
-                'note',
-                'amount',
-                'account'
-              ]"
-            ></app-transactions-table>
-          </mat-card-content>
-        </mat-card>
-      </section>
-    </div>
+    <mat-card>
+      <mat-card-title>Transactions</mat-card-title>
+      <mat-card-content>
+        <app-transactions-table
+          [data]="transactions$ | async"
+          [displayedColumns]="['date', 'category', 'note', 'amount', 'account']"
+        ></app-transactions-table>
+      </mat-card-content>
+    </mat-card>
   </ng-container>
 </section>
