@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, combineLatest, forkJoin, of } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { ColorService } from 'src/app/core/services/color.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { storeNames } from 'src/app/core/state/indexed-db-config';
@@ -14,6 +14,7 @@ import {
   Tag,
   Transaction,
 } from 'src/app/shared/models/entities.models';
+import { ModelState } from 'src/app/shared/models/financius.enums';
 import {
   FinanciusAccount,
   FinanciusBackup,
@@ -97,26 +98,59 @@ export class SettingsShellComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  private startImport(backup: FinanciusBackup, merge: boolean) {
+  private startImport(financius: FinanciusBackup, merge: boolean) {
     this.loading$.next(true);
 
     if (!merge) {
       this.clearDatabase();
     }
 
-    combineLatest([
-      this.importMetadata(backup),
-      this.importAccounts(backup),
-      this.importCategories(backup),
-      this.importCurrencies(backup),
-      this.importTags(backup),
-      this.importTransactions(backup),
-    ])
+    const backup: FinanciusBackup = {
+      ...financius,
+      currencies: financius.currencies.filter(
+        (c) => c.model_state === ModelState.Normal
+      ),
+      categories: financius.categories.filter(
+        (c) => c.model_state === ModelState.Normal
+      ),
+      tags: financius.tags.filter((t) => t.model_state === ModelState.Normal),
+      accounts: financius.accounts.filter(
+        (a) => a.model_state === ModelState.Normal
+      ),
+      transactions: financius.transactions.filter(
+        (t) => t.model_state === ModelState.Normal
+      ),
+    };
+
+    // Only import those with values to prevent forkJoin from just completing
+    const toImports = [];
+
+    if (backup.currencies.length) {
+      toImports.push(this.importCurrencies(backup));
+    }
+
+    if (backup.categories.length) {
+      toImports.push(this.importCategories(backup));
+    }
+
+    if (backup.tags.length) {
+      toImports.push(this.importTags(backup));
+    }
+
+    if (backup.accounts.length) {
+      toImports.push(this.importAccounts(backup));
+    }
+
+    if (backup.transactions.length) {
+      toImports.push(this.importTransactions(backup));
+    }
+
+    forkJoin([this.importMetadata(backup), ...toImports])
       .pipe(
-        finalize(() => {
+        switchMap(() => {
           this.fileName = '';
           this.loading$.next(false);
-          this.informSuccess(backup);
+          return this.informSuccess(backup);
         }),
         catchError(() => {
           this.fileName = '';
@@ -128,7 +162,7 @@ export class SettingsShellComponent implements OnInit {
           return of();
         })
       )
-      .subscribe();
+      .subscribe(() => location.reload());
   }
 
   private clearDatabase() {
@@ -154,8 +188,7 @@ export class SettingsShellComponent implements OnInit {
         <li>${backup.currencies.length} currencies</li>
       `,
       })
-      .afterClosed()
-      .subscribe(() => location.reload());
+      .afterClosed();
   }
 
   private importAccounts(backup: FinanciusBackup) {
@@ -186,18 +219,6 @@ export class SettingsShellComponent implements OnInit {
       storeNames.Categories,
       backup.categories.map((a) => this.mapToCategory(a))
     );
-  }
-
-  private mapToCategory(a: FinanciusCategory): Category {
-    return <Category>{
-      id: a.id,
-      modelState: a.model_state,
-      syncState: a.sync_state,
-      name: a.title,
-      color: this.colorService.argbToHex(a.color),
-      transactionType: a.transaction_type,
-      sortOrder: a.sort_order,
-    };
   }
 
   private importCurrencies(backup: FinanciusBackup) {
@@ -351,6 +372,18 @@ export class SettingsShellComponent implements OnInit {
     const category = categories.find((c) => c.id === categoryId);
 
     return category ? this.mapToCategory(category) : null;
+  }
+
+  private mapToCategory(a: FinanciusCategory): Category {
+    return <Category>{
+      id: a.id,
+      modelState: a.model_state,
+      syncState: a.sync_state,
+      name: a.title,
+      color: this.colorService.argbToHex(a.color),
+      transactionType: a.transaction_type,
+      sortOrder: a.sort_order,
+    };
   }
 
   private getTags(tagIds: string[], tags: FinanciusTag[]): Tag[] {
