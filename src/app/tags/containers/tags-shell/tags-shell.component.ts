@@ -42,6 +42,10 @@ export class TagsShellComponent
       .afterClosed()
       .pipe(
         switchMap((dialogData: Partial<Tag>) => {
+          if (!dialogData) {
+            return of();
+          }
+
           return this.service.add({
             name: dialogData.name!,
             id: Guid.newGuid(),
@@ -63,6 +67,10 @@ export class TagsShellComponent
       .afterClosed()
       .pipe(
         switchMap((dialogData: Partial<Tag>) => {
+          if (!dialogData) {
+            return of();
+          }
+
           return this.service.update(dialogData);
         })
       )
