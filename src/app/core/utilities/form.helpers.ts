@@ -33,7 +33,10 @@ export class FormHelpers {
       id: category?.id || '',
       name: [category?.name || '', Validators.required],
       color: [category?.color || '', Validators.required],
-      transactionType: [category?.transactionType || '', Validators.required],
+      transactionType: [
+        category?.transactionType || TransactionType.Expense,
+        Validators.required,
+      ],
     });
   }
 

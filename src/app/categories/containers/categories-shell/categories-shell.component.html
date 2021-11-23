@@ -7,7 +7,17 @@
 ></mat-progress-bar>
 
 <section class="container">
-  <h2>Categories</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Categories</h2>
 
-  <app-categories-table [data]="entities$ | async"></app-categories-table>
+    <button mat-mini-fab (click)="onAddClick()" color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <app-categories-table
+    [data]="entities$ | async"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-categories-table>
 </section>

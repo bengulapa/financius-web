@@ -1,0 +1,59 @@
+<div class="fw-dialog">
+  <h2 mat-dialog-title>{{ isEditMode ? "Edit" : "Add" }} Category</h2>
+
+  <form [formGroup]="form">
+    <mat-button-toggle-group class="mb-3" formControlName="transactionType">
+      <mat-button-toggle
+        *ngFor="let type of TransactionType | enumArray"
+        [value]="TransactionType[type]"
+        >{{ type }}</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="form.get('name')?.hasError('required')"
+        >Name is required</mat-error
+      >
+      <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
+        >Name is too long</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Color</mat-label>
+      <mat-select formControlName="color" required>
+        <mat-select-trigger>
+          <div
+            class="d-block w-100"
+            [style.background-color]="form.get('color')?.value"
+            style="height: 1rem"
+          ></div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let color of colors" [value]="color">
+          <div
+            class="d-block w-100"
+            [style.background-color]="color"
+            style="height: 1rem"
+          ></div>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('color')?.hasError('required')"
+        >Color is required</mat-error
+      >
+    </mat-form-field>
+  </form>
+
+  <mat-dialog-actions>
+    <button mat-stroked-button [mat-dialog-close]="false">CANCEL</button>
+    <button
+      [disabled]="!form.valid"
+      mat-flat-button
+      color="accent"
+      [mat-dialog-close]="form.value"
+    >
+      {{ isEditMode ? "UPDATE" : "SAVE" }}
+    </button>
+  </mat-dialog-actions>
+</div>
