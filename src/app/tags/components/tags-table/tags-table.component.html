@@ -33,7 +33,7 @@
         <mat-icon matTooltip="Edit">edit</mat-icon>
       </button>
 
-      <button mat-icon-button (click)="delete.emit(row.id)" color="warn">
+      <button mat-icon-button (click)="delete.emit(row)" color="warn">
         <mat-icon matTooltip="Delete">delete</mat-icon>
       </button>
     </td>
@@ -46,6 +46,7 @@
     <td class="mat-cell" colspan="4">No tag found</td>
   </tr>
 </table>
+
 <mat-paginator
   [pageSizeOptions]="[10, 25, 100]"
   showFirstLastButtons

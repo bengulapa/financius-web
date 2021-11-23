@@ -1,17 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   OnChanges,
-  Output,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Tag } from 'src/app/shared/models/entities.models';
+import { TableBaseComponent } from 'src/app/shared/table-base.component';
 
 @Component({
   selector: 'app-tags-table',
@@ -19,37 +14,17 @@ import { Tag } from 'src/app/shared/models/entities.models';
   styleUrls: ['./tags-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TagsTableComponent implements OnChanges {
-  @Input()
-  data: Tag[] | null = [];
-
-  @Input()
+export class TagsTableComponent
+  extends TableBaseComponent<Tag>
+  implements OnChanges
+{
   displayedColumns = ['name', 'actions'];
-
-  @Output()
-  edit = new EventEmitter<Partial<Tag>>();
-
-  @Output()
-  delete = new EventEmitter<string>();
-
-  dataSource!: MatTableDataSource<Tag>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data?.currentValue) {
       this.dataSource = new MatTableDataSource(this.data || []);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TagsService } from 'src/app/core/services/tags.service';
@@ -50,7 +51,7 @@ export class TagsShellComponent
       .subscribe();
   }
 
-  onEdit(tag: Partial<Tag>) {
+  onEdit(tag: Tag) {
     this.dialog
       .open(TagFormDialogComponent, {
         disableClose: true,
@@ -68,9 +69,26 @@ export class TagsShellComponent
       .subscribe();
   }
 
-  onDelete(id: string) {
-    this.service.delete(id).subscribe(() => {
-      this.notify.success('Tag has been deleted');
-    });
+  onDelete(tag: Tag) {
+    this.notify
+      .confirm({
+        content: 'Are you sure you want to delete this tag?',
+        okButtonColor: 'warn',
+        okButtonText: 'Delete',
+      })
+      .afterClosed()
+      .pipe(
+        switchMap((result) => {
+          if (result) {
+            return this.service.delete(tag.id);
+          }
+          return of();
+        })
+      )
+      .subscribe((deletedKey) => {
+        if (deletedKey) {
+          this.notify.success('Tag has been deleted');
+        }
+      });
   }
 }
