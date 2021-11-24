@@ -28,6 +28,11 @@
     background: #dedede;
   }
 
+  .accent-tag {
+    color: mat.get-contrast-color-from-palette($primary, 400);
+    background: mat.get-color-from-palette($accent, 500);
+  }
+
   .mat-row {
     transition: background ease-out 0.2s;
     &:hover {
