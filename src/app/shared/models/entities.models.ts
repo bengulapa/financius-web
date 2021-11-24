@@ -19,6 +19,7 @@ export interface Currency extends BaseModel {
   decimalSeparator: string;
   groupSeparator: string;
   decimalCount: number;
+  isDefault?: boolean;
 }
 
 export interface Category extends BaseModel {

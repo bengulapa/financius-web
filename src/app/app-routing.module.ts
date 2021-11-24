@@ -20,6 +20,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'currencies',
+    loadChildren: () =>
+      import('./currencies/currencies.module').then((m) => m.CurrenciesModule),
+  },
+  {
     path: 'categories',
     loadChildren: () =>
       import('./categories/categories.module').then((m) => m.CategoriesModule),

@@ -1,0 +1,23 @@
+<app-main-toolbar></app-main-toolbar>
+
+<mat-progress-bar
+  *ngIf="loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
+<section class="container">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Currencies</h2>
+
+    <button mat-mini-fab (click)="onAddClick()" color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <app-currencies-table
+    [data]="entities$ | async"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-currencies-table>
+</section>

@@ -8,6 +8,7 @@ import {
   Transaction,
 } from 'src/app/shared/models/entities.models';
 import {
+  SymbolPosition,
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
@@ -43,8 +44,30 @@ export class FormHelpers {
   createCurrencyForm(currency?: Currency | null): FormGroup {
     return this.fb.group({
       id: currency?.id || '',
-      code: [currency?.code || '', Validators.required],
-      symbol: [currency?.symbol || '', Validators.required],
+      code: [
+        currency?.code || '',
+        [Validators.required, Validators.maxLength(3)],
+      ],
+      symbol: [
+        currency?.symbol || '',
+        [Validators.required, Validators.maxLength(3)],
+      ],
+      symbolPosition: [
+        currency?.symbolPosition || SymbolPosition.FarRight,
+        [Validators.required],
+      ],
+      decimalCount: [
+        currency?.decimalCount || 2,
+        [Validators.required, Validators.maxLength(1)],
+      ],
+      decimalSeparator: [
+        currency?.decimalSeparator || '.',
+        [Validators.required, Validators.maxLength(1)],
+      ],
+      groupSeparator: [
+        currency?.groupSeparator || ',',
+        [Validators.required, Validators.maxLength(3)],
+      ],
     });
   }
 

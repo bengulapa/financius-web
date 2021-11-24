@@ -29,15 +29,15 @@ export enum SymbolPosition {
   FarLeft = 4,
 }
 
-export enum DecimalSeparator {
-  Dot = '.',
-  Comma = ',',
-  Space = ' ',
-}
+export const DecimalSeparator = new Map([
+  ['None', ''],
+  ['Dot', '.'],
+  ['Comma', ','],
+]);
 
-export enum GroupSeparator {
-  None = '',
-  Dot = '.',
-  Comma = ',',
-  Space = ' ',
-}
+export const GroupSeparator = new Map([
+  ['None', ''],
+  ['Dot', '.'],
+  ['Comma', ','],
+  ['Space', ' '],
+]);
