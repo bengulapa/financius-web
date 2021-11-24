@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -107,8 +108,9 @@ export class SettingsShellComponent implements OnInit {
 
     const backup: FinanciusBackup = {
       ...financius,
-      currencies: financius.currencies.filter(
-        (c) => c.model_state === ModelState.Normal
+      currencies: _.uniqBy(
+        financius.currencies.filter((c) => c.model_state === ModelState.Normal),
+        'code'
       ),
       categories: financius.categories.filter(
         (c) => c.model_state === ModelState.Normal
