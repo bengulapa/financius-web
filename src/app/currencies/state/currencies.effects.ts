@@ -15,7 +15,7 @@ import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Currency } from 'src/app/shared/models/entities.models';
 import { CurrencyActions } from './currencies.actions';
-import { getEntitiesLoaded } from './currencies.selectors';
+import { getCurrencies, getEntitiesLoaded } from './currencies.selectors';
 
 @Injectable()
 export class CurrenciesEffects {
@@ -102,6 +102,67 @@ export class CurrenciesEffects {
             )
           )
       )
+    )
+  );
+
+  updatePreviousMainOnAdd$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CurrencyActions.addSuccess),
+      filter((c) => c.currency.isDefault!),
+      switchMap(({ currency }) =>
+        of(CurrencyActions.updatePreviousMain({ currency }))
+      )
+    )
+  );
+
+  updatePreviousMainOnUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CurrencyActions.updateSuccess),
+      filter((c) => c.currency.changes.isDefault!),
+      switchMap(({ currency }) =>
+        of(
+          CurrencyActions.updatePreviousMain({
+            currency: <Currency>currency.changes,
+          })
+        )
+      )
+    )
+  );
+
+  updatePreviousMain$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CurrencyActions.updatePreviousMain),
+      withLatestFrom(this.store.select(getCurrencies)),
+      filter(([_, c]) => !!c.length),
+      switchMap(([{ currency }, currencies]) => {
+        const prevMain = currencies.find(
+          (c) => c.id !== currency.id && c.isDefault
+        )!;
+
+        return this.service
+          .update({
+            id: prevMain.id,
+            changes: {
+              ...prevMain,
+              isDefault: false,
+            },
+          })
+          .pipe(
+            map(
+              (currency) =>
+                CurrencyActions.updateSuccess({
+                  currency: { id: currency.id, changes: currency },
+                }),
+              catchError((err: any) => {
+                const errorMessage =
+                  'An error occurred while updating a currency.';
+                this.notify.error(errorMessage);
+                console.log(err);
+                return of(CurrencyActions.updateFail({ errorMessage }));
+              })
+            )
+          );
+      })
     )
   );
 

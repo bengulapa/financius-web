@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Currency, Transaction } from 'src/app/shared/models/entities.models';
+import { Currency } from 'src/app/shared/models/entities.models';
 import { CurrencyActions } from './currencies.actions';
 import { CurrenciesState } from './currencies.reducer';
 import * as currenciesQuery from './currencies.selectors';
@@ -12,6 +12,9 @@ export class CurrenciesFacade {
   entities$? = this.store.select(currenciesQuery.getCurrencies);
   currency$?: Observable<Currency | null> = this.store.select(
     currenciesQuery.getCurrency
+  );
+  mainCurrency$?: Observable<Currency | null> = this.store.select(
+    currenciesQuery.getMainCurrency
   );
 
   constructor(private store: Store<CurrenciesState>) {}
@@ -30,12 +33,6 @@ export class CurrenciesFacade {
 
   update(currency: Currency) {
     this.store.dispatch(CurrencyActions.update({ currency }));
-  }
-
-  updateCurrencyBalance(currency: Currency, amount: number) {
-    this.store.dispatch(
-      CurrencyActions.updateCurrencyBalance({ currency, amount })
-    );
   }
 
   delete(currency: Currency) {

@@ -52,11 +52,6 @@ export namespace CurrencyActions {
     props<{ currency: Currency }>()
   );
 
-  export const updateCurrencyBalance = createAction(
-    `[Transaction]-${prefix} Update Balance`,
-    props<{ currency: Currency; amount: number }>()
-  );
-
   export const updateSuccess = createAction(
     `${prefix} Update Success`,
     props<{ currency: Update<Currency> }>()
@@ -65,6 +60,11 @@ export namespace CurrencyActions {
   export const updateFail = createAction(
     `${prefix} Update Fail`,
     props<{ errorMessage: string }>()
+  );
+
+  export const updatePreviousMain = createAction(
+    `${prefix} Update Previous Main`,
+    props<{ currency: Currency }>()
   );
 
   export const remove = createAction(

@@ -26,9 +26,7 @@ export const getEntitiesLoaded = createSelector(
   (state) => state.entitiesLoaded
 );
 
-export const getTransactions = createSelector(
+export const getMainCurrency = createSelector(
   getCurrencies,
-  getCurrency,
-  getLoading,
-  getEntitiesLoaded
+  (currencies) => currencies.find((c) => c.isDefault) || null
 );
