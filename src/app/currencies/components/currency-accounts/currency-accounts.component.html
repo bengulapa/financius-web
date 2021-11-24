@@ -1,0 +1,8 @@
+<mat-list dense>
+  <mat-list-item *ngFor="let account of accounts">
+    <div class="d-flex justify-content-between w-100">
+      <span>{{ account.name }}</span>
+      <span>{{ account.balance | fwCurrency: account.currency.code }}</span>
+    </div>
+  </mat-list-item>
+</mat-list>

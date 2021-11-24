@@ -1,0 +1,47 @@
+<app-main-toolbar></app-main-toolbar>
+
+<mat-progress-bar
+  *ngIf="facade.loading$ | async"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
+<section class="container">
+  <ng-container *ngIf="facade.currency$ | async as currency">
+    <h2><a routerLink="/currencies">Currencies</a> / {{ currency.code }}</h2>
+
+    <div class="d-flex">
+      <section class="w-30 me-1">
+        <mat-card *ngIf="currency">
+          <mat-card-title>Details</mat-card-title>
+          <mat-card-content>
+            <p class="mt-4">
+              <mat-slide-toggle [checked]="currency.isDefault"
+                >Main currency</mat-slide-toggle
+              >
+            </p>
+            <p>Symbol: {{ currency.symbol }}</p>
+            <p>
+              Symbol position:
+              {{ SymbolPosition[currency.symbolPosition] | enumSeparator }}
+            </p>
+            <p>Decimal count: {{ currency.decimalCount }}</p>
+            <p>Decimal separator: {{ currency.decimalSeparator }}</p>
+            <p>Thousands separator: {{ currency.groupSeparator }}</p>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section class="w-70 ms-1">
+        <mat-card>
+          <mat-card-title>Accounts</mat-card-title>
+          <mat-card-content>
+            <app-currency-accounts
+              [accounts]="accountsFacade.activeAccounts$ | async"
+            ></app-currency-accounts>
+          </mat-card-content>
+        </mat-card>
+      </section>
+    </div>
+  </ng-container>
+</section>
