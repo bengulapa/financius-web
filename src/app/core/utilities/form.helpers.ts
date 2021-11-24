@@ -57,16 +57,18 @@ export class FormHelpers {
         [Validators.required],
       ],
       decimalCount: [
-        currency?.decimalCount === undefined ? 2 : currency?.decimalCount,
-        [Validators.required, Validators.maxLength(1)],
+        currency?.decimalCount === undefined ? 2 : currency?.decimalCount || 0,
+        [Validators.maxLength(1)],
       ],
       decimalSeparator: [
-        currency?.decimalSeparator || '.',
-        [Validators.required, Validators.maxLength(1)],
+        currency?.decimalSeparator === undefined
+          ? '.'
+          : currency?.decimalSeparator,
+        [Validators.maxLength(1)],
       ],
       groupSeparator: [
-        currency?.groupSeparator || ',',
-        [Validators.required, Validators.maxLength(3)],
+        currency?.groupSeparator === undefined ? ',' : currency?.groupSeparator,
+        [Validators.maxLength(1)],
       ],
       isDefault: [currency?.isDefault || false],
     });
