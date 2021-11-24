@@ -12,6 +12,7 @@ import {
   mergeMap,
   tap,
 } from 'rxjs/operators';
+import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
@@ -46,6 +47,13 @@ export class TransactionsEffects {
           )
         )
       )
+    );
+  });
+
+  accountViewOpened$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AccountActions.accountViewOpened),
+      mergeMap(() => of(TransactionActions.retrieve()))
     );
   });
 

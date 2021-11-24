@@ -27,6 +27,10 @@ export class AccountsFacade {
     this.store.dispatch(AccountActions.getByKey({ key }));
   }
 
+  accountViewOpened(accountId: string) {
+    this.store.dispatch(AccountActions.accountViewOpened({ accountId }));
+  }
+
   add(account: Account) {
     this.store.dispatch(AccountActions.add({ account }));
   }

@@ -40,6 +40,15 @@ export class AccountsEffects {
     );
   });
 
+  accountViewOpened$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AccountActions.accountViewOpened),
+      mergeMap(({ accountId }) =>
+        of(AccountActions.getByKey({ key: accountId }))
+      )
+    );
+  });
+
   getByKey$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.getByKey),
