@@ -28,8 +28,7 @@
 
   <div class="w-50 ms-1">
     <app-accounts-card
-      *ngIf="accounts$ | async as accounts"
-      [accounts]="accounts"
+      [accounts]="accountsFacade.activeAccounts$ | async"
     ></app-accounts-card>
   </div>
 </section>
