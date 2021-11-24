@@ -8,7 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { CurrenciesService } from 'src/app/core/services/currency.service';
+import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import {
   ChartColor,
   SingleChartData,

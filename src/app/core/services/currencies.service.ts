@@ -1,15 +1,16 @@
 import { formatCurrency } from '@angular/common';
 import { Injectable } from '@angular/core';
-import {
-  EntityCollectionServiceBase,
-  EntityCollectionServiceElementsFactory,
-} from '@ngrx/data';
+import * as _ from 'lodash';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable, of } from 'rxjs';
 import { Currency } from 'src/app/shared/models/entities.models';
-import * as _ from 'lodash';
+import { storeNames } from '../state/indexed-db-config';
+import { EntityBaseService } from './entity-base.service';
 
 @Injectable({ providedIn: 'root' })
-export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
+export class CurrenciesService extends EntityBaseService<Currency> {
+  readonly name = storeNames.Currencies;
+
   currencies: Currency[] = [
     {
       id: 'ed71e4f2-9a2e-4f2b-ae32-e9513f2d0f4e',
@@ -112,8 +113,8 @@ export class CurrenciesService extends EntityCollectionServiceBase<Currency> {
     },
   ];
 
-  constructor(factory: EntityCollectionServiceElementsFactory) {
-    super('Currency', factory);
+  constructor(dbService: NgxIndexedDBService) {
+    super(dbService);
   }
 
   getCurrencies(): Observable<Currency[]> {

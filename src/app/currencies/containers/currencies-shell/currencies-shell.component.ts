@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { CurrenciesService } from 'src/app/core/services/currency.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Currency } from 'src/app/shared/models/entities.models';
+import { CurrenciesFacade } from '../../state/currencies.facade';
 import { CurrencyFormDialogComponent } from '../currency-form-dialog/currency-form-dialog.component';
 
 @Component({
@@ -19,7 +17,7 @@ export class CurrenciesShellComponent
   implements OnInit
 {
   constructor(
-    private service: CurrenciesService,
+    public facade: CurrenciesFacade,
     private dialog: MatDialog,
     private notify: NotificationService
   ) {
@@ -27,9 +25,7 @@ export class CurrenciesShellComponent
   }
 
   ngOnInit(): void {
-    this.service.getAll();
-    this.entities$ = this.service.entities$;
-    this.loading$ = this.service.loading$;
+    this.facade.retrieve();
   }
 
   onAddClick() {
@@ -41,25 +37,16 @@ export class CurrenciesShellComponent
         data: {},
       })
       .afterClosed()
-      .pipe(
-        switchMap((dialogData: Partial<Currency>) => {
-          if (!dialogData) {
-            return of();
-          }
+      .subscribe((dialogData: Currency) => {
+        if (!dialogData) {
+          return;
+        }
 
-          return this.service.add({
-            id: Guid.newGuid(),
-            code: dialogData.code!,
-            symbol: dialogData.symbol!,
-            symbolPosition: dialogData.symbolPosition!,
-            decimalSeparator: dialogData.decimalSeparator!,
-            decimalCount: dialogData.decimalCount!,
-            groupSeparator: dialogData.groupSeparator!,
-            isDefault: dialogData.isDefault!,
-          });
-        })
-      )
-      .subscribe();
+        this.facade.add({
+          ...dialogData,
+          id: Guid.newGuid(),
+        });
+      });
   }
 
   onEdit(currency: Currency) {
@@ -73,16 +60,13 @@ export class CurrenciesShellComponent
         },
       })
       .afterClosed()
-      .pipe(
-        switchMap((dialogData: Currency) => {
-          if (!dialogData) {
-            return of();
-          }
+      .subscribe((dialogData: Currency) => {
+        if (!dialogData) {
+          return;
+        }
 
-          return this.service.update(dialogData);
-        })
-      )
-      .subscribe();
+        return this.facade.update(dialogData);
+      });
   }
 
   onDelete(currency: Currency) {
@@ -93,17 +77,9 @@ export class CurrenciesShellComponent
         okButtonText: 'Delete',
       })
       .afterClosed()
-      .pipe(
-        switchMap((result) => {
-          if (result) {
-            return this.service.delete(currency.id);
-          }
-          return of();
-        })
-      )
-      .subscribe((deletedKey) => {
-        if (deletedKey) {
-          this.notify.success('Currency has been deleted');
+      .subscribe((result) => {
+        if (result) {
+          this.facade.delete(currency);
         }
       });
   }

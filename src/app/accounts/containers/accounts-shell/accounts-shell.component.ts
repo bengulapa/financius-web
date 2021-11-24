@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { of } from 'rxjs';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { Account } from 'src/app/shared/models/entities.models';
 import { AccountsFacade } from '../../state/accounts.facade';
 import { AccountFormDialogComponent } from '../account-form-dialog/account-form-dialog.component';
@@ -36,7 +36,10 @@ export class AccountsShellComponent implements OnInit {
           return;
         }
 
-        this.facade.add(dialogData);
+        this.facade.add({
+          ...dialogData,
+          id: Guid.newGuid(),
+        });
       });
   }
 
@@ -53,11 +56,10 @@ export class AccountsShellComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogData: Account | null) => {
         if (!dialogData) {
-          return of();
+          return;
         }
 
         this.facade.update(dialogData);
-        return of();
       });
   }
 

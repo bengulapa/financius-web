@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { CurrenciesService } from 'src/app/core/services/currency.service';
+import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { FormHelpers } from 'src/app/core/utilities/form.helpers';
 import { Account, Currency } from 'src/app/shared/models/entities.models';
 
