@@ -21,3 +21,23 @@ export enum ModelState {
   Deleted = 2,
   DeletedUndo = 3,
 }
+
+export enum SymbolPosition {
+  CloseRight = 1,
+  FarRight = 2,
+  CloseLeft = 3,
+  FarLeft = 4,
+}
+
+export enum DecimalSeparator {
+  Dot = '.',
+  Comma = ',',
+  Space = ' ',
+}
+
+export enum GroupSeparator {
+  None = '',
+  Dot = '.',
+  Comma = ',',
+  Space = ' ',
+}

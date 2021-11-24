@@ -1,5 +1,6 @@
 import {
   ModelState,
+  SymbolPosition,
   SyncState,
   TransactionState,
   TransactionType,
@@ -14,7 +15,7 @@ export interface BaseModel {
 export interface Currency extends BaseModel {
   code: string;
   symbol: string;
-  symbolPosition: number;
+  symbolPosition: SymbolPosition;
   decimalSeparator: string;
   groupSeparator: string;
   decimalCount: number;
