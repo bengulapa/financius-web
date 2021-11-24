@@ -57,7 +57,7 @@ export class FormHelpers {
         [Validators.required],
       ],
       decimalCount: [
-        currency?.decimalCount || 2,
+        currency?.decimalCount === undefined ? 2 : currency?.decimalCount,
         [Validators.required, Validators.maxLength(1)],
       ],
       decimalSeparator: [
