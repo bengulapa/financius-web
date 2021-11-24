@@ -9,14 +9,16 @@ import { TransactionsTableComponent } from './components/transactions-table/tran
 import { MaterialModule } from './material.module';
 import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
 import { EnumArrayPipe } from './pipes/enum-array.pipe';
+import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
 
 @NgModule({
   declarations: [
     MainToolbarComponent,
     TransactionsTableComponent,
+    CustomDialogComponent,
     CustomCurrencyPipe,
     EnumArrayPipe,
-    CustomDialogComponent,
+    EnumSeparatorPipe,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, NgxChartsModule],
   exports: [
@@ -30,6 +32,7 @@ import { EnumArrayPipe } from './pipes/enum-array.pipe';
 
     CustomCurrencyPipe,
     EnumArrayPipe,
+    EnumSeparatorPipe,
   ],
 })
 export class SharedModule {}
