@@ -2,7 +2,9 @@ import {
   Directive,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -10,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Directive()
-export abstract class TableBaseComponent<T> {
+export abstract class TableBaseComponent<T> implements OnChanges {
   @Input()
   data: T[] | null = [];
 
@@ -23,7 +25,16 @@ export abstract class TableBaseComponent<T> {
   dataSource!: MatTableDataSource<T>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  displayedColumns: string[] = [];
+
+  abstract displayedColumns: string[];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data?.currentValue) {
+      this.dataSource = new MatTableDataSource(this.data || []);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
