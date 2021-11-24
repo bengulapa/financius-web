@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
 import { Account } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -14,20 +8,11 @@ import { Account } from 'src/app/shared/models/entities.models';
   styleUrls: ['./accounts-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountsCardComponent implements OnInit {
+export class AccountsCardComponent {
   @Input()
-  accounts!: Account[];
-
-  activeAccounts: Account[] = [];
+  accounts?: Account[] | null;
 
   constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    this.activeAccounts = _.sortBy(
-      this.accounts.filter((a) => a.includeInTotals),
-      'name'
-    );
-  }
 
   onAccountClicked(accountId: string) {
     this.router.navigateByUrl(`/accounts/${accountId}`);

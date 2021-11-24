@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import * as _ from 'lodash';
 import { ModelState } from 'src/app/shared/models/financius.enums';
 import { transactionsQuery } from 'src/app/transactions/state/transactions.selectors';
 import * as fromReducer from './accounts.reducer';
@@ -28,8 +29,11 @@ export const getEntitiesLoaded = createSelector(
 );
 
 export const getActiveAccounts = createSelector(selectAllAccounts, (accounts) =>
-  accounts?.filter(
-    (t) => t.modelState === ModelState.Normal && t.includeInTotals
+  _.orderBy(
+    accounts?.filter(
+      (t) => t.modelState === ModelState.Normal && t.includeInTotals
+    ),
+    'name'
   )
 );
 
