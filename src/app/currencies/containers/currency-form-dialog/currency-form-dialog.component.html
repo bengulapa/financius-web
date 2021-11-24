@@ -2,6 +2,10 @@
   <h2 mat-dialog-title>{{ isEditMode ? "Edit" : "Add" }} Currency</h2>
 
   <form [formGroup]="form">
+    <mat-slide-toggle class="mb-3" formControlName="isDefault" color="accent"
+      >Set as main currency</mat-slide-toggle
+    >
+
     <mat-form-field appearance="fill" class="w-100 mb-2">
       <mat-label>Code</mat-label>
       <input matInput formControlName="code" required />

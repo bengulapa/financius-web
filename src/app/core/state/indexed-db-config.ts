@@ -70,7 +70,7 @@ export const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: false },
       storeSchema: [
         ...baseObjectStoreSchema,
-        { name: 'code', keypath: 'code', options: { unique: false } },
+        { name: 'code', keypath: 'code', options: { unique: true } },
         { name: 'symbol', keypath: 'symbol', options: { unique: false } },
         {
           name: 'symbolPosition',
@@ -90,6 +90,11 @@ export const dbConfig: DBConfig = {
         {
           name: 'decimalCount',
           keypath: 'decimalCount',
+          options: { unique: false },
+        },
+        {
+          name: 'isDefault',
+          keypath: 'isDefault',
           options: { unique: false },
         },
       ],

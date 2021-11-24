@@ -68,6 +68,7 @@ export class FormHelpers {
         currency?.groupSeparator || ',',
         [Validators.required, Validators.maxLength(3)],
       ],
+      isDefault: [currency?.isDefault || false],
     });
   }
 

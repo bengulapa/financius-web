@@ -55,6 +55,7 @@ export class CurrenciesShellComponent
             decimalSeparator: dialogData.decimalSeparator!,
             decimalCount: dialogData.decimalCount!,
             groupSeparator: dialogData.groupSeparator!,
+            isDefault: dialogData.isDefault!,
           });
         })
       )
