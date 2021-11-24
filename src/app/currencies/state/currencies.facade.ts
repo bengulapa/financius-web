@@ -3,21 +3,20 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Currency } from 'src/app/shared/models/entities.models';
 import { CurrencyActions } from './currencies.actions';
-import { CurrenciesState } from './currencies.reducer';
 import * as currenciesQuery from './currencies.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class CurrenciesFacade {
-  loading$? = this.store.select(currenciesQuery.getLoading);
-  entities$? = this.store.select(currenciesQuery.getCurrencies);
+  loading$? = this.store.select(currenciesQuery.selectLoading);
+  entities$? = this.store.select(currenciesQuery.selectCurrencies);
   currency$?: Observable<Currency | null> = this.store.select(
-    currenciesQuery.getCurrency
+    currenciesQuery.selectCurrency
   );
   mainCurrency$?: Observable<Currency | null> = this.store.select(
-    currenciesQuery.getMainCurrency
+    currenciesQuery.selectMainCurrency
   );
 
-  constructor(private store: Store<CurrenciesState>) {}
+  constructor(private store: Store) {}
 
   retrieve() {
     this.store.dispatch(CurrencyActions.retrieve());

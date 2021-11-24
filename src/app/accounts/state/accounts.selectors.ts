@@ -1,45 +1,50 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as _ from 'lodash';
 import { ModelState } from 'src/app/shared/models/financius.enums';
-import { transactionsQuery } from 'src/app/transactions/state/transactions.selectors';
+import { selectAllTransactions } from 'src/app/transactions/state/transactions.selectors';
 import * as fromReducer from './accounts.reducer';
 
 const { selectAll } = fromReducer.accountsAdapter.getSelectors();
 
-const getState = createFeatureSelector<fromReducer.AccountsState>(
+const selectState = createFeatureSelector<fromReducer.AccountsState>(
   fromReducer.featureKey
 );
 
-const selectAllAccounts = createSelector(getState, selectAll);
+const selectAllAccounts = createSelector(selectState, selectAll);
 
-export const getAccounts = createSelector(selectAllAccounts, (accounts) =>
+export const selectAccounts = createSelector(selectAllAccounts, (accounts) =>
   accounts?.filter((t) => t.modelState === ModelState.Normal)
 );
 
-export const getAccount = createSelector(
-  getState,
+export const selectAccount = createSelector(
+  selectState,
   (state) => state.selectedAccount
 );
 
-export const getLoading = createSelector(getState, (state) => state.loading);
+export const selectLoading = createSelector(
+  selectState,
+  (state) => state.loading
+);
 
-export const getEntitiesLoaded = createSelector(
-  getState,
+export const selectEntitiesLoaded = createSelector(
+  selectState,
   (state) => state.entitiesLoaded
 );
 
-export const getActiveAccounts = createSelector(selectAllAccounts, (accounts) =>
-  _.orderBy(
-    accounts?.filter(
-      (t) => t.modelState === ModelState.Normal && t.includeInTotals
-    ),
-    'name'
-  )
+export const selectActiveAccounts = createSelector(
+  selectAllAccounts,
+  (accounts) =>
+    _.orderBy(
+      accounts?.filter(
+        (t) => t.modelState === ModelState.Normal && t.includeInTotals
+      ),
+      'name'
+    )
 );
 
-export const getTransactions = createSelector(
-  getAccount,
-  transactionsQuery.getTransactions,
+export const selectAccountTransactions = createSelector(
+  selectAccount,
+  selectAllTransactions,
   (account, transactions) => {
     return account && transactions?.length
       ? transactions.filter(

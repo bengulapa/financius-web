@@ -19,15 +19,18 @@ export const initialState: TransactionsState =
 
 export const transactionsReducer = createReducer(
   initialState,
-  on(TransactionActions.retrieve, (state) => ({
-    ...state,
-    loading: !state.entitiesLoaded,
-  })),
+  on(
+    TransactionActions.retrieve,
+    (state): TransactionsState => ({
+      ...state,
+      loading: !state.entitiesLoaded,
+    })
+  ),
   on(
     TransactionActions.add,
     TransactionActions.update,
     TransactionActions.remove,
-    (state) => ({
+    (state): TransactionsState => ({
       ...state,
       loading: true,
     })
@@ -37,7 +40,7 @@ export const transactionsReducer = createReducer(
     TransactionActions.addFail,
     TransactionActions.updateFail,
     TransactionActions.removeFail,
-    (state, { errorMessage }) => ({
+    (state, { errorMessage }): TransactionsState => ({
       ...state,
       loading: false,
       error: errorMessage,

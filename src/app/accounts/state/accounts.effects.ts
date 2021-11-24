@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import {
   catchError,
+  concatMap,
   exhaustMap,
   filter,
   map,
   mergeMap,
   switchMap,
   tap,
-  withLatestFrom,
 } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { Account } from 'src/app/shared/models/entities.models';
 import { AccountActions } from './accounts.actions';
-import { getEntitiesLoaded } from './accounts.selectors';
+import { selectEntitiesLoaded } from './accounts.selectors';
 
 @Injectable()
 export class AccountsEffects {
-  retrieve$ = createEffect(() =>
-    this.actions$.pipe(
+  retrieve$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.retrieve),
-      withLatestFrom(this.store.select(getEntitiesLoaded)),
+      concatLatestFrom(() => this.store.select(selectEntitiesLoaded)),
       filter(([_, loaded]) => !loaded),
       exhaustMap(() =>
         this.service.getAll().pipe(
@@ -38,11 +37,11 @@ export class AccountsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  getByKey$ = createEffect(() =>
-    this.actions$.pipe(
+  getByKey$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.getByKey),
       switchMap((action) => {
         return this.service.getById(action.key).pipe(
@@ -57,11 +56,11 @@ export class AccountsEffects {
           )
         );
       })
-    )
-  );
+    );
+  });
 
-  add$ = createEffect(() =>
-    this.actions$.pipe(
+  add$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.add),
       mergeMap((action) =>
         this.service.add(action.account).pipe(
@@ -75,13 +74,13 @@ export class AccountsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  update$ = createEffect(() =>
-    this.actions$.pipe(
+  update$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.update),
-      switchMap((action) =>
+      concatMap((action) =>
         this.service
           .update({ id: action.account.id, changes: action.account })
           .pipe(
@@ -99,11 +98,11 @@ export class AccountsEffects {
             )
           )
       )
-    )
-  );
+    );
+  });
 
-  updateFromTransaction$ = createEffect(() =>
-    this.actions$.pipe(
+  updateFromTransaction$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.updateAccountBalance),
       mergeMap((action) => {
         return this.service
@@ -129,13 +128,13 @@ export class AccountsEffects {
             )
           );
       })
-    )
-  );
+    );
+  });
 
-  remove$ = createEffect(() =>
-    this.actions$.pipe(
+  remove$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(AccountActions.remove),
-      switchMap((action) =>
+      concatMap((action) =>
         this.service.delete(action.account.id).pipe(
           map(
             () =>
@@ -151,8 +150,8 @@ export class AccountsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
   readonly showErrorAlert$ = createEffect(
     () => {
@@ -171,7 +170,7 @@ export class AccountsEffects {
   );
 
   constructor(
-    private store: Store<Account>,
+    private store: Store,
     private actions$: Actions,
     private service: AccountsService,
     private notify: NotificationService

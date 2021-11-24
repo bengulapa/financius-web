@@ -7,21 +7,28 @@ import * as fromReducer from './transactions.reducer';
 
 const { selectAll } = fromReducer.transactionsAdapter.getSelectors();
 
-const getState = createFeatureSelector<fromReducer.TransactionsState>(
+const selectState = createFeatureSelector<fromReducer.TransactionsState>(
   fromReducer.featureKey
 );
 
-const selectAllTransactions = createSelector(getState, selectAll);
+export const selectAllTransactions = createSelector(selectState, selectAll);
 
-export const transactionsQuery = {
-  getLoading: createSelector(getState, (state) => state.loading),
-  getEntitiesLoaded: createSelector(getState, (state) => state.entitiesLoaded),
-  getActiveTransactions: createSelector(selectAllTransactions, (transactions) =>
+export const selectLoading = createSelector(
+  selectState,
+  (state) => state.loading
+);
+
+export const selectEntitiesLoaded = createSelector(
+  selectState,
+  (state) => state.entitiesLoaded
+);
+
+export const selectActiveTransactions = createSelector(
+  selectAllTransactions,
+  (transactions) =>
     transactions?.filter(
       (t) =>
         t.modelState === ModelState.Normal &&
         t.transactionState === TransactionState.Confirmed
     )
-  ),
-  getTransactions: selectAllTransactions,
-};
+);

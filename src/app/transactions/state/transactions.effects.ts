@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { of } from 'rxjs';
 import {
   catchError,
+  concatMap,
   exhaustMap,
   filter,
   map,
   mergeMap,
   tap,
-  withLatestFrom,
 } from 'rxjs/operators';
 import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -18,16 +18,17 @@ import { TransactionsService } from 'src/app/core/services/transactions.service'
 import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TransactionActions } from './transactions.actions';
-import { TransactionsState } from './transactions.reducer';
-import { transactionsQuery } from './transactions.selectors';
+import * as transactionsQuery from './transactions.selectors';
 
 @Injectable()
 export class TransactionsEffects {
-  retrieve$ = createEffect(() =>
-    this.actions$.pipe(
+  retrieve$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(TransactionActions.retrieve),
       // Don't load if we've already loaded.
-      withLatestFrom(this.store.select(transactionsQuery.getEntitiesLoaded)),
+      concatLatestFrom(() =>
+        this.store.select(transactionsQuery.selectEntitiesLoaded)
+      ),
       filter(([_, loaded]) => !loaded),
       // Don't handle more than one load request at a time.
       exhaustMap(() =>
@@ -45,11 +46,11 @@ export class TransactionsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  add$ = createEffect(() =>
-    this.actions$.pipe(
+  add$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(TransactionActions.add),
       mergeMap((action) =>
         this.service.add(action.transaction).pipe(
@@ -65,25 +66,26 @@ export class TransactionsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
   updateTransactionAccountOnAdd$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(TransactionActions.addSuccess),
-        withLatestFrom(
-          this.store.select(transactionsQuery.getActiveTransactions)
+        concatLatestFrom(() =>
+          this.store.select(transactionsQuery.selectActiveTransactions)
         ),
         tap(([{ transaction }, transactions]) => {
           this.updateTransactionAccount(transaction, transactions);
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
-  update$ = createEffect(() =>
-    this.actions$.pipe(
+  update$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(TransactionActions.update),
       mergeMap(({ old, update }) =>
         this.service.update({ id: old.id, changes: update }).pipe(
@@ -103,15 +105,15 @@ export class TransactionsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
   updateTransactionAccountOnUpdate$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(TransactionActions.updateSuccess),
-        withLatestFrom(
-          this.store.select(transactionsQuery.getActiveTransactions)
+        concatLatestFrom(() =>
+          this.store.select(transactionsQuery.selectActiveTransactions)
         ),
         tap(([{ old, transaction }, transactions]) => {
           if (
@@ -126,14 +128,15 @@ export class TransactionsEffects {
             transactions
           );
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
-  remove$ = createEffect(() =>
-    this.actions$.pipe(
+  remove$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(TransactionActions.remove),
-      mergeMap((action) =>
+      concatMap((action) =>
         this.service.delete(action.transaction.id).pipe(
           map(
             () =>
@@ -150,21 +153,22 @@ export class TransactionsEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
   removeSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(TransactionActions.removeSuccess),
-        withLatestFrom(
-          this.store.select(transactionsQuery.getActiveTransactions)
+        concatLatestFrom(() =>
+          this.store.select(transactionsQuery.selectActiveTransactions)
         ),
         tap(([{ transaction }, transactions]) => {
           this.updateTransactionAccount(transaction, transactions);
           this.notify.success('Transaction has been deleted');
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
@@ -173,7 +177,7 @@ export class TransactionsEffects {
     private service: TransactionsService,
     private accountsFacade: AccountsFacade,
     private notify: NotificationService,
-    private store: Store<TransactionsState>
+    private store: Store
   ) {}
 
   private updateTransactionAccount(

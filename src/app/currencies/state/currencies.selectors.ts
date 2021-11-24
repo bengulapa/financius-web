@@ -4,29 +4,33 @@ import * as fromReducer from './currencies.reducer';
 
 const { selectAll } = fromReducer.currenciesAdapter.getSelectors();
 
-const getState = createFeatureSelector<fromReducer.CurrenciesState>(
+const selectState = createFeatureSelector<fromReducer.CurrenciesState>(
   fromReducer.featureKey
 );
 
-const selectAllCurrencies = createSelector(getState, selectAll);
+const selectAllCurrencies = createSelector(selectState, selectAll);
 
-export const getCurrencies = createSelector(selectAllCurrencies, (currencies) =>
-  currencies?.filter((t) => t.modelState === ModelState.Normal)
+export const selectCurrencies = createSelector(
+  selectAllCurrencies,
+  (currencies) => currencies?.filter((t) => t.modelState === ModelState.Normal)
 );
 
-export const getCurrency = createSelector(
-  getState,
+export const selectCurrency = createSelector(
+  selectState,
   (state) => state.selectedCurrency
 );
 
-export const getLoading = createSelector(getState, (state) => state.loading);
+export const selectLoading = createSelector(
+  selectState,
+  (state) => state.loading
+);
 
-export const getEntitiesLoaded = createSelector(
-  getState,
+export const selectEntitiesLoaded = createSelector(
+  selectState,
   (state) => state.entitiesLoaded
 );
 
-export const getMainCurrency = createSelector(
-  getCurrencies,
+export const selectMainCurrency = createSelector(
+  selectCurrencies,
   (currencies) => currencies.find((c) => c.isDefault) || null
 );

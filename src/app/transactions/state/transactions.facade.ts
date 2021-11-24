@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Update } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionActions } from './transactions.actions';
-import { TransactionsState } from './transactions.reducer';
-import { transactionsQuery } from './transactions.selectors';
+import * as transactionsQuery from './transactions.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsFacade {
-  loading$? = this.store.select(transactionsQuery.getLoading);
-  entities$? = this.store.select(transactionsQuery.getActiveTransactions);
+  loading$? = this.store.select(transactionsQuery.selectLoading);
+  entities$? = this.store.select(transactionsQuery.selectActiveTransactions);
 
-  constructor(private store: Store<TransactionsState>) {}
+  constructor(private store: Store) {}
 
   retrieve() {
     this.store.dispatch(TransactionActions.retrieve());

@@ -21,16 +21,19 @@ export const initialState: CurrenciesState = currenciesAdapter.getInitialState({
 
 export const currenciesReducer = createReducer(
   initialState,
-  on(CurrencyActions.retrieve, (state) => ({
-    ...state,
-    loading: !state.entitiesLoaded,
-  })),
+  on(
+    CurrencyActions.retrieve,
+    (state): CurrenciesState => ({
+      ...state,
+      loading: !state.entitiesLoaded,
+    })
+  ),
   on(
     CurrencyActions.getByKey,
     CurrencyActions.add,
     CurrencyActions.update,
     CurrencyActions.remove,
-    (state) => ({
+    (state): CurrenciesState => ({
       ...state,
       loading: true,
     })
@@ -41,7 +44,7 @@ export const currenciesReducer = createReducer(
     CurrencyActions.addFail,
     CurrencyActions.updateFail,
     CurrencyActions.removeFail,
-    (state, { errorMessage }) => ({
+    (state, { errorMessage }): CurrenciesState => ({
       ...state,
       loading: false,
       error: errorMessage,

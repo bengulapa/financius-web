@@ -21,16 +21,19 @@ export const initialState: AccountsState = accountsAdapter.getInitialState({
 
 export const accountsReducer = createReducer(
   initialState,
-  on(AccountActions.retrieve, (state) => ({
-    ...state,
-    loading: !state.entitiesLoaded,
-  })),
+  on(
+    AccountActions.retrieve,
+    (state): AccountsState => ({
+      ...state,
+      loading: !state.entitiesLoaded,
+    })
+  ),
   on(
     AccountActions.getByKey,
     AccountActions.add,
     AccountActions.update,
     AccountActions.remove,
-    (state) => ({
+    (state): AccountsState => ({
       ...state,
       loading: true,
     })
@@ -41,7 +44,7 @@ export const accountsReducer = createReducer(
     AccountActions.addFail,
     AccountActions.updateFail,
     AccountActions.removeFail,
-    (state, { errorMessage }) => ({
+    (state, { errorMessage }): AccountsState => ({
       ...state,
       loading: false,
       error: errorMessage,

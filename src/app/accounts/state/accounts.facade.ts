@@ -3,22 +3,21 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { AccountActions } from './accounts.actions';
-import { AccountsState } from './accounts.reducer';
 import * as accountsQuery from './accounts.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class AccountsFacade {
-  loading$? = this.store.select(accountsQuery.getLoading);
-  entities$? = this.store.select(accountsQuery.getAccounts);
-  activeAccounts$? = this.store.select(accountsQuery.getActiveAccounts);
+  loading$? = this.store.select(accountsQuery.selectLoading);
+  entities$? = this.store.select(accountsQuery.selectAccounts);
+  activeAccounts$? = this.store.select(accountsQuery.selectActiveAccounts);
   transactions$?: Observable<Transaction[]> = this.store.select(
-    accountsQuery.getTransactions
+    accountsQuery.selectAccountTransactions
   );
   account$?: Observable<Account | null> = this.store.select(
-    accountsQuery.getAccount
+    accountsQuery.selectAccount
   );
 
-  constructor(private store: Store<AccountsState>) {}
+  constructor(private store: Store) {}
 
   retrieve() {
     this.store.dispatch(AccountActions.retrieve());

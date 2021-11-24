@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import {
   catchError,
+  concatMap,
   exhaustMap,
   filter,
   map,
   mergeMap,
   switchMap,
-  withLatestFrom,
 } from 'rxjs/operators';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Currency } from 'src/app/shared/models/entities.models';
 import { CurrencyActions } from './currencies.actions';
-import { getCurrencies, getEntitiesLoaded } from './currencies.selectors';
+import { selectCurrencies, selectEntitiesLoaded } from './currencies.selectors';
 
 @Injectable()
 export class CurrenciesEffects {
-  retrieve$ = createEffect(() =>
-    this.actions$.pipe(
+  retrieve$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.retrieve),
-      withLatestFrom(this.store.select(getEntitiesLoaded)),
+      concatLatestFrom(() => this.store.select(selectEntitiesLoaded)),
       filter(([_, loaded]) => !loaded),
       exhaustMap(() =>
         this.service.getAll().pipe(
@@ -38,11 +38,11 @@ export class CurrenciesEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  getByKey$ = createEffect(() =>
-    this.actions$.pipe(
+  getByKey$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.getByKey),
       switchMap((action) => {
         return this.service.getById(action.key).pipe(
@@ -58,11 +58,11 @@ export class CurrenciesEffects {
           )
         );
       })
-    )
-  );
+    );
+  });
 
-  add$ = createEffect(() =>
-    this.actions$.pipe(
+  add$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.add),
       mergeMap((action) =>
         this.service.add(action.currency).pipe(
@@ -77,13 +77,13 @@ export class CurrenciesEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  update$ = createEffect(() =>
-    this.actions$.pipe(
+  update$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.update),
-      switchMap((action) =>
+      concatMap((action) =>
         this.service
           .update({ id: action.currency.id, changes: action.currency })
           .pipe(
@@ -102,39 +102,39 @@ export class CurrenciesEffects {
             )
           )
       )
-    )
-  );
+    );
+  });
 
-  updatePreviousMainOnAdd$ = createEffect(() =>
-    this.actions$.pipe(
+  updatePreviousMainOnAdd$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.addSuccess),
       filter((c) => c.currency.isDefault!),
-      switchMap(({ currency }) =>
+      concatMap(({ currency }) =>
         of(CurrencyActions.updatePreviousMain({ currency }))
       )
-    )
-  );
+    );
+  });
 
-  updatePreviousMainOnUpdate$ = createEffect(() =>
-    this.actions$.pipe(
+  updatePreviousMainOnUpdate$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.updateSuccess),
       filter((c) => c.currency.changes.isDefault!),
-      switchMap(({ currency }) =>
+      concatMap(({ currency }) =>
         of(
           CurrencyActions.updatePreviousMain({
             currency: <Currency>currency.changes,
           })
         )
       )
-    )
-  );
+    );
+  });
 
-  updatePreviousMain$ = createEffect(() =>
-    this.actions$.pipe(
+  updatePreviousMain$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.updatePreviousMain),
-      withLatestFrom(this.store.select(getCurrencies)),
+      concatLatestFrom(() => this.store.select(selectCurrencies)),
       filter(([_, c]) => !!c.length),
-      switchMap(([{ currency }, currencies]) => {
+      concatMap(([{ currency }, currencies]) => {
         const prevMain = currencies.find(
           (c) => c.id !== currency.id && c.isDefault
         )!;
@@ -163,13 +163,13 @@ export class CurrenciesEffects {
             )
           );
       })
-    )
-  );
+    );
+  });
 
-  remove$ = createEffect(() =>
-    this.actions$.pipe(
+  remove$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(CurrencyActions.remove),
-      switchMap((action) =>
+      concatMap((action) =>
         this.service.delete(action.currency.id).pipe(
           map(
             () =>
@@ -186,11 +186,11 @@ export class CurrenciesEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
   constructor(
-    private store: Store<Currency>,
+    private store: Store,
     private actions$: Actions,
     private service: CurrenciesService,
     private notify: NotificationService
