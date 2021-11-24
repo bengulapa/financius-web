@@ -67,8 +67,18 @@
         <mat-icon matTooltip="Edit">edit</mat-icon>
       </button>
 
-      <button mat-icon-button (click)="delete.emit(row)" color="warn">
-        <mat-icon matTooltip="Delete">delete</mat-icon>
+      <button
+        [disabled]="row.isDefault"
+        mat-icon-button
+        (click)="delete.emit(row)"
+        color="warn"
+      >
+        <mat-icon
+          matTooltip="{{
+            row.isDefault ? 'Unable to delete main currency' : 'Delete'
+          }}"
+          >delete</mat-icon
+        >
       </button>
     </td>
   </ng-container>
