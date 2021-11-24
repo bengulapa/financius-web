@@ -9,12 +9,12 @@ import {
   map,
   mergeMap,
   switchMap,
+  tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Account } from 'src/app/shared/models/entities.models';
-import { TransactionsFacade } from 'src/app/transactions/state/transactions.facade';
 import { AccountActions } from './accounts.actions';
 import { getEntitiesLoaded } from './accounts.selectors';
 
@@ -32,7 +32,6 @@ export class AccountsEffects {
             catchError((err: any) => {
               const errorMessage =
                 'An error occurred while retrieving accounts.';
-              this.notify.error(errorMessage);
               console.log(err);
               return of(AccountActions.retrieveFail({ errorMessage }));
             })
@@ -52,7 +51,6 @@ export class AccountsEffects {
             catchError((err: any) => {
               const errorMessage =
                 'An error occurred while retrieving an account.';
-              this.notify.error(errorMessage);
               console.log(err);
               return of(AccountActions.getByKeyFail({ errorMessage }));
             })
@@ -71,7 +69,6 @@ export class AccountsEffects {
             (account) => AccountActions.addSuccess({ account }),
             catchError((err: any) => {
               const errorMessage = 'An error occurred while adding a account.';
-              this.notify.error(errorMessage);
               console.log(err);
               return of(AccountActions.addFail({ errorMessage }));
             })
@@ -96,7 +93,6 @@ export class AccountsEffects {
               catchError((err: any) => {
                 const errorMessage =
                   'An error occurred while updating a account.';
-                this.notify.error(errorMessage);
                 console.log(err);
                 return of(AccountActions.updateFail({ errorMessage }));
               })
@@ -127,7 +123,6 @@ export class AccountsEffects {
               catchError((err: any) => {
                 const errorMessage =
                   'An error occurred while updating a account.';
-                this.notify.error(errorMessage);
                 console.log(err);
                 return of(AccountActions.updateFail({ errorMessage }));
               })
@@ -150,7 +145,6 @@ export class AccountsEffects {
             catchError((err: any) => {
               const errorMessage =
                 'An error occurred while removing a account.';
-              this.notify.error(errorMessage);
               console.log(err);
               return of(AccountActions.removeFail({ errorMessage }));
             })
@@ -160,11 +154,26 @@ export class AccountsEffects {
     )
   );
 
+  readonly showErrorAlert$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(
+          AccountActions.retrieveFail,
+          AccountActions.getByKeyFail,
+          AccountActions.addFail,
+          AccountActions.updateFail,
+          AccountActions.removeFail
+        ),
+        tap(({ errorMessage }) => this.notify.error(errorMessage))
+      );
+    },
+    { dispatch: false }
+  );
+
   constructor(
     private store: Store<Account>,
     private actions$: Actions,
     private service: AccountsService,
-    private notify: NotificationService,
-    private transactionsFacade: TransactionsFacade
+    private notify: NotificationService
   ) {}
 }
