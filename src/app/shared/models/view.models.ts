@@ -21,8 +21,11 @@ export enum Period {
 
 export interface TransactionFilter {
   selectedPeriod: Period;
-  selectedDate?: Date;
-  selectedMonth?: number;
-  selectedWeek?: number;
-  selectedYear?: number;
+  selectedDate: Date;
+  selectedMonth: number;
+  selectedWeek: {
+    start: Date;
+    end: Date;
+  };
+  selectedYear: number;
 }

@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { format } from 'date-fns';
+import { format, isWithinInterval } from 'date-fns';
 import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import {
   ModelState,
@@ -68,10 +68,17 @@ export const selectPeriodLabel = createSelector(selectFilter, (filter) => {
       }`;
 
     case Period.Day:
-      return `${format(filter.selectedDate!, 'PPPP')}`;
+      return `${format(filter.selectedDate, 'PPPP')}`;
 
     case Period.Week:
-      return `Week ${filter.selectedWeek}`;
+      return `${format(filter.selectedWeek.start, 'dd MMM')} - ${format(
+        filter.selectedWeek.end,
+        'dd MMM'
+      )} ${
+        filter.selectedWeek.end.getFullYear() !== new Date().getFullYear()
+          ? ` ${filter.selectedWeek.end.getFullYear()}`
+          : ''
+      }`;
 
     case Period.Year:
       return `${filter.selectedYear}`;
@@ -103,10 +110,11 @@ export const selectExpenses = createSelector(
         );
 
       case Period.Week:
-        return expenses?.filter(
-          (t) =>
-            new Date(t.date).getMonth() === filter.selectedMonth &&
-            new Date(t.date).getFullYear() === filter.selectedYear
+        return expenses?.filter((t) =>
+          isWithinInterval(new Date(t.date), {
+            start: filter.selectedWeek.start,
+            end: filter.selectedWeek.end,
+          })
         );
 
       case Period.Year:

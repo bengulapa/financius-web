@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { add } from 'date-fns';
+import { add, addWeeks, endOfWeek, startOfWeek } from 'date-fns';
 import { first } from 'rxjs/operators';
 import { Period } from 'src/app/shared/models/view.models';
 import { TransactionActions } from 'src/app/transactions/state/transactions.actions';
@@ -20,7 +20,10 @@ export class ReportsShellComponent implements OnInit {
   selectedMonth!: number;
   selectedYear!: number;
   selectedDate!: Date;
-  selectedWeek!: number;
+  selectedWeek!: {
+    start: Date;
+    end: Date;
+  };
 
   constructor(private store: Store) {}
 
@@ -29,10 +32,10 @@ export class ReportsShellComponent implements OnInit {
 
     this.filter$.pipe(first()).subscribe((f) => {
       this.selectedPeriod = f.selectedPeriod;
-      this.selectedDate = f.selectedDate!;
-      this.selectedWeek = f.selectedWeek!;
-      this.selectedMonth = f.selectedMonth!;
-      this.selectedYear = f.selectedYear!;
+      this.selectedDate = f.selectedDate;
+      this.selectedWeek = f.selectedWeek;
+      this.selectedMonth = f.selectedMonth;
+      this.selectedYear = f.selectedYear;
     });
   }
 
@@ -40,10 +43,8 @@ export class ReportsShellComponent implements OnInit {
     this.selectedPeriod = period;
 
     this.store.dispatch(
-      TransactionActions.updateFilter({
-        filter: {
-          selectedPeriod: period,
-        },
+      TransactionActions.updateSelectedPeriod({
+        period,
       })
     );
   }
@@ -70,7 +71,11 @@ export class ReportsShellComponent implements OnInit {
         break;
 
       case Period.Week:
-        this.selectedWeek += increment;
+        const weekDate = addWeeks(this.selectedWeek.start, increment);
+        this.selectedWeek = {
+          start: startOfWeek(weekDate, { weekStartsOn: 1 }),
+          end: endOfWeek(weekDate, { weekStartsOn: 1 }),
+        };
         break;
 
       case Period.Year:

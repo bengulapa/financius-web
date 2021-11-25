@@ -1,7 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import { TransactionFilter } from 'src/app/shared/models/view.models';
+import { Period, TransactionFilter } from 'src/app/shared/models/view.models';
 
 export namespace TransactionActions {
   const key = '[Transactions]';
@@ -66,6 +66,11 @@ export namespace TransactionActions {
   export const updateFilter = createAction(
     `${key} Update Filter`,
     props<{ filter: TransactionFilter }>()
+  );
+
+  export const updateSelectedPeriod = createAction(
+    `${key} Update Selected Period `,
+    props<{ period: Period }>()
   );
 
   export const resetFilter = createAction(`${key} Reset Filter`);
