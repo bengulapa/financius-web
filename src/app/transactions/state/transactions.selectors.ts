@@ -60,7 +60,11 @@ export const selectPeriodLabel = createSelector(selectFilter, (filter) => {
   switch (filter.selectedPeriod) {
     default:
     case SelectedPeriod.Monthly:
-      return getLocaleMonthName(filter.selectedMonth!);
+      return `${getLocaleMonthName(filter.selectedMonth!)}${
+        filter.selectedYear !== new Date().getFullYear()
+          ? ` ${filter.selectedYear}`
+          : ''
+      }`;
   }
 });
 
@@ -79,7 +83,6 @@ export const selectExpenses = createSelector(
           new Date(t.date).getFullYear() === filter.selectedYear
       );
     }
-    console.log(expenses);
 
     return expenses;
   }

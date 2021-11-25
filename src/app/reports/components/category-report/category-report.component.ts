@@ -50,9 +50,6 @@ export class CategoryReportComponent implements OnChanges {
         Object.keys(expensesGroup).map((e) => ({
           name: e,
           value: _.sumBy(expensesGroup[e], 'amount'),
-          extra: {
-            symbol: 'P',
-          },
         })),
         ['value'],
         ['desc']

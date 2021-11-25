@@ -81,5 +81,23 @@ export const transactionsReducer = createReducer(
       ...state,
       loading: false,
     })
+  ),
+  on(
+    TransactionActions.updateFilter,
+    (state, { filter }): TransactionsState => ({
+      ...state,
+      filter,
+    })
+  ),
+  on(
+    TransactionActions.resetFilter,
+    (state): TransactionsState => ({
+      ...state,
+      filter: {
+        selectedPeriod: SelectedPeriod.Monthly,
+        selectedMonth: new Date().getMonth(),
+        selectedYear: new Date().getFullYear(),
+      },
+    })
   )
 );

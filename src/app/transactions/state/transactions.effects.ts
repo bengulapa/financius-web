@@ -17,6 +17,7 @@ import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
+import { ReportsActions } from 'src/app/reports/state/reports.actions';
 import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TransactionActions } from './transactions.actions';
@@ -55,9 +56,17 @@ export class TransactionsEffects {
     return this.actions$.pipe(
       ofType(
         DashboardActions.dashboardPageOpened,
+        ReportsActions.reportsPageOpened,
         AccountActions.accountViewOpened
       ),
       mergeMap(() => of(TransactionActions.retrieve()))
+    );
+  });
+
+  resetFilter$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DashboardActions.dashboardPageOpened),
+      mergeMap(() => of(TransactionActions.resetFilter()))
     );
   });
 

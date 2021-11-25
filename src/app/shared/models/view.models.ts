@@ -22,5 +22,5 @@ export interface TransactionFilter {
   selectedPeriod: SelectedPeriod;
   selectedMonth?: number;
   selectedWeek?: number;
-  selectedYear?: number;
+  selectedYear: number;
 }

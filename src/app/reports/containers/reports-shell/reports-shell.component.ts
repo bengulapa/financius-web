@@ -1,39 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TransactionsService } from 'src/app/core/services/transactions.service';
-import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
-import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
+import { SelectedPeriod } from 'src/app/shared/models/view.models';
+import { TransactionActions } from 'src/app/transactions/state/transactions.actions';
+import { selectFilter } from 'src/app/transactions/state/transactions.selectors';
+import { ReportsActions } from '../../state/reports.actions';
+import { selectReportsPageViewModel } from '../../state/reports.selectors';
 
 @Component({
   selector: 'app-reports-shell',
   templateUrl: './reports-shell.component.html',
   styleUrls: ['./reports-shell.component.scss'],
 })
-export class ReportsShellComponent
-  extends EntityBaseComponent<Transaction>
-  implements OnInit
-{
-  expenses$?: Observable<Transaction[]>;
-
-  title!: string;
+export class ReportsShellComponent implements OnInit {
+  vm$ = this.store.select(selectReportsPageViewModel);
+  filter$ = this.store.select(selectFilter);
   selectedMonth!: number;
   selectedYear!: number;
 
-  constructor(private transactionsService: TransactionsService) {
-    super();
-  }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    const currentDate = new Date(),
-      currentMonth = currentDate.getMonth(),
-      currentYear = currentDate.getFullYear();
+    this.store.dispatch(ReportsActions.reportsPageOpened());
 
-    this.selectedMonth = currentMonth;
-    this.selectedYear = currentYear;
-    this.setSelectedPeriod();
-
-    // this.loading$ = this.transactionsService.loading$;
+    this.filter$.pipe(first()).subscribe((f) => {
+      this.selectedMonth = f.selectedMonth!;
+      this.selectedYear = f.selectedYear;
+    });
   }
 
   onPeriodChange(increment: number) {
@@ -46,21 +39,15 @@ export class ReportsShellComponent
       this.selectedMonth += 12;
       this.selectedYear -= 1;
     }
-    this.setSelectedPeriod();
-  }
 
-  private setSelectedPeriod() {
-    this.setTitle();
-
-    this.expenses$ = this.transactionsService.getMonthlyExpenses(
-      this.selectedMonth,
-      this.selectedYear
+    this.store.dispatch(
+      TransactionActions.updateFilter({
+        filter: {
+          selectedPeriod: SelectedPeriod.Monthly,
+          selectedMonth: this.selectedMonth,
+          selectedYear: this.selectedYear,
+        },
+      })
     );
-  }
-
-  private setTitle() {
-    this.title = `${getLocaleMonthName(this.selectedMonth)} ${
-      this.selectedYear
-    }`;
   }
 }

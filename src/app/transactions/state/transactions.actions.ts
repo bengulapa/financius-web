@@ -1,6 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 import { Transaction } from 'src/app/shared/models/entities.models';
+import { TransactionFilter } from 'src/app/shared/models/view.models';
 
 export namespace TransactionActions {
   const key = '[Transactions]';
@@ -61,4 +62,11 @@ export namespace TransactionActions {
     `${key} Remove Fail`,
     props<{ errorMessage: string }>()
   );
+
+  export const updateFilter = createAction(
+    `${key} Update Filter`,
+    props<{ filter: TransactionFilter }>()
+  );
+
+  export const resetFilter = createAction(`${key} Reset Filter`);
 }
