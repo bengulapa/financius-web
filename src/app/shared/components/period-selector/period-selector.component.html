@@ -1,0 +1,8 @@
+<mat-button-toggle-group [value]="selectedValue" appearance="legacy">
+  <mat-button-toggle
+    *ngFor="let type of Period | enumArray"
+    [value]="Period[type]"
+    (change)="periodChange.emit($event.value)"
+    >{{ type }}</mat-button-toggle
+  >
+</mat-button-toggle-group>
