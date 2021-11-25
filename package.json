@@ -27,6 +27,7 @@
     "@ngrx/store": "^12.5.1",
     "@ngrx/store-devtools": "^12.5.1",
     "@swimlane/ngx-charts": "^19.1.0",
+    "date-fns": "^2.26.0",
     "lodash": "^4.17.21",
     "ngx-indexed-db": "^9.4.0",
     "rxjs": "~6.6.0",
