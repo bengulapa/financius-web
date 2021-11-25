@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import * as _ from 'lodash';
@@ -18,12 +19,12 @@ import { Transaction } from 'src/app/shared/models/entities.models';
   styleUrls: ['./overview-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewCardComponent implements OnInit {
+export class OverviewCardComponent implements OnChanges {
   @Input()
   title!: string;
 
   @Input()
-  transactions!: Transaction[] | null;
+  transactions?: Transaction[] | null;
 
   totalExpense: number = 0;
   currencyCode!: string | null;
@@ -31,23 +32,25 @@ export class OverviewCardComponent implements OnInit {
   LegendPosition = LegendPosition;
   customColors: ChartColor[] = [];
 
-  ngOnInit(): void {
-    // TODO: Group per currency code?
-    this.currencyCode = 'PHP';
-    this.totalExpense = _.sumBy(this.transactions, 'amount');
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.transactions?.currentValue) {
+      // TODO: Group per currency code?
+      this.currencyCode = 'PHP';
+      this.totalExpense = _.sumBy(this.transactions, 'amount');
 
-    const expensesGroup = _.groupBy(this.transactions, 'category.name');
+      const expensesGroup = _.groupBy(this.transactions, 'category.name');
 
-    this.pieData = Object.keys(expensesGroup).map((e) => ({
-      name: e,
-      value: _.sumBy(expensesGroup[e], 'amount'),
-    }));
+      this.pieData = Object.keys(expensesGroup).map((e) => ({
+        name: e,
+        value: _.sumBy(expensesGroup[e], 'amount'),
+      }));
 
-    this.customColors = Object.keys(expensesGroup).map((e) => ({
-      name: e,
-      value:
-        this.transactions?.find((t) => t.category?.name === e)?.category
-          ?.color || '',
-    }));
+      this.customColors = Object.keys(expensesGroup).map((e) => ({
+        name: e,
+        value:
+          this.transactions?.find((t) => t.category?.name === e)?.category
+            ?.color || '',
+      }));
+    }
   }
 }

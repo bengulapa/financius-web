@@ -11,3 +11,16 @@ export interface TransactionsViewModel {
   currencyCode: string | null;
   transactionType: TransactionType;
 }
+
+export enum SelectedPeriod {
+  Weekly = 0,
+  Monthly = 1,
+  Yearly = 2,
+}
+
+export interface TransactionFilter {
+  selectedPeriod: SelectedPeriod;
+  selectedMonth?: number;
+  selectedWeek?: number;
+  selectedYear?: number;
+}

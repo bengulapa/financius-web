@@ -7,7 +7,8 @@ import * as transactionsQuery from './transactions.selectors';
 @Injectable({ providedIn: 'root' })
 export class TransactionsFacade {
   loading$? = this.store.select(transactionsQuery.selectLoading);
-  entities$? = this.store.select(transactionsQuery.selectActiveTransactions);
+  entities$? = this.store.select(transactionsQuery.selectConfirmedTransactions);
+  filteredExpenses$? = this.store.select(transactionsQuery.selectExpenses);
 
   constructor(private store: Store) {}
 

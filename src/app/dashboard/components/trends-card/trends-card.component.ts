@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import * as _ from 'lodash';
 import { MultiChartData } from 'src/app/shared/models/chart.models';
@@ -14,7 +15,7 @@ import { Transaction } from 'src/app/shared/models/entities.models';
   styleUrls: ['./trends-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrendsCardComponent implements OnInit {
+export class TrendsCardComponent implements OnChanges {
   @Input()
   title!: string;
 
@@ -24,36 +25,36 @@ export class TrendsCardComponent implements OnInit {
   chartData: MultiChartData[] = [];
   currencyCode = 'PHP';
 
-  constructor() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.transactions?.currentValue) {
+      const dailyExpenses = _.groupBy(this.transactions, (t) =>
+        new Date(t.date).getDate().toLocaleString()
+      );
 
-  ngOnInit(): void {
-    const dailyExpenses = _.groupBy(this.transactions, (t) =>
-      new Date(t.date).getDate().toLocaleString()
-    );
+      const groupedDailyExpenses = Object.keys(dailyExpenses).map((day) => ({
+        name: day,
+        value: _.sumBy(dailyExpenses[day], 'amount'),
+      }));
 
-    const groupedDailyExpenses = Object.keys(dailyExpenses).map((day) => ({
-      name: day,
-      value: _.sumBy(dailyExpenses[day], 'amount'),
-    }));
+      const date = new Date(),
+        y = date.getFullYear(),
+        m = date.getMonth(),
+        lastDay = new Date(y, m + 1, 0).getDate();
 
-    const date = new Date(),
-      y = date.getFullYear(),
-      m = date.getMonth(),
-      lastDay = new Date(y, m + 1, 0).getDate();
+      const series = _.range(1, lastDay + 1).map((day) => ({
+        name: day.toLocaleString(),
+        value:
+          groupedDailyExpenses.find((e) => e.name === day.toLocaleString())
+            ?.value || 0,
+        extra: { symbol: 'P' },
+      }));
 
-    const series = _.range(1, lastDay + 1).map((day) => ({
-      name: day.toLocaleString(),
-      value:
-        groupedDailyExpenses.find((e) => e.name === day.toLocaleString())
-          ?.value || 0,
-      extra: { symbol: 'P' },
-    }));
-
-    this.chartData = [
-      {
-        name: this.title,
-        series: series,
-      },
-    ];
+      this.chartData = [
+        {
+          name: this.title,
+          series: series,
+        },
+      ];
+    }
   }
 }

@@ -1,34 +1,36 @@
 <app-main-toolbar></app-main-toolbar>
 
-<section class="container d-flex">
-  <div class="w-50 me-1">
-    <mat-card>
-      <mat-card-title>{{ title }}</mat-card-title>
-      <mat-card-content>
-        <ng-container *ngIf="expenses$ | async as expenses; else loading">
-          <div class="mb-4">
-            <app-overview-card
-              [title]="title"
-              [transactions]="expenses"
-            ></app-overview-card>
-          </div>
+<ng-container *ngIf="vm$ | async as vm">
+  <mat-progress-bar
+    *ngIf="vm.loading; else showContent"
+    color="accent"
+    mode="indeterminate"
+  ></mat-progress-bar>
 
-          <app-trends-card
-            [title]="title"
-            [transactions]="expenses"
-          ></app-trends-card>
-        </ng-container>
+  <ng-template #showContent>
+    <section class="container d-flex">
+      <div class="w-50 me-1">
+        <mat-card>
+          <mat-card-title>{{ vm.periodLabel }}</mat-card-title>
+          <mat-card-content>
+            <div class="mb-4">
+              <app-overview-card
+                [title]="vm.periodLabel"
+                [transactions]="vm.filteredExpenses"
+              ></app-overview-card>
+            </div>
 
-        <ng-template #loading>
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </ng-template>
-      </mat-card-content>
-    </mat-card>
-  </div>
+            <app-trends-card
+              [title]="vm.periodLabel"
+              [transactions]="vm.filteredExpenses"
+            ></app-trends-card>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
-  <div class="w-50 ms-1">
-    <app-accounts-card
-      [accounts]="accountsFacade.activeAccounts$ | async"
-    ></app-accounts-card>
-  </div>
-</section>
+      <div class="w-50 ms-1">
+        <app-accounts-card [accounts]="vm.activeAccounts"></app-accounts-card>
+      </div>
+    </section>
+  </ng-template>
+</ng-container>

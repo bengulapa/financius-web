@@ -16,6 +16,7 @@ import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TransactionActions } from './transactions.actions';
@@ -50,9 +51,12 @@ export class TransactionsEffects {
     );
   });
 
-  accountViewOpened$ = createEffect(() => {
+  loadTransactions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AccountActions.accountViewOpened),
+      ofType(
+        DashboardActions.dashboardPageOpened,
+        AccountActions.accountViewOpened
+      ),
       mergeMap(() => of(TransactionActions.retrieve()))
     );
   });
@@ -82,7 +86,7 @@ export class TransactionsEffects {
       return this.actions$.pipe(
         ofType(TransactionActions.addSuccess),
         concatLatestFrom(() =>
-          this.store.select(transactionsQuery.selectActiveTransactions)
+          this.store.select(transactionsQuery.selectConfirmedTransactions)
         ),
         tap(([{ transaction }, transactions]) => {
           this.updateTransactionAccount(transaction, transactions);
@@ -121,7 +125,7 @@ export class TransactionsEffects {
       return this.actions$.pipe(
         ofType(TransactionActions.updateSuccess),
         concatLatestFrom(() =>
-          this.store.select(transactionsQuery.selectActiveTransactions)
+          this.store.select(transactionsQuery.selectConfirmedTransactions)
         ),
         tap(([{ old, transaction }, transactions]) => {
           if (
@@ -169,7 +173,7 @@ export class TransactionsEffects {
       return this.actions$.pipe(
         ofType(TransactionActions.removeSuccess),
         concatLatestFrom(() =>
-          this.store.select(transactionsQuery.selectActiveTransactions)
+          this.store.select(transactionsQuery.selectConfirmedTransactions)
         ),
         tap(([{ transaction }, transactions]) => {
           this.updateTransactionAccount(transaction, transactions);

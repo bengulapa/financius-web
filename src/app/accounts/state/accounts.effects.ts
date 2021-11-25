@@ -14,6 +14,7 @@ import {
 } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { AccountActions } from './accounts.actions';
 import { selectEntitiesLoaded } from './accounts.selectors';
 
@@ -40,7 +41,14 @@ export class AccountsEffects {
     );
   });
 
-  accountViewOpened$ = createEffect(() => {
+  loadAccounts$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DashboardActions.dashboardPageOpened),
+      mergeMap(() => of(AccountActions.retrieve()))
+    );
+  });
+
+  loadAccount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.accountViewOpened),
       mergeMap(({ accountId }) =>
