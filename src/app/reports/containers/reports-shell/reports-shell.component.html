@@ -9,6 +9,13 @@
 
   <ng-template #showContent>
     <section class="container">
+      <div class="d-flex justify-content-end mb-3">
+        <app-period-selector
+          [selectedValue]="selectedPeriod"
+          (periodChange)="onSelectedPeriodChange($event)"
+        ></app-period-selector>
+      </div>
+
       <app-category-report
         [transactions]="vm.filteredExpenses"
         [loading]="vm.loading"

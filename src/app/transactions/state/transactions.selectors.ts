@@ -1,11 +1,12 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { format } from 'date-fns';
 import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import {
   ModelState,
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
-import { SelectedPeriod } from 'src/app/shared/models/view.models';
+import { Period } from 'src/app/shared/models/view.models';
 import * as fromReducer from './transactions.reducer';
 
 const { selectAll } = fromReducer.transactionsAdapter.getSelectors();
@@ -59,12 +60,21 @@ export const selectFilter = createSelector(
 export const selectPeriodLabel = createSelector(selectFilter, (filter) => {
   switch (filter.selectedPeriod) {
     default:
-    case SelectedPeriod.Monthly:
+    case Period.Month:
       return `${getLocaleMonthName(filter.selectedMonth!)}${
         filter.selectedYear !== new Date().getFullYear()
           ? ` ${filter.selectedYear}`
           : ''
       }`;
+
+    case Period.Day:
+      return `${format(filter.selectedDate!, 'PPPP')}`;
+
+    case Period.Week:
+      return `Week ${filter.selectedWeek}`;
+
+    case Period.Year:
+      return `${filter.selectedYear}`;
   }
 });
 
@@ -76,14 +86,33 @@ export const selectExpenses = createSelector(
       (t) => t.transactionType === TransactionType.Expense
     );
 
-    if (filter.selectedPeriod === SelectedPeriod.Monthly) {
-      expenses = expenses?.filter(
-        (t) =>
-          new Date(t.date).getMonth() === filter.selectedMonth &&
-          new Date(t.date).getFullYear() === filter.selectedYear
-      );
-    }
+    switch (filter.selectedPeriod) {
+      default:
+      case Period.Month:
+        return expenses?.filter(
+          (t) =>
+            new Date(t.date).getMonth() === filter.selectedMonth &&
+            new Date(t.date).getFullYear() === filter.selectedYear
+        );
 
-    return expenses;
+      case Period.Day:
+        return expenses?.filter(
+          (t) =>
+            new Date(t.date).toDateString() ===
+            filter.selectedDate?.toDateString()
+        );
+
+      case Period.Week:
+        return expenses?.filter(
+          (t) =>
+            new Date(t.date).getMonth() === filter.selectedMonth &&
+            new Date(t.date).getFullYear() === filter.selectedYear
+        );
+
+      case Period.Year:
+        return expenses?.filter(
+          (t) => new Date(t.date).getFullYear() === filter.selectedYear
+        );
+    }
   }
 );

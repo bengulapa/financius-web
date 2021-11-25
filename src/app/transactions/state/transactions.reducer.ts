@@ -1,14 +1,13 @@
 import { createEntityAdapter, EntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
+import { getWeek } from 'date-fns';
 import { BaseEntityState } from 'src/app/core/state/core.reducers';
 import { Transaction } from 'src/app/shared/models/entities.models';
-import {
-  SelectedPeriod,
-  TransactionFilter,
-} from 'src/app/shared/models/view.models';
+import { Period, TransactionFilter } from 'src/app/shared/models/view.models';
 import { TransactionActions } from './transactions.actions';
 
 export const featureKey = 'transactions';
+const now = new Date();
 
 export interface TransactionsState extends BaseEntityState<Transaction> {
   filter: TransactionFilter;
@@ -22,7 +21,11 @@ export const initialState: TransactionsState =
     loading: false,
     entitiesLoaded: false,
     filter: {
-      selectedPeriod: SelectedPeriod.Monthly,
+      selectedDate: now,
+      selectedWeek: getWeek(now, {
+        weekStartsOn: 1,
+      }),
+      selectedPeriod: Period.Month,
       selectedMonth: new Date().getMonth(),
       selectedYear: new Date().getFullYear(),
     },
@@ -86,18 +89,17 @@ export const transactionsReducer = createReducer(
     TransactionActions.updateFilter,
     (state, { filter }): TransactionsState => ({
       ...state,
-      filter,
+      filter: {
+        ...state.filter,
+        ...filter,
+      },
     })
   ),
   on(
     TransactionActions.resetFilter,
     (state): TransactionsState => ({
       ...state,
-      filter: {
-        selectedPeriod: SelectedPeriod.Monthly,
-        selectedMonth: new Date().getMonth(),
-        selectedYear: new Date().getFullYear(),
-      },
+      filter: initialState.filter,
     })
   )
 );
