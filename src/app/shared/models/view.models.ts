@@ -12,15 +12,17 @@ export interface TransactionsViewModel {
   transactionType: TransactionType;
 }
 
-export enum SelectedPeriod {
-  Weekly = 0,
-  Monthly = 1,
-  Yearly = 2,
+export enum Period {
+  Day = 0,
+  Week = 1,
+  Month = 2,
+  Year = 3,
 }
 
 export interface TransactionFilter {
-  selectedPeriod: SelectedPeriod;
+  selectedPeriod: Period;
+  selectedDate?: Date;
   selectedMonth?: number;
   selectedWeek?: number;
-  selectedYear: number;
+  selectedYear?: number;
 }

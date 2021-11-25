@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
+import { PeriodSelectorComponent } from './components/period-selector/period-selector.component';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { MaterialModule } from './material.module';
 import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
@@ -16,6 +17,8 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     MainToolbarComponent,
     TransactionsTableComponent,
     CustomDialogComponent,
+    PeriodSelectorComponent,
+
     CustomCurrencyPipe,
     EnumArrayPipe,
     EnumSeparatorPipe,
@@ -29,6 +32,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
 
     MainToolbarComponent,
     TransactionsTableComponent,
+    PeriodSelectorComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,
