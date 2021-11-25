@@ -4,13 +4,22 @@ import * as transactionsSelectors from 'src/app/transactions/state/transactions.
 
 export const selectDashboardPageViewModel = createSelector(
   transactionsSelectors.selectExpenses,
-  accountsSelectors.selectActiveAccounts,
   transactionsSelectors.selectPeriodLabel,
+  transactionsSelectors.selectFilter,
   transactionsSelectors.selectLoading,
+  accountsSelectors.selectActiveAccounts,
   accountsSelectors.selectLoading,
-  (expenses, accounts, label, transactionsLoading, accountsLoading) => ({
+  (
+    expenses,
+    label,
+    filter,
+    transactionsLoading,
+    accounts,
+    accountsLoading
+  ) => ({
     filteredExpenses: expenses,
     activeAccounts: accounts,
+    filter,
     periodLabel: label,
     loading: transactionsLoading || accountsLoading,
   })
