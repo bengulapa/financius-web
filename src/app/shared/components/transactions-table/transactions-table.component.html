@@ -30,13 +30,18 @@
   <ng-container matColumnDef="category">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
     <td mat-cell *matCellDef="let row">
-      <span
-        *ngIf="row.category; else transfer"
-        [style.color]="row.category.color"
-      >
-        {{ row.category.name }}
+      <span class="d-flex align-items-center">
+        <ng-container *ngIf="row.category as category; else transfer">
+          <mat-icon class="me-2" [style.color]="category.color" [inline]="true"
+            >circle</mat-icon
+          >
+          {{ category.name }}
+        </ng-container>
+        <ng-template #transfer>
+          <mat-icon class="me-2 color-neutral" [inline]="true">circle</mat-icon>
+          Transfer
+        </ng-template>
       </span>
-      <ng-template #transfer> Transfer </ng-template>
     </td>
   </ng-container>
 
