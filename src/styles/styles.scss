@@ -65,9 +65,16 @@ table {
   font-size: 2rem;
 }
 
+/* NGX Charts override */
+
 .advanced-pie-legend {
   line-height: 1.5;
 }
+
+.chart-legend .legend-labels {
+  overflow-x: auto !important;
+}
+/* NGX Charts override end */
 
 ::-webkit-scrollbar {
   -webkit-appearance: none;
