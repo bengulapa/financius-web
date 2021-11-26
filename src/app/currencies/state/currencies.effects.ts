@@ -11,8 +11,11 @@ import {
   mergeMap,
   switchMap,
 } from 'rxjs/operators';
+import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
+import { ReportsActions } from 'src/app/reports/state/reports.actions';
 import { Currency } from 'src/app/shared/models/entities.models';
 import { CurrencyActions } from './currencies.actions';
 import { selectCurrencies, selectEntitiesLoaded } from './currencies.selectors';
@@ -38,6 +41,17 @@ export class CurrenciesEffects {
           )
         )
       )
+    );
+  });
+
+  loadCurrencies$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        DashboardActions.dashboardPageOpened,
+        ReportsActions.reportsPageOpened,
+        AccountActions.accountsPageOpened
+      ),
+      mergeMap(() => of(CurrencyActions.retrieve()))
     );
   });
 
