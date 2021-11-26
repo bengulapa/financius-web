@@ -35,7 +35,6 @@ import * as fromReducer from './state/currencies.reducer';
       fromReducer.featureKey,
       fromReducer.currenciesReducer
     ),
-    EffectsModule.forFeature([CurrenciesEffects]),
   ],
 })
 export class CurrenciesModule {}

@@ -7,6 +7,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { environment } from 'src/environments/environment';
 import { AccountsEffects } from '../accounts/state/accounts.effects';
+import { CurrenciesEffects } from '../currencies/state/currencies.effects';
 import { SharedModule } from '../shared/shared.module';
 import { TransactionsEffects } from '../transactions/state/transactions.effects';
 import { metaReducers, reducers } from './state/core.reducers';
@@ -25,7 +26,11 @@ import { dbConfig } from './state/indexed-db-config';
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([AccountsEffects, TransactionsEffects]),
+    EffectsModule.forRoot([
+      AccountsEffects,
+      TransactionsEffects,
+      CurrenciesEffects,
+    ]),
     EntityDataModule.forRoot(entityConfig),
     EntityStoreModule,
   ],
