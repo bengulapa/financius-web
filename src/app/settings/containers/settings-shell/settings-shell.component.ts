@@ -412,7 +412,7 @@ export class SettingsShellComponent implements OnInit {
           account_from_id: tr.accountFrom?.id || null,
           account_to_id: tr.accountTo?.id || null,
           category_id: tr.category?.id || null,
-          tag_ids: tr.tags?.map((t) => t.id),
+          tag_ids: tr.tags?.map((t) => t.id) || [],
           date: tr.date,
           amount: this.convertToFinanciusAmount(
             tr.amount,
@@ -499,7 +499,11 @@ export class SettingsShellComponent implements OnInit {
     );
     element.setAttribute(
       'download',
-      `Financius ${formatDate(backup.timestamp, 'yyyy-MM-dd Hmmss', 'en')}.json`
+      `Financius Web ${formatDate(
+        backup.timestamp,
+        'yyyy-MM-dd Hmmss',
+        'en'
+      )}.json`
     );
     element.style.display = 'none';
     document.body.appendChild(element);
