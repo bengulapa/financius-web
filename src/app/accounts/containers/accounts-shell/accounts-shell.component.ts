@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { Account } from 'src/app/shared/models/entities.models';
-import { AccountsFacade } from '../../state/accounts.facade';
+import { AccountActions } from '../../state/accounts.actions';
+import { selectAccountsPageViewModel } from '../../state/accounts.selectors';
 import { AccountFormDialogComponent } from '../account-form-dialog/account-form-dialog.component';
 
 @Component({
@@ -12,14 +14,16 @@ import { AccountFormDialogComponent } from '../account-form-dialog/account-form-
   styleUrls: ['./accounts-shell.component.scss'],
 })
 export class AccountsShellComponent implements OnInit {
+  readonly vm$ = this.store.select(selectAccountsPageViewModel);
+
   constructor(
-    public facade: AccountsFacade,
     private dialog: MatDialog,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.facade.retrieve();
+    this.store.dispatch(AccountActions.accountsPageOpened());
   }
 
   onAddClick() {
@@ -36,10 +40,14 @@ export class AccountsShellComponent implements OnInit {
           return;
         }
 
-        this.facade.add({
-          ...dialogData,
-          id: Guid.newGuid(),
-        });
+        this.store.dispatch(
+          AccountActions.add({
+            account: {
+              ...dialogData,
+              id: Guid.newGuid(),
+            },
+          })
+        );
       });
   }
 
@@ -59,7 +67,7 @@ export class AccountsShellComponent implements OnInit {
           return;
         }
 
-        this.facade.update(dialogData);
+        this.store.dispatch(AccountActions.update({ account: dialogData }));
       });
   }
 
@@ -73,7 +81,7 @@ export class AccountsShellComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.facade.delete(account);
+          this.store.dispatch(AccountActions.remove({ account }));
         }
       });
   }

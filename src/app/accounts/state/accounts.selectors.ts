@@ -54,3 +54,12 @@ export const selectAccountTransactions = createSelector(
       : [];
   }
 );
+
+export const selectAccountsPageViewModel = createSelector(
+  selectAccounts,
+  selectLoading,
+  (accounts, loading) => ({
+    accounts,
+    loading,
+  })
+);

@@ -5,6 +5,10 @@ import { Account } from 'src/app/shared/models/entities.models';
 export namespace AccountActions {
   const prefix = '[Accounts]';
 
+  export const accountsPageOpened = createAction(
+    `${prefix} Accounts Page Opened`
+  );
+
   export const accountViewOpened = createAction(
     `${prefix} Account View Opened`,
     props<{ accountId: string }>()

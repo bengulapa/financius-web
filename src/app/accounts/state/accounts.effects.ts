@@ -43,7 +43,10 @@ export class AccountsEffects {
 
   loadAccounts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(DashboardActions.dashboardPageOpened),
+      ofType(
+        AccountActions.accountsPageOpened,
+        DashboardActions.dashboardPageOpened
+      ),
       mergeMap(() => of(AccountActions.retrieve()))
     );
   });
