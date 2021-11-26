@@ -24,12 +24,14 @@
               <app-overview-card
                 [title]="vm.periodLabel"
                 [transactions]="vm.filteredExpenses"
+                [mainCurrency]="vm.mainCurrency"
               ></app-overview-card>
             </div>
 
             <app-trends-card
               [title]="vm.periodLabel"
               [transactions]="vm.filteredExpenses"
+              [mainCurrency]="vm.mainCurrency"
             ></app-trends-card>
           </mat-card-content>
         </mat-card>

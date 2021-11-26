@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import * as _ from 'lodash';
 import { ModelState } from 'src/app/shared/models/financius.enums';
 import * as fromReducer from './currencies.reducer';
 
@@ -12,7 +13,11 @@ const selectAllCurrencies = createSelector(selectState, selectAll);
 
 export const selectCurrencies = createSelector(
   selectAllCurrencies,
-  (currencies) => currencies?.filter((t) => t.modelState === ModelState.Normal)
+  (currencies) =>
+    _.sortBy(
+      currencies?.filter((t) => t.modelState === ModelState.Normal),
+      'code'
+    )
 );
 
 export const selectCurrency = createSelector(

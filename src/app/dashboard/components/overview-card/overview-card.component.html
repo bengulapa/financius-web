@@ -11,13 +11,13 @@
         <div>
           {{ model.name }}
         </div>
-        <div>{{ model.value | fwCurrency: currencyCode }}</div>
+        <div>{{ model.value | fwCurrency: mainCurrency }}</div>
       </ng-template>
     </ngx-charts-pie-chart>
   </div>
 
   <div>
     <h4>Total Monthly Expense</h4>
-    <span class="total">{{ totalExpense | fwCurrency: currencyCode }}</span>
+    <span class="total">{{ totalExpense | fwCurrency: mainCurrency }}</span>
   </div>
 </div>

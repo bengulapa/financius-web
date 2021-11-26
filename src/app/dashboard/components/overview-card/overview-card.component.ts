@@ -11,7 +11,7 @@ import {
   ChartColor,
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Currency, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-overview-card',
@@ -26,16 +26,16 @@ export class OverviewCardComponent implements OnChanges {
   @Input()
   transactions?: Transaction[] | null;
 
+  @Input()
+  mainCurrency!: Currency | null;
+
   totalExpense: number = 0;
-  currencyCode!: string | null;
   pieData: SingleChartData[] = [];
   LegendPosition = LegendPosition;
   customColors: ChartColor[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.transactions?.currentValue) {
-      // TODO: Group per currency code?
-      this.currencyCode = 'PHP';
       this.totalExpense = _.sumBy(this.transactions, 'amount');
 
       const expensesGroup = _.groupBy(this.transactions, 'category.name');

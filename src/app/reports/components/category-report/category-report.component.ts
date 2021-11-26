@@ -13,7 +13,7 @@ import {
   ChartColor,
   SingleChartData,
 } from 'src/app/shared/models/chart.models';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Currency, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-category-report',
@@ -31,10 +31,12 @@ export class CategoryReportComponent implements OnChanges {
   @Input()
   loading?: boolean | null = false;
 
+  @Input()
+  mainCurrency!: Currency | null;
+
   @Output()
   periodChange = new EventEmitter<number>();
 
-  currencyCode!: string | null;
   chartData: SingleChartData[] = [];
   customColors: ChartColor[] = [];
 
@@ -42,8 +44,6 @@ export class CategoryReportComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.transactions?.currentValue) {
-      this.currencyCode = 'PHP';
-
       const expensesGroup = _.groupBy(this.transactions, 'category.name');
 
       this.chartData = _.orderBy(
@@ -65,10 +65,10 @@ export class CategoryReportComponent implements OnChanges {
   }
 
   formatValue = (value: number): string => {
-    return this.currencyService.format(value, this.currencyCode);
+    return this.currencyService.format(value, this.mainCurrency);
   };
 
-  formatPercentage = (value: number): any => {
+  formatPercentage = (value: number): string | number => {
     return Math.round(value) >= 1 ? Math.round(value) : '<1';
   };
 }

@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { FormHelpers } from 'src/app/core/utilities/form.helpers';
+import { selectCurrencies } from 'src/app/currencies/state/currencies.selectors';
 import { Account, Currency } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -20,13 +21,13 @@ export class AccountFormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { account: Account },
     public dialogRef: MatDialogRef<AccountFormDialogComponent>,
     private formHelpers: FormHelpers,
-    private cs: CurrenciesService
+    private store: Store
   ) {}
 
   ngOnInit(): void {
     this.form = this.formHelpers.createAccountForm(this.data.account);
 
-    this.currencies$ = this.cs.getCurrencies();
+    this.currencies$ = this.store.select(selectCurrencies);
   }
 
   close() {

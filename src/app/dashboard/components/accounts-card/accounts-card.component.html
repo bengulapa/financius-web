@@ -10,7 +10,7 @@
       >
         <div class="d-flex justify-content-between w-100">
           <span>{{ account.name }}</span>
-          <span>{{ account.balance | fwCurrency: account.currency.code }}</span>
+          <span>{{ account.balance | fwCurrency: account.currency }}</span>
         </div>
       </mat-list-option>
     </mat-selection-list>

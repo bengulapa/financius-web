@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import * as _ from 'lodash';
 import { MultiChartData } from 'src/app/shared/models/chart.models';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Currency, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
   selector: 'app-trends-card',
@@ -22,8 +22,10 @@ export class TrendsCardComponent implements OnChanges {
   @Input()
   transactions!: Transaction[] | null;
 
+  @Input()
+  mainCurrency!: Currency | null;
+
   chartData: MultiChartData[] = [];
-  currencyCode = 'PHP';
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.transactions?.currentValue) {
@@ -36,9 +38,9 @@ export class TrendsCardComponent implements OnChanges {
         value: _.sumBy(dailyExpenses[day], 'amount'),
       }));
 
-      const date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth(),
+      const now = new Date(),
+        y = now.getFullYear(),
+        m = now.getMonth(),
         lastDay = new Date(y, m + 1, 0).getDate();
 
       const series = _.range(1, lastDay + 1).map((day) => ({
@@ -46,7 +48,6 @@ export class TrendsCardComponent implements OnChanges {
         value:
           groupedDailyExpenses.find((e) => e.name === day.toLocaleString())
             ?.value || 0,
-        extra: { symbol: 'P' },
       }));
 
       this.chartData = [

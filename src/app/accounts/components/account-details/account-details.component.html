@@ -9,9 +9,7 @@
       <mat-card-title>Details</mat-card-title>
       <mat-card-content>
         <p class="mt-4">Name: {{ account.name }}</p>
-        <p>
-          Balance: {{ account.balance | fwCurrency: account.currency.code }}
-        </p>
+        <p>Balance: {{ account.balance | fwCurrency: account.currency }}</p>
         <p>Currency: {{ account.currency.code }}</p>
         <p>Include in Totals?: {{ account.includeInTotals ? "Yes" : "No" }}</p>
         <p *ngIf="account.note as note">Note: {{ note }}</p>
