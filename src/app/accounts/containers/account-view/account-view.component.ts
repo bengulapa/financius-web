@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TransactionsFacade } from 'src/app/transactions/state/transactions.facade';
-import { AccountsFacade } from '../../state/accounts.facade';
+import { Store } from '@ngrx/store';
+import { AccountActions } from '../../state/accounts.actions';
+import { selectAccountPageViewModel } from '../../state/accounts.selectors';
 
 @Component({
   selector: 'app-account-view',
@@ -9,11 +10,12 @@ import { AccountsFacade } from '../../state/accounts.facade';
   styleUrls: ['./account-view.component.scss'],
 })
 export class AccountViewComponent implements OnInit {
+  readonly vm$ = this.store.select(selectAccountPageViewModel);
+
   constructor(
-    public facade: AccountsFacade,
-    public transactionsFacade: TransactionsFacade,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -25,7 +27,7 @@ export class AccountViewComponent implements OnInit {
         return;
       }
 
-      this.facade.accountViewOpened(id);
+      this.store.dispatch(AccountActions.accountViewOpened({ accountId: id }));
     });
   }
 }

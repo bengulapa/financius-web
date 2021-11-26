@@ -1,17 +1,19 @@
 <app-main-toolbar></app-main-toolbar>
 
-<mat-progress-bar
-  *ngIf="facade.loading$ | async"
-  color="accent"
-  mode="indeterminate"
-></mat-progress-bar>
+<ng-container *ngIf="vm$ | async as vm">
+  <mat-progress-bar
+    *ngIf="vm.loading"
+    color="accent"
+    mode="indeterminate"
+  ></mat-progress-bar>
 
-<section class="container">
-  <ng-container>
-    <app-account-details
-      [account]="facade.account$ | async"
-      [transactions]="facade.transactions$ | async"
-      [loading]="transactionsFacade.loading$ | async"
-    ></app-account-details>
-  </ng-container>
-</section>
+  <section class="container">
+    <ng-container>
+      <app-account-details
+        [account]="vm.account"
+        [transactions]="vm.transactions"
+        [loading]="vm.transactionsLoading"
+      ></app-account-details>
+    </ng-container>
+  </section>
+</ng-container>

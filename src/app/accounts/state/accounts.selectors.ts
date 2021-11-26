@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as _ from 'lodash';
 import { ModelState } from 'src/app/shared/models/financius.enums';
-import { selectConfirmedTransactions } from 'src/app/transactions/state/transactions.selectors';
+import * as transactionsSelectors from 'src/app/transactions/state/transactions.selectors';
 import * as fromReducer from './accounts.reducer';
 
 const { selectAll } = fromReducer.accountsAdapter.getSelectors();
@@ -44,7 +44,7 @@ export const selectActiveAccounts = createSelector(
 
 export const selectAccountTransactions = createSelector(
   selectAccount,
-  selectConfirmedTransactions,
+  transactionsSelectors.selectConfirmedTransactions,
   (account, transactions) => {
     return account && transactions?.length
       ? transactions.filter(
@@ -61,5 +61,18 @@ export const selectAccountsPageViewModel = createSelector(
   (accounts, loading) => ({
     accounts,
     loading,
+  })
+);
+
+export const selectAccountPageViewModel = createSelector(
+  selectAccount,
+  selectLoading,
+  selectAccountTransactions,
+  transactionsSelectors.selectLoading,
+  (account, loading, transactions, transactionsLoading) => ({
+    account,
+    loading,
+    transactions,
+    transactionsLoading,
   })
 );
