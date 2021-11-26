@@ -28,6 +28,18 @@
     background: #dedede;
   }
 
+  .color-primary {
+    color: mat.get-color-from-palette($primary, 500);
+  }
+
+  .color-accent {
+    color: mat.get-color-from-palette($accent, 500);
+  }
+
+  .color-warn {
+    color: mat.get-color-from-palette($warn, 500);
+  }
+
   .accent-tag {
     color: mat.get-contrast-color-from-palette($primary, 400);
     background: mat.get-color-from-palette($accent, 500);
