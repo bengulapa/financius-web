@@ -21,7 +21,11 @@
       formControlName="currencyCode"
       (selectionChange)="setCurrency($event.value)"
     >
-      <mat-option *ngFor="let currency of currencies" [value]="currency.code">
+      <mat-option
+        *ngFor="let currency of currencies"
+        [value]="currency.code"
+        [class.color-accent]="currency.isDefault"
+      >
         {{ currency.code }}
       </mat-option>
     </mat-select>
