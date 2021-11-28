@@ -107,6 +107,7 @@ export class TransactionsShellComponent implements OnInit {
       transactionState: dialogData?.transactionState
         ? TransactionState.Confirmed
         : TransactionState.Pending,
+      tags: dialogData.tags || [],
     };
   }
 }
