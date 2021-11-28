@@ -6,7 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { getMonth, getYear } from 'date-fns';
+import { format, getMonth, getYear } from 'date-fns';
 import * as _ from 'lodash';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { Transaction } from '../../models/entities.models';
@@ -115,6 +115,24 @@ export class TransactionsTableComponent
       const freeTextFilter = searchTerms.freeText
         ? transaction.note
             .trim()
+            .toLocaleLowerCase()
+            .includes(searchTerms.freeText) ||
+          transaction.tags
+            .map((t) => t.name)
+            .join()
+            .toLocaleLowerCase()
+            .includes(searchTerms.freeText) ||
+          transaction.amount.toString().includes(searchTerms.freeText) ||
+          (transaction.category?.name || '')
+            .toLocaleLowerCase()
+            .includes(searchTerms.freeText) ||
+          (transaction.accountFrom?.name || '')
+            .toLocaleLowerCase()
+            .includes(searchTerms.freeText) ||
+          (transaction.accountTo?.name || '')
+            .toLocaleLowerCase()
+            .includes(searchTerms.freeText) ||
+          format(transaction.date, 'PPPP')
             .toLocaleLowerCase()
             .includes(searchTerms.freeText)
         : true;
