@@ -6,6 +6,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { PeriodSelectorComponent } from './components/period-selector/period-selector.component';
+import { TableSearchComponent } from './components/table-search/table-search.component';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { MaterialModule } from './material.module';
 import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
@@ -18,12 +19,21 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     TransactionsTableComponent,
     CustomDialogComponent,
     PeriodSelectorComponent,
+    TableSearchComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,
     EnumSeparatorPipe,
   ],
-  imports: [CommonModule, RouterModule, MaterialModule, NgxChartsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+
+    MaterialModule,
+    ReactiveFormsModule,
+
+    NgxChartsModule,
+  ],
   exports: [
     CommonModule,
     MaterialModule,
@@ -37,6 +47,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     CustomCurrencyPipe,
     EnumArrayPipe,
     EnumSeparatorPipe,
+    TableSearchComponent,
   ],
 })
 export class SharedModule {}
