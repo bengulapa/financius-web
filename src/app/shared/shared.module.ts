@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
+import { DateFiltersComponent } from './components/date-filters/date-filters.component';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { PeriodSelectorComponent } from './components/period-selector/period-selector.component';
 import { TableSearchComponent } from './components/table-search/table-search.component';
@@ -20,6 +21,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     CustomDialogComponent,
     PeriodSelectorComponent,
     TableSearchComponent,
+    DateFiltersComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,
@@ -30,6 +32,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     RouterModule,
 
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule,
 
     NgxChartsModule,
@@ -43,6 +46,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     MainToolbarComponent,
     TransactionsTableComponent,
     PeriodSelectorComponent,
+    DateFiltersComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,

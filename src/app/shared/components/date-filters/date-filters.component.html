@@ -1,0 +1,35 @@
+<mat-form-field appearance="standard" class="me-2">
+  <mat-label>Filter by year</mat-label>
+  <mat-select
+    [(ngModel)]="year"
+    (selectionChange)="yearChange.emit($event.value)"
+  >
+    <mat-option>None</mat-option>
+    <mat-option *ngFor="let year of years" [value]="year">
+      {{ year }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="standard" class="me-2">
+  <mat-label>Filter by month</mat-label>
+  <mat-select
+    [(ngModel)]="month"
+    (selectionChange)="monthChange.emit($event.value)"
+  >
+    <mat-option>None</mat-option>
+    <mat-option *ngFor="let month of months" [value]="month.key">
+      {{ month.value }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<button
+  matTooltip="Clear filters"
+  *ngIf="year || (month !== undefined && month >= 0)"
+  mat-flat-button
+  class="me-2"
+  (click)="year = undefined; month = undefined; clearFilters.emit()"
+>
+  <mat-icon color="warn">clear</mat-icon>
+</button>

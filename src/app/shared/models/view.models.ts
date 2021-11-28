@@ -29,3 +29,9 @@ export interface TransactionFilter {
   };
   selectedYear: number;
 }
+
+export interface TransactionsTableFilter {
+  selectedYear: number | null;
+  selectedMonth: number | null;
+  freeText: string;
+}
