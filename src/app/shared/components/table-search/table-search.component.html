@@ -1,9 +1,9 @@
 <mat-form-field appearance="standard" class="w-100">
-  <mat-icon matPrefix [inline]="true">search</mat-icon>
   <mat-label>Search</mat-label>
   <input matInput [formControl]="input" />
+
   <button
-    *ngIf="input.value"
+    *ngIf="input.value; else searchIcon"
     mat-icon-button
     matSuffix
     color="warn"
@@ -11,4 +11,8 @@
   >
     <mat-icon>clear</mat-icon>
   </button>
+
+  <ng-template #searchIcon>
+    <mat-icon matSuffix [inline]="true">search</mat-icon>
+  </ng-template>
 </mat-form-field>
