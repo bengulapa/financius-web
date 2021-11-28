@@ -1,18 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { Transaction } from '../../models/entities.models';
+import { TableBaseComponent } from '../../table-base.component';
 
 @Component({
   selector: 'app-transactions-table',
@@ -20,10 +9,7 @@ import { Transaction } from '../../models/entities.models';
   styleUrls: ['./transactions-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsTableComponent implements OnChanges {
-  @Input()
-  data?: Transaction[] | null;
-
+export class TransactionsTableComponent extends TableBaseComponent<Transaction> {
   @Input()
   loading?: boolean | null = false;
 
@@ -38,33 +24,5 @@ export class TransactionsTableComponent implements OnChanges {
     'actions',
   ];
 
-  @Output()
-  edit = new EventEmitter<Transaction>();
-
-  @Output()
-  delete = new EventEmitter<Transaction>();
-
-  dataSource!: MatTableDataSource<Transaction>;
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
   TransactionType = TransactionType;
-
-  constructor() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data?.currentValue) {
-      this.dataSource = new MatTableDataSource(this.data || []);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 }

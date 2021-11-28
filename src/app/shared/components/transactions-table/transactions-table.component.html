@@ -6,10 +6,7 @@
 ></mat-progress-bar>
 
 <div class="d-flex justify-content-end w-100">
-  <mat-form-field appearance="standard" class="w-50">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #filter />
-  </mat-form-field>
+  <app-table-search (search)="applySearch($event)"></app-table-search>
 </div>
 
 <table

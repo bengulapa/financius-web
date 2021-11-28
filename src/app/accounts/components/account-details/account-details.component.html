@@ -22,7 +22,7 @@
       <mat-card-title>Transactions</mat-card-title>
       <mat-card-content>
         <app-transactions-table
-          [data]="transactions"
+          [data]="transactions || []"
           [loading]="loading"
           [displayedColumns]="['date', 'category', 'tags', 'note', 'amount']"
         ></app-transactions-table>
