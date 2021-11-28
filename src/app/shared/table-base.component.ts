@@ -38,7 +38,11 @@ export abstract class TableBaseComponent<T> implements OnChanges {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.applySearch(filterValue);
+  }
+
+  applySearch(search: string) {
+    this.dataSource.filter = search.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
