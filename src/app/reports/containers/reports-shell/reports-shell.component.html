@@ -17,6 +17,7 @@
       </div>
 
       <app-category-report
+        *ngIf="vm.mainCurrency"
         [transactions]="vm.filteredExpenses"
         [loading]="vm.loading"
         [title]="vm.periodLabel"
