@@ -447,7 +447,7 @@ export class SettingsShellComponent implements OnInit {
           model_state: fc.modelState,
           sync_state: fc.syncState,
           title: fc.name,
-          color: this.colorService.hexToSigned24Bit(fc.color),
+          color: this.colorService.hexToSignedInt(fc.color),
           transaction_type: fc.transactionType,
           sort_order: fc.sortOrder,
         }

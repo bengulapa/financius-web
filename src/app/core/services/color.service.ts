@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ColorService {
-  constructor() {}
-
   /**
    * https://gist.github.com/kiley0/756bf555c5a7ae17b8d03596ae364712
    * @returns Array of material colors in hex
@@ -275,11 +273,30 @@ export class ColorService {
     return '#' + (color & 0x00ffffff).toString(16).padStart(6, '0');
   }
 
-  hexToSigned24Bit(hex: string): number {
+  /**
+   * https://stackoverflow.com/questions/13468474/javascript-convert-a-hex-signed-integer-to-a-javascript-value
+   * @param hex
+   * @param numSize
+   * @returns signed int
+   */
+  hexToSignedInt(hex: string, numSize = 6): number {
     if (!hex) {
       return 0;
     }
 
-    return (parseInt(hex.substr(1), 16) << 8) / 256;
+    hex = hex.substr(1);
+
+    const val = {
+      mask: 0x8 * Math.pow(16, numSize - 1), // 0x8000 if numSize = 4
+      sub: -0x1 * Math.pow(16, numSize), // -0x10000 if numSize = 4
+    };
+
+    if (parseInt(hex, 16) && val.mask > 0) {
+      // negative
+      return val.sub + parseInt(hex, 16);
+    } else {
+      // positive
+      return parseInt(hex, 16);
+    }
   }
 }
