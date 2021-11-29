@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountsFacade } from 'src/app/accounts/state/accounts.facade';
+import { Store } from '@ngrx/store';
 import { SymbolPosition } from 'src/app/shared/models/financius.enums';
-import { CurrenciesFacade } from '../../state/currencies.facade';
+import { CurrencyActions } from '../../state/currencies.actions';
+import { selectCurrencyPageViewModel } from '../../state/currencies.selectors';
 
 @Component({
   selector: 'app-currency-view',
@@ -10,14 +11,11 @@ import { CurrenciesFacade } from '../../state/currencies.facade';
   styleUrls: ['./currency-view.component.scss'],
 })
 export class CurrencyViewComponent implements OnInit {
+  readonly vm$ = this.store.select(selectCurrencyPageViewModel);
+
   SymbolPosition = SymbolPosition;
 
-  constructor(
-    public facade: CurrenciesFacade,
-    public accountsFacade: AccountsFacade,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private store: Store) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -28,8 +26,7 @@ export class CurrencyViewComponent implements OnInit {
         return;
       }
 
-      this.facade.getByKey(id);
-      this.accountsFacade.retrieve();
+      this.store.dispatch(CurrencyActions.currencyViewOpened({ currencyId: id }));
     });
   }
 }

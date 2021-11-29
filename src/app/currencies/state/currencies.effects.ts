@@ -2,15 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  exhaustMap,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-} from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -32,8 +24,7 @@ export class CurrenciesEffects {
           map(
             (currencies) => CurrencyActions.retrieveSuccess({ currencies }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while retrieving currencies.';
+              const errorMessage = 'An error occurred while retrieving currencies.';
               this.notify.error(errorMessage);
               console.log(err);
               return of(CurrencyActions.retrieveFail({ errorMessage }));
@@ -46,11 +37,7 @@ export class CurrenciesEffects {
 
   loadCurrencies$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        DashboardActions.dashboardPageOpened,
-        ReportsActions.reportsPageOpened,
-        AccountActions.accountsPageOpened
-      ),
+      ofType(DashboardActions.dashboardPageOpened, ReportsActions.reportsPageOpened, AccountActions.accountsPageOpened),
       mergeMap(() => of(CurrencyActions.retrieve()))
     );
   });
@@ -63,8 +50,7 @@ export class CurrenciesEffects {
           map(
             (currency) => CurrencyActions.getByKeySuccess({ currency }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while retrieving an currency.';
+              const errorMessage = 'An error occurred while retrieving an currency.';
               this.notify.error(errorMessage);
               console.log(err);
               return of(CurrencyActions.getByKeyFail({ errorMessage }));
@@ -72,6 +58,13 @@ export class CurrenciesEffects {
           )
         );
       })
+    );
+  });
+
+  loadCurrency$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CurrencyActions.currencyViewOpened),
+      mergeMap(({ currencyId }) => of(CurrencyActions.getByKey({ key: currencyId })))
     );
   });
 
@@ -98,23 +91,20 @@ export class CurrenciesEffects {
     return this.actions$.pipe(
       ofType(CurrencyActions.update),
       concatMap((action) =>
-        this.service
-          .update({ id: action.currency.id, changes: action.currency })
-          .pipe(
-            map(
-              (currency) =>
-                CurrencyActions.updateSuccess({
-                  currency: { id: currency.id, changes: currency },
-                }),
-              catchError((err: any) => {
-                const errorMessage =
-                  'An error occurred while updating a currency.';
-                this.notify.error(errorMessage);
-                console.log(err);
-                return of(CurrencyActions.updateFail({ errorMessage }));
-              })
-            )
+        this.service.update({ id: action.currency.id, changes: action.currency }).pipe(
+          map(
+            (currency) =>
+              CurrencyActions.updateSuccess({
+                currency: { id: currency.id, changes: currency },
+              }),
+            catchError((err: any) => {
+              const errorMessage = 'An error occurred while updating a currency.';
+              this.notify.error(errorMessage);
+              console.log(err);
+              return of(CurrencyActions.updateFail({ errorMessage }));
+            })
           )
+        )
       )
     );
   });
@@ -123,9 +113,7 @@ export class CurrenciesEffects {
     return this.actions$.pipe(
       ofType(CurrencyActions.addSuccess),
       filter((c) => c.currency.isDefault!),
-      concatMap(({ currency }) =>
-        of(CurrencyActions.updatePreviousMain({ currency }))
-      )
+      concatMap(({ currency }) => of(CurrencyActions.updatePreviousMain({ currency })))
     );
   });
 
@@ -149,9 +137,7 @@ export class CurrenciesEffects {
       concatLatestFrom(() => this.store.select(selectCurrencies)),
       filter(([_, c]) => !!c.length),
       concatMap(([{ currency }, currencies]) => {
-        const prevMain = currencies.find(
-          (c) => c.id !== currency.id && c.isDefault
-        )!;
+        const prevMain = currencies.find((c) => c.id !== currency.id && c.isDefault)!;
 
         return this.service
           .update({
@@ -168,8 +154,7 @@ export class CurrenciesEffects {
                   currency: { id: currency.id, changes: currency },
                 }),
               catchError((err: any) => {
-                const errorMessage =
-                  'An error occurred while updating a currency.';
+                const errorMessage = 'An error occurred while updating a currency.';
                 this.notify.error(errorMessage);
                 console.log(err);
                 return of(CurrencyActions.updateFail({ errorMessage }));
@@ -191,8 +176,7 @@ export class CurrenciesEffects {
                 currency: action.currency,
               }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while removing a currency.';
+              const errorMessage = 'An error occurred while removing a currency.';
               this.notify.error(errorMessage);
               console.log(err);
               return of(CurrencyActions.removeFail({ errorMessage }));
@@ -203,10 +187,5 @@ export class CurrenciesEffects {
     );
   });
 
-  constructor(
-    private store: Store,
-    private actions$: Actions,
-    private service: CurrenciesService,
-    private notify: NotificationService
-  ) {}
+  constructor(private store: Store, private actions$: Actions, private service: CurrenciesService, private notify: NotificationService) {}
 }

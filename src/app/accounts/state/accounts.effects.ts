@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { catchError, concatMap, exhaustMap, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { CurrencyActions } from 'src/app/currencies/state/currencies.actions';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { AccountActions } from './accounts.actions';
 import { selectEntitiesLoaded } from './accounts.selectors';
@@ -33,7 +34,7 @@ export class AccountsEffects {
 
   loadAccounts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AccountActions.accountsPageOpened, DashboardActions.dashboardPageOpened),
+      ofType(AccountActions.accountsPageOpened, DashboardActions.dashboardPageOpened, CurrencyActions.currencyViewOpened),
       mergeMap(() => of(AccountActions.retrieve()))
     );
   });
