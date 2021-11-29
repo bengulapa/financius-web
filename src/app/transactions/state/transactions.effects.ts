@@ -7,6 +7,7 @@ import { catchError, concatMap, exhaustMap, filter, map, mergeMap, tap } from 'r
 import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
+import { round } from 'src/app/core/utilities/number.utils';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { ReportsActions } from 'src/app/reports/state/reports.actions';
@@ -288,6 +289,6 @@ export class TransactionsEffects {
         'amount'
       );
 
-    return Math.round(toSum) - Math.round(fromSum);
+    return round(toSum) - round(fromSum);
   }
 }
