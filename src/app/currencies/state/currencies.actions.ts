@@ -5,7 +5,7 @@ import { Currency } from 'src/app/shared/models/entities.models';
 export namespace CurrencyActions {
   const prefix = '[Currencies]';
 
-  export const currencyPageOpened = createAction(`${prefix} Index Page Opened`);
+  export const currenciesPageOpened = createAction(`${prefix} Index Page Opened`);
 
   export const currencyViewOpened = createAction(`${prefix} Currency View Opened`, props<{ currencyId: string }>());
 

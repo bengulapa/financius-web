@@ -25,6 +25,11 @@ export const selectEntitiesLoaded = createSelector(selectState, (state) => state
 
 export const selectMainCurrency = createSelector(selectCurrencies, (currencies) => currencies.find((c) => c.isDefault) || null);
 
+export const selectCurrencyIndexViewModel = createSelector(selectLoading, selectCurrencies, (loading, currencies) => ({
+  loading,
+  currencies,
+}));
+
 export const selectCurrencyPageViewModel = createSelector(
   selectLoading,
   selectCurrency,

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { EntityBaseComponent } from 'src/app/shared/entity-base.component';
 import { Currency } from 'src/app/shared/models/entities.models';
-import { CurrenciesFacade } from '../../state/currencies.facade';
+import { CurrencyActions } from '../../state/currencies.actions';
+import { selectCurrencyIndexViewModel } from '../../state/currencies.selectors';
 import { CurrencyFormDialogComponent } from '../currency-form-dialog/currency-form-dialog.component';
 
 @Component({
@@ -12,20 +14,15 @@ import { CurrencyFormDialogComponent } from '../currency-form-dialog/currency-fo
   templateUrl: './currencies-shell.component.html',
   styleUrls: ['./currencies-shell.component.scss'],
 })
-export class CurrenciesShellComponent
-  extends EntityBaseComponent<Currency>
-  implements OnInit
-{
-  constructor(
-    public facade: CurrenciesFacade,
-    private dialog: MatDialog,
-    private notify: NotificationService
-  ) {
+export class CurrenciesShellComponent extends EntityBaseComponent<Currency> implements OnInit {
+  readonly vm$ = this.store.select(selectCurrencyIndexViewModel);
+
+  constructor(private dialog: MatDialog, private notify: NotificationService, private store: Store) {
     super();
   }
 
   ngOnInit(): void {
-    this.facade.retrieve();
+    this.store.dispatch(CurrencyActions.currenciesPageOpened());
   }
 
   onAddClick() {
@@ -42,10 +39,14 @@ export class CurrenciesShellComponent
           return;
         }
 
-        this.facade.add({
-          ...dialogData,
-          id: Guid.newGuid(),
-        });
+        this.store.dispatch(
+          CurrencyActions.add({
+            currency: {
+              ...dialogData,
+              id: Guid.newGuid(),
+            },
+          })
+        );
       });
   }
 
@@ -65,7 +66,11 @@ export class CurrenciesShellComponent
           return;
         }
 
-        return this.facade.update(dialogData);
+        this.store.dispatch(
+          CurrencyActions.update({
+            currency: dialogData,
+          })
+        );
       });
   }
 
@@ -79,7 +84,7 @@ export class CurrenciesShellComponent
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.facade.delete(currency);
+          this.store.dispatch(CurrencyActions.remove({ currency }));
         }
       });
   }
