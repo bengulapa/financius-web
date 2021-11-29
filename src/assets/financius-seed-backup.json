@@ -1,0 +1,482 @@
+{
+  "version": 9,
+  "timestamp": 1637553670724,
+  "currencies": [
+    {
+      "id": "ffce45e8-e40a-456c-b8c0-6b54acf8cc9a",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "JPY",
+      "symbol": "¥",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 0
+    },
+    {
+      "id": "b7fcabce-0413-4ed7-a3f3-8b2c9b3ab287",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "EUR",
+      "symbol": "€",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "5b55a324-eb28-4d19-a3d9-a7460152851a",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "GBP",
+      "symbol": "£",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "f87485a4-6001-41f1-a637-040084c0dc48",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "USD",
+      "symbol": "$",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "ce3c693c-478c-4856-bfac-4dc54dfb2dcd",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "INR",
+      "symbol": "₹",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "96f0beb0-b9c3-4754-a1a4-733643d17aa7",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "RUB",
+      "symbol": "RUB",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "7b1298d7-5f99-4ceb-a21d-2f1e93ae9b25",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "CNY",
+      "symbol": "CN¥",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "3e21b3fb-9557-4f30-9fea-6dd60119809c",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "PHP",
+      "symbol": "₱",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    },
+    {
+      "id": "abcc54ba-28b9-46d2-972d-410d963b31ec",
+      "model_state": 1,
+      "sync_state": 1,
+      "code": "AUD",
+      "symbol": "$",
+      "symbol_position": 2,
+      "decimal_separator": ".",
+      "group_separator": ",",
+      "decimal_count": 2
+    }
+  ],
+  "categories": [
+    {
+      "id": "96888ab3-466d-4e2c-94b4-8e99fc6c5e07",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Food",
+      "color": -7617718,
+      "transaction_type": 1,
+      "sort_order": 0
+    },
+    {
+      "id": "71c50bd3-35ec-48ad-af7b-4d2554899b3d",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Leisure",
+      "color": -16537100,
+      "transaction_type": 1,
+      "sort_order": 1
+    },
+    {
+      "id": "97f03a39-4343-4772-8abd-99dbf9c13482",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Transportation",
+      "color": -16121,
+      "transaction_type": 1,
+      "sort_order": 2
+    },
+    {
+      "id": "f2665c85-6f89-4308-a52b-a209946fcda0",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Health and Beauty",
+      "color": -6543440,
+      "transaction_type": 1,
+      "sort_order": 3
+    },
+    {
+      "id": "36d29bf3-6dd8-4b26-b4fc-4afed1332c5d",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Clothing",
+      "color": -43230,
+      "transaction_type": 1,
+      "sort_order": 4
+    },
+    {
+      "id": "d63058e6-1253-4c1f-b7b4-15b130cbc28f",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Household",
+      "color": -12627531,
+      "transaction_type": 1,
+      "sort_order": 5
+    },
+    {
+      "id": "2eaf5666-03c4-4fa6-b5ee-53c04e1af735",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Bills and Utilities",
+      "color": -8825528,
+      "transaction_type": 1,
+      "sort_order": 6
+    },
+    {
+      "id": "2391e634-24a5-415a-8d7e-8ecad292230a",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Salary",
+      "color": -14312668,
+      "transaction_type": 2,
+      "sort_order": 0
+    }
+  ],
+  "tags": [
+    {
+      "id": "c_groceries",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Groceries"
+    },
+    {
+      "id": "c_lunch",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Lunch"
+    },
+    {
+      "id": "c_eating_out",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Eating out"
+    },
+    {
+      "id": "c_coffee_and_snacks",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Coffee and Snacks"
+    },
+    {
+      "id": "c_music",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Music"
+    },
+    {
+      "id": "c_movies",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Movies"
+    },
+    {
+      "id": "c_books_and_magazines",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Books and Magazines"
+    },
+    {
+      "id": "c_party",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Party"
+    },
+    {
+      "id": "c_gifts",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Gifts"
+    },
+    {
+      "id": "c_games",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Games"
+    },
+    {
+      "id": "c_concerts",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Concerts"
+    },
+    {
+      "id": "c_clothes",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Clothes"
+    },
+    {
+      "id": "c_shoes",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Shoes"
+    },
+    {
+      "id": "c_accessories",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Accessories"
+    },
+    {
+      "id": "c_alcohol",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Alcohol"
+    },
+    {
+      "id": "c_tobacco",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Tobacco"
+    },
+    {
+      "id": "c_fuel",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Fuel"
+    },
+    {
+      "id": "c_public_transportation",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Public Transportation"
+    },
+    {
+      "id": "c_taxi",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Taxi"
+    },
+    {
+      "id": "c_car_maintenance",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Car Maintenance"
+    },
+    {
+      "id": "c_cosmetics",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Cosmetics"
+    },
+    {
+      "id": "c_sports",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Sports"
+    },
+    {
+      "id": "c_medicine",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Medicine"
+    },
+    {
+      "id": "c_vitamins",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Vitamins"
+    },
+    {
+      "id": "c_rent_and_mortgage",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Rent and Mortgage"
+    },
+    {
+      "id": "c_electronics",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Electronics"
+    },
+    {
+      "id": "c_appliances",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Appliances"
+    },
+    {
+      "id": "c_furniture",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Furniture"
+    },
+    {
+      "id": "c_house_maintenance",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "House Maintenance"
+    },
+    {
+      "id": "c_internet",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Internet"
+    },
+    {
+      "id": "c_cold_water",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Cold Water"
+    },
+    {
+      "id": "c_hot_water",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Hot Water"
+    },
+    {
+      "id": "c_electric",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Electric"
+    },
+    {
+      "id": "c_heating",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Heating"
+    },
+    {
+      "id": "c_gas",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Gas"
+    },
+    {
+      "id": "c_telephone",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Telephone"
+    },
+    {
+      "id": "c_tv",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "TV"
+    },
+    {
+      "id": "c_garbage_and_recycling",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Garbage and Recycling"
+    },
+    {
+      "id": "c_child_care",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Child Care"
+    },
+    {
+      "id": "c_child_clothing",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Child Clothing"
+    },
+    {
+      "id": "c_child_education",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Child Education"
+    },
+    {
+      "id": "c_toys",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Toys"
+    },
+    {
+      "id": "c_bonus",
+      "model_state": 1,
+      "sync_state": 1,
+      "title": "Bonus"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "059c941f-8636-4267-98b0-6a671f2b1a35",
+      "model_state": 1,
+      "sync_state": 1,
+      "currency_code": "USD",
+      "title": "Credit Card",
+      "note": "",
+      "balance": 0,
+      "include_in_totals": true
+    },
+    {
+      "id": "2be3c93c-0396-4085-8e73-c5f04355992f",
+      "model_state": 1,
+      "sync_state": 1,
+      "currency_code": "USD",
+      "title": "Cash",
+      "note": "",
+      "balance": 0,
+      "include_in_totals": true
+    },
+    {
+      "id": "c511d169-5431-4214-9a6c-e752451ecd7e",
+      "model_state": 1,
+      "sync_state": 1,
+      "currency_code": "USD",
+      "title": "Savings",
+      "note": "",
+      "balance": 0,
+      "include_in_totals": true
+    },
+    {
+      "id": "d75d8c51-17e0-4abc-8a9e-fb82925179e9",
+      "model_state": 1,
+      "sync_state": 1,
+      "currency_code": "USD",
+      "title": "Payroll",
+      "note": "",
+      "balance": 0,
+      "include_in_totals": true
+    }
+  ],
+  "transactions": []
+}
