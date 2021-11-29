@@ -102,12 +102,15 @@ export class SettingsShellComponent implements OnInit {
   private startImport(financius: FinanciusBackup, merge: boolean) {
     this.loading$.next(true);
 
+    // TODO: Merge data
     if (!merge) {
       this.clearDatabase();
     }
 
+    // Don't import deleted filed. Financius still exports soft-deleted entities, `ModelState.Deleted` = 2
     const backup: FinanciusBackup = {
       ...financius,
+      // Only import distinct currencies, somehow, Financius duplicates currencies on import or export
       currencies: _.uniqBy(
         financius.currencies.filter((c) => c.model_state === ModelState.Normal),
         'code'
@@ -224,6 +227,11 @@ export class SettingsShellComponent implements OnInit {
   }
 
   private importCurrencies(backup: FinanciusBackup) {
+    // Determine the main currency. Somehow Financius don't export this data. Check which currency is most used among the accounts. If empty, set a new one.
+    const mainCurrencyCode = backup.accounts.length
+      ? this.getMainCurrencyCode(backup.accounts)
+      : 'USD';
+
     return this.dbService.bulkAdd(
       storeNames.Currencies,
       backup.currencies.map(
@@ -238,6 +246,7 @@ export class SettingsShellComponent implements OnInit {
             decimalCount: c.decimal_count,
             decimalSeparator: c.decimal_separator,
             groupSeparator: c.group_separator,
+            isDefault: c.code === mainCurrencyCode,
           }
       )
     );
@@ -509,5 +518,19 @@ export class SettingsShellComponent implements OnInit {
     document.body.appendChild(element);
     element.click(); // simulate click
     document.body.removeChild(element);
+  }
+
+  private getMainCurrencyCode(accounts: FinanciusAccount[]): string {
+    const currencyGroup = _.groupBy(accounts, 'currency_code');
+    const currencies = _.orderBy(
+      Object.keys(currencyGroup).map((code) => ({
+        code,
+        sum: currencyGroup[code].length,
+      })),
+      'sum',
+      'desc'
+    );
+
+    return currencies[0].code;
   }
 }
