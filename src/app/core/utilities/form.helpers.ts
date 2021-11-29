@@ -12,6 +12,7 @@ import {
   TransactionState,
   TransactionType,
 } from 'src/app/shared/models/financius.enums';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class FormHelpers {
@@ -21,11 +22,14 @@ export class FormHelpers {
     return this.fb.group({
       id: account?.id || '',
       name: [account?.name || '', Validators.required],
-      currencyCode: [account?.currency.code || '', Validators.required],
+      currencyCode: [
+        account?.currency.code || environment.defaultCurrency,
+        Validators.required,
+      ],
       currency: this.createCurrencyForm(account?.currency),
       note: account?.note || '',
       balance: [account?.balance || 0, Validators.required],
-      includeInTotals: account?.includeInTotals || false,
+      includeInTotals: account?.includeInTotals || true,
     });
   }
 

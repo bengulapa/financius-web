@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   version: 9,
+  defaultCurrency: 'USD',
 };
 
 /*

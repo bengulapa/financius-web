@@ -230,7 +230,7 @@ export class SettingsShellComponent implements OnInit {
     // Determine the main currency. Somehow Financius don't export this data. Check which currency is most used among the accounts. If empty, set a new one.
     const mainCurrencyCode = backup.accounts.length
       ? this.getMainCurrencyCode(backup.accounts)
-      : 'USD';
+      : environment.defaultCurrency;
 
     return this.dbService.bulkAdd(
       storeNames.Currencies,
