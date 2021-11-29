@@ -41,7 +41,12 @@ export class TransactionsEffects {
 
   loadTransactions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(DashboardActions.dashboardPageOpened, ReportsActions.reportsPageOpened, AccountActions.accountViewOpened),
+      ofType(
+        TransactionActions.indexPageOpened,
+        DashboardActions.dashboardPageOpened,
+        ReportsActions.reportsPageOpened,
+        AccountActions.accountViewOpened
+      ),
       mergeMap(() => of(TransactionActions.retrieve()))
     );
   });

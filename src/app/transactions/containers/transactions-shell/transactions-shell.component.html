@@ -1,22 +1,16 @@
 <app-main-toolbar></app-main-toolbar>
 
-<mat-progress-bar
-  *ngIf="facade.loading$ | async"
-  color="accent"
-  mode="indeterminate"
-></mat-progress-bar>
+<ng-container *ngIf="vm$ | async as vm">
+  <mat-progress-bar *ngIf="vm.loading" color="accent" mode="indeterminate"></mat-progress-bar>
 
-<section class="container">
-  <div class="d-flex justify-content-between align-items-center">
-    <h2 class="mb-0">Transactions</h2>
-    <button mat-mini-fab (click)="onAddClick()" color="accent">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
+  <section class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Transactions</h2>
+      <button mat-mini-fab (click)="onAddClick()" color="accent">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
-  <app-transactions-table
-    [data]="facade.entities$ | async"
-    (edit)="onEdit($event)"
-    (delete)="onDelete($event)"
-  ></app-transactions-table>
-</section>
+    <app-transactions-table [data]="vm.transactions" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-transactions-table>
+  </section>
+</ng-container>
