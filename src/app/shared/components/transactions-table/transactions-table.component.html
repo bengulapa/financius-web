@@ -1,9 +1,4 @@
-<mat-progress-bar
-  *ngIf="loading"
-  class="my-3"
-  color="accent"
-  mode="indeterminate"
-></mat-progress-bar>
+<mat-progress-bar *ngIf="loading" class="my-3" color="accent" mode="indeterminate"></mat-progress-bar>
 
 <div class="d-flex justify-content-end w-100">
   <app-date-filters
@@ -17,18 +12,11 @@
   <app-table-search (search)="applySearch($event)"></app-table-search>
 </div>
 
-<table
-  mat-table
-  [dataSource]="dataSource"
-  matSort
-  matSortActive="date"
-  matSortDirection="desc"
-  class="table mat-elevation-z8"
->
+<table mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc" class="table mat-elevation-z8">
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
     <td mat-cell *matCellDef="let row">
-      {{ row.date | date: "yyyy MMM dd" }}
+      {{ row.date | date: 'yyyy MMM dd' }}
     </td>
   </ng-container>
 
@@ -37,14 +25,14 @@
     <td mat-cell *matCellDef="let row">
       <span class="d-flex align-items-center">
         <ng-container *ngIf="row.category as category; else transfer">
-          <mat-icon class="me-2" [style.color]="category.color" [inline]="true"
-            >circle</mat-icon
-          >
+          <mat-icon class="me-2" [style.color]="category.color" [inline]="true">circle</mat-icon>
           {{ category.name }}
         </ng-container>
         <ng-template #transfer>
-          <mat-icon class="me-2 color-neutral" [inline]="true">circle</mat-icon>
-          Transfer
+          <ng-container *ngIf="row.accountFrom && row.accountTo">
+            <mat-icon class="me-2 color-neutral" [inline]="true">circle</mat-icon>
+            Transfer
+          </ng-container>
         </ng-template>
       </span>
     </td>
@@ -67,11 +55,7 @@
   <ng-container matColumnDef="amount">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
     <td mat-cell *matCellDef="let row">
-      <span
-        class="transaction-type-{{
-          TransactionType[row.transactionType] | lowercase
-        }}"
-      >
+      <span class="transaction-type-{{ TransactionType[row.transactionType] | lowercase }}">
         {{ row.amount | fwCurrency: row.currency }}</span
       >
     </td>
@@ -82,7 +66,7 @@
     <td mat-cell *matCellDef="let row">
       <span>{{
         row.transactionType === TransactionType.Transfer
-          ? row.accountFrom.name + " → " + row.accountTo.name
+          ? row.accountFrom.name + ' → ' + row.accountTo.name
           : row.accountFrom?.name || row.accountTo?.name
       }}</span>
     </td>
@@ -108,8 +92,4 @@
     <td class="mat-cell" colspan="6">No transaction found</td>
   </tr>
 </table>
-<mat-paginator
-  [pageSizeOptions]="[10, 25, 100]"
-  showFirstLastButtons
-  aria-label="Select page of transactions"
-></mat-paginator>
+<mat-paginator [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons aria-label="Select page of transactions"></mat-paginator>
