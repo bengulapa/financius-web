@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  Account,
-  Category,
-  Currency,
-  Tag,
-  Transaction,
-} from 'src/app/shared/models/entities.models';
-import {
-  SymbolPosition,
-  TransactionState,
-  TransactionType,
-} from 'src/app/shared/models/financius.enums';
+import { Account, Category, Currency, Tag, Transaction } from 'src/app/shared/models/entities.models';
+import { SymbolPosition, TransactionState, TransactionType } from 'src/app/shared/models/financius.enums';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -22,10 +12,7 @@ export class FormHelpers {
     return this.fb.group({
       id: account?.id || '',
       name: [account?.name || '', Validators.required],
-      currencyCode: [
-        account?.currency.code || environment.defaultCurrency,
-        Validators.required,
-      ],
+      currencyCode: [account?.currency.code || '', Validators.required],
       currency: this.createCurrencyForm(account?.currency),
       note: account?.note || '',
       balance: [account?.balance || 0, Validators.required],
@@ -38,42 +25,19 @@ export class FormHelpers {
       id: category?.id || '',
       name: [category?.name || '', Validators.required],
       color: [category?.color || '', Validators.required],
-      transactionType: [
-        category?.transactionType || TransactionType.Expense,
-        Validators.required,
-      ],
+      transactionType: [category?.transactionType || TransactionType.Expense, Validators.required],
     });
   }
 
   createCurrencyForm(currency?: Currency | null): FormGroup {
     return this.fb.group({
       id: currency?.id || '',
-      code: [
-        currency?.code || '',
-        [Validators.required, Validators.maxLength(3)],
-      ],
-      symbol: [
-        currency?.symbol || '',
-        [Validators.required, Validators.maxLength(3)],
-      ],
-      symbolPosition: [
-        currency?.symbolPosition || SymbolPosition.FarRight,
-        [Validators.required],
-      ],
-      decimalCount: [
-        currency?.decimalCount === undefined ? 2 : currency?.decimalCount || 0,
-        [Validators.maxLength(1)],
-      ],
-      decimalSeparator: [
-        currency?.decimalSeparator === undefined
-          ? '.'
-          : currency?.decimalSeparator,
-        [Validators.maxLength(1)],
-      ],
-      groupSeparator: [
-        currency?.groupSeparator === undefined ? ',' : currency?.groupSeparator,
-        [Validators.maxLength(1)],
-      ],
+      code: [currency?.code || '', [Validators.required, Validators.maxLength(3)]],
+      symbol: [currency?.symbol || '', [Validators.required, Validators.maxLength(3)]],
+      symbolPosition: [currency?.symbolPosition || SymbolPosition.FarRight, [Validators.required]],
+      decimalCount: [currency?.decimalCount === undefined ? 2 : currency?.decimalCount || 0, [Validators.maxLength(1)]],
+      decimalSeparator: [currency?.decimalSeparator === undefined ? '.' : currency?.decimalSeparator, [Validators.maxLength(1)]],
+      groupSeparator: [currency?.groupSeparator === undefined ? ',' : currency?.groupSeparator, [Validators.maxLength(1)]],
       isDefault: [currency?.isDefault || false],
     });
   }
@@ -104,8 +68,7 @@ export class FormHelpers {
       amount: transaction?.amount || 0,
       note: transaction?.note || '',
       transactionType: transaction?.transactionType || TransactionType.Expense,
-      transactionState:
-        transaction?.transactionState === TransactionState.Confirmed || true,
+      transactionState: transaction?.transactionState === TransactionState.Confirmed || true,
       includeInReports: transaction?.includeInReports || true,
       exchangeRate: transaction?.exchangeRate || 1.0,
     });

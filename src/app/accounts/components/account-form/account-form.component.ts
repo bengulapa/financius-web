@@ -1,12 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Currency } from 'src/app/shared/models/entities.models';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-account-form',
@@ -14,24 +8,31 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./account-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountFormComponent implements OnInit {
+export class AccountFormComponent implements OnChanges {
   @Input()
   form!: FormGroup;
 
   @Input()
   currencies?: Currency[] | null;
 
-  ngOnInit(): void {
-    if (!this.form.get('currency')?.valid) {
-      this.setCurrency(environment.defaultCurrency);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.currencies?.currentValue && this.currencies?.length && !this.form.get('currency')?.valid) {
+      this.setDefaultCurrency();
     }
   }
 
   setCurrency(code: string | null) {
     this.form.patchValue({
-      currency: code
-        ? this.currencies?.find((c) => c.code === code) || null
-        : null,
+      currency: code ? this.currencies?.find((c) => c.code === code) || null : null,
+    });
+  }
+
+  private setDefaultCurrency() {
+    const defaultCurrency = this.currencies!.find((c) => c.isDefault);
+
+    this.form.patchValue({
+      currency: defaultCurrency,
+      currencyCode: defaultCurrency?.code,
     });
   }
 }
