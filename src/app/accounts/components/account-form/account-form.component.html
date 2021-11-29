@@ -7,29 +7,31 @@
     >
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="w-100 mb-2">
-    <mat-label>Balance</mat-label>
-    <input type="number" matInput formControlName="balance" required />
-    <mat-error *ngIf="form.get('balance')?.hasError('required')"
-      >Balance is required</mat-error
-    >
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="w-100 mb-2">
-    <mat-label>Currency</mat-label>
-    <mat-select
-      formControlName="currencyCode"
-      (selectionChange)="setCurrency($event.value)"
-    >
-      <mat-option
-        *ngFor="let currency of currencies"
-        [value]="currency.code"
-        [class.color-accent]="currency.isDefault"
+  <div class="mb-2">
+    <mat-form-field appearance="fill" class="w-30 pe-2">
+      <mat-label>Currency</mat-label>
+      <mat-select
+        formControlName="currencyCode"
+        (selectionChange)="setCurrency($event.value)"
       >
-        {{ currency.code }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        <mat-option
+          *ngFor="let currency of currencies"
+          [value]="currency.code"
+          [class.color-accent]="currency.isDefault"
+        >
+          {{ currency.code }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-70">
+      <mat-label>Balance</mat-label>
+      <input type="number" matInput formControlName="balance" required />
+      <mat-error *ngIf="form.get('balance')?.hasError('required')"
+        >Balance is required</mat-error
+      >
+    </mat-form-field>
+  </div>
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
     <mat-label>Note</mat-label>
