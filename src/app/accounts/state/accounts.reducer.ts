@@ -10,8 +10,7 @@ export interface AccountsState extends BaseEntityState<Account> {
   selectedAccount: Account | null;
 }
 
-export const accountsAdapter: EntityAdapter<Account> =
-  createEntityAdapter<Account>();
+export const accountsAdapter: EntityAdapter<Account> = createEntityAdapter<Account>();
 
 export const initialState: AccountsState = accountsAdapter.getInitialState({
   loading: false,
@@ -32,6 +31,7 @@ export const accountsReducer = createReducer(
     AccountActions.getByKey,
     AccountActions.add,
     AccountActions.update,
+    AccountActions.updateAccountBalance,
     AccountActions.remove,
     (state): AccountsState => ({
       ...state,
@@ -43,6 +43,7 @@ export const accountsReducer = createReducer(
     AccountActions.getByKeyFail,
     AccountActions.addFail,
     AccountActions.updateFail,
+    AccountActions.updateAccountBalanceFail,
     AccountActions.removeFail,
     (state, { errorMessage }): AccountsState => ({
       ...state,
@@ -70,7 +71,7 @@ export const accountsReducer = createReducer(
       loading: false,
     })
   ),
-  on(AccountActions.updateSuccess, (state, { account }) =>
+  on(AccountActions.updateSuccess, AccountActions.updateAccountBalanceSuccess, (state, { account }) =>
     accountsAdapter.updateOne(account, {
       ...state,
       loading: false,

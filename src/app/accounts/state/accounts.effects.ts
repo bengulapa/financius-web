@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  exhaustMap,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AccountsService } from 'src/app/core/services/accounts.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
@@ -30,8 +21,7 @@ export class AccountsEffects {
           map(
             (accounts) => AccountActions.retrieveSuccess({ accounts }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while retrieving accounts.';
+              const errorMessage = 'An error occurred while retrieving accounts.';
               console.log(err);
               return of(AccountActions.retrieveFail({ errorMessage }));
             })
@@ -43,20 +33,8 @@ export class AccountsEffects {
 
   loadAccounts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        AccountActions.accountsPageOpened,
-        DashboardActions.dashboardPageOpened
-      ),
+      ofType(AccountActions.accountsPageOpened, DashboardActions.dashboardPageOpened),
       mergeMap(() => of(AccountActions.retrieve()))
-    );
-  });
-
-  loadAccount$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(AccountActions.accountViewOpened),
-      mergeMap(({ accountId }) =>
-        of(AccountActions.getByKey({ key: accountId }))
-      )
     );
   });
 
@@ -68,14 +46,20 @@ export class AccountsEffects {
           map(
             (account) => AccountActions.getByKeySuccess({ account }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while retrieving an account.';
+              const errorMessage = 'An error occurred while retrieving an account.';
               console.log(err);
               return of(AccountActions.getByKeyFail({ errorMessage }));
             })
           )
         );
       })
+    );
+  });
+
+  loadAccount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AccountActions.accountViewOpened),
+      mergeMap(({ accountId }) => of(AccountActions.getByKey({ key: accountId })))
     );
   });
 
@@ -101,27 +85,24 @@ export class AccountsEffects {
     return this.actions$.pipe(
       ofType(AccountActions.update),
       concatMap((action) =>
-        this.service
-          .update({ id: action.account.id, changes: action.account })
-          .pipe(
-            map(
-              (account) =>
-                AccountActions.updateSuccess({
-                  account: { id: account.id, changes: account },
-                }),
-              catchError((err: any) => {
-                const errorMessage =
-                  'An error occurred while updating a account.';
-                console.log(err);
-                return of(AccountActions.updateFail({ errorMessage }));
-              })
-            )
+        this.service.update({ id: action.account.id, changes: action.account }).pipe(
+          map(
+            (account) =>
+              AccountActions.updateSuccess({
+                account: { id: account.id, changes: account },
+              }),
+            catchError((err: any) => {
+              const errorMessage = 'An error occurred while updating a account.';
+              console.log(err);
+              return of(AccountActions.updateFail({ errorMessage }));
+            })
           )
+        )
       )
     );
   });
 
-  updateFromTransaction$ = createEffect(() => {
+  updateAccountBalanceOnTransactionChange$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.updateAccountBalance),
       mergeMap((action) => {
@@ -136,14 +117,13 @@ export class AccountsEffects {
           .pipe(
             map(
               (account) =>
-                AccountActions.updateSuccess({
+                AccountActions.updateAccountBalanceSuccess({
                   account: { id: account.id, changes: account },
                 }),
               catchError((err: any) => {
-                const errorMessage =
-                  'An error occurred while updating a account.';
+                const errorMessage = 'An error occurred while updating a account.';
                 console.log(err);
-                return of(AccountActions.updateFail({ errorMessage }));
+                return of(AccountActions.updateAccountBalanceFail({ errorMessage }));
               })
             )
           );
@@ -162,8 +142,7 @@ export class AccountsEffects {
                 account: action.account,
               }),
             catchError((err: any) => {
-              const errorMessage =
-                'An error occurred while removing a account.';
+              const errorMessage = 'An error occurred while removing a account.';
               console.log(err);
               return of(AccountActions.removeFail({ errorMessage }));
             })
@@ -181,6 +160,7 @@ export class AccountsEffects {
           AccountActions.getByKeyFail,
           AccountActions.addFail,
           AccountActions.updateFail,
+          AccountActions.updateAccountBalanceFail,
           AccountActions.removeFail
         ),
         tap(({ errorMessage }) => this.notify.error(errorMessage))
@@ -189,10 +169,5 @@ export class AccountsEffects {
     { dispatch: false }
   );
 
-  constructor(
-    private store: Store,
-    private actions$: Actions,
-    private service: AccountsService,
-    private notify: NotificationService
-  ) {}
+  constructor(private store: Store, private actions$: Actions, private service: AccountsService, private notify: NotificationService) {}
 }
