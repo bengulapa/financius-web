@@ -1,5 +1,6 @@
 import { KeyValue } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 import * as _ from 'lodash';
 import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 
@@ -10,7 +11,28 @@ import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 })
 export class DateFiltersComponent implements OnInit {
   @Input()
+  appearance: MatFormFieldAppearance = 'standard';
+
+  @Input()
   years!: number[];
+
+  @Input()
+  month?: number;
+
+  @Input()
+  year?: number;
+
+  @Input()
+  yearLabel = 'Filter by year';
+
+  @Input()
+  monthLabel = 'Filter by month';
+
+  @Input()
+  yearSelectorWidth = '110px';
+
+  @Input()
+  monthSelectorWidth = '120px';
 
   @Output()
   monthChange = new EventEmitter<number | undefined>();
@@ -23,12 +45,11 @@ export class DateFiltersComponent implements OnInit {
 
   months!: KeyValue<number, string>[];
 
-  month?: number;
-  year?: number;
-
   constructor() {}
 
   ngOnInit(): void {
+    this.years = this.years || _.range(2010, new Date().getFullYear());
+
     this.months = _.range(0, 12).map((i) => ({
       key: i,
       value: getLocaleMonthName(i),

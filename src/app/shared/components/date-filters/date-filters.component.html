@@ -1,9 +1,6 @@
-<mat-form-field appearance="standard" class="me-2">
-  <mat-label>Filter by year</mat-label>
-  <mat-select
-    [(ngModel)]="year"
-    (selectionChange)="yearChange.emit($event.value)"
-  >
+<mat-form-field [appearance]="appearance" class="me-2" [style.width]="yearSelectorWidth">
+  <mat-label>{{ yearLabel }}</mat-label>
+  <mat-select [(ngModel)]="year" (selectionChange)="yearChange.emit($event.value)">
     <mat-option>None</mat-option>
     <mat-option *ngFor="let year of years" [value]="year">
       {{ year }}
@@ -11,12 +8,9 @@
   </mat-select>
 </mat-form-field>
 
-<mat-form-field appearance="standard" class="me-2">
-  <mat-label>Filter by month</mat-label>
-  <mat-select
-    [(ngModel)]="month"
-    (selectionChange)="monthChange.emit($event.value)"
-  >
+<mat-form-field [appearance]="appearance" class="me-2" [style.width]="monthSelectorWidth">
+  <mat-label>{{ monthLabel }}</mat-label>
+  <mat-select [(ngModel)]="month" (selectionChange)="monthChange.emit($event.value)">
     <mat-option>None</mat-option>
     <mat-option *ngFor="let month of months" [value]="month.key">
       {{ month.value }}
