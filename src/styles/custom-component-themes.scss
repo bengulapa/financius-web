@@ -1,9 +1,9 @@
-@use "~@angular/material" as mat;
+@use '~@angular/material' as mat;
 
 @mixin custom-component-themes($theme) {
-  $primary: map-get($theme, "primary");
-  $accent: map-get($theme, "accent");
-  $warn: map-get($theme, "warn");
+  $primary: map-get($theme, 'primary');
+  $accent: map-get($theme, 'accent');
+  $warn: map-get($theme, 'warn');
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $is-dark-theme: map-get($theme, is-dark);
@@ -32,6 +32,7 @@
     color: mat.get-color-from-palette($primary, 500);
   }
 
+  a,
   .color-accent {
     color: mat.get-color-from-palette($accent, 500);
   }
@@ -48,7 +49,7 @@
   .mat-row {
     transition: background ease-out 0.2s;
     &:hover {
-      background: mat.get-color-from-palette($background, "hover");
+      background: mat.get-color-from-palette($background, 'hover');
     }
   }
 }
