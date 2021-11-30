@@ -19,7 +19,7 @@
   <ng-container matColumnDef="symbolPosition">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Symbol position</th>
     <td mat-cell *matCellDef="let row">
-      {{ SymbolPosition[row.symbolPosition] | enumSeparator }}
+      {{ row.symbolPosition | enumDisplay: SymbolPosition }}
     </td>
   </ng-container>
 

@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as _ from 'lodash';
-import { selectActiveAccounts } from 'src/app/accounts/state/accounts.selectors';
+import * as accountsSelectors from 'src/app/accounts/state/accounts.selectors';
 import { ModelState } from 'src/app/shared/models/financius.enums';
 import * as fromReducer from './currencies.reducer';
 
@@ -33,7 +33,7 @@ export const selectCurrencyIndexViewModel = createSelector(selectLoading, select
 export const selectCurrencyPageViewModel = createSelector(
   selectLoading,
   selectCurrency,
-  selectActiveAccounts,
+  accountsSelectors.selectActiveAccounts,
   (loading, currency, accounts) => ({
     loading,
     currency,

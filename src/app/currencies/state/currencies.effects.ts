@@ -35,17 +35,10 @@ export class CurrenciesEffects {
     );
   });
 
-  loadCurrency$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(CurrencyActions.currenciesPageOpened),
-      mergeMap(() => of(CurrencyActions.retrieve()))
-    );
-  });
-
   loadCurrencies$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
-        CurrencyActions.currencyViewOpened,
+        CurrencyActions.currenciesPageOpened,
         DashboardActions.dashboardPageOpened,
         ReportsActions.reportsPageOpened,
         AccountActions.accountsPageOpened
@@ -70,6 +63,13 @@ export class CurrenciesEffects {
           )
         );
       })
+    );
+  });
+
+  loadCurrency$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CurrencyActions.currencyViewOpened),
+      mergeMap(({ currencyId }) => of(CurrencyActions.getByKey({ key: currencyId })))
     );
   });
 

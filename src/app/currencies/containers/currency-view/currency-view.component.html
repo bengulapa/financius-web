@@ -18,7 +18,7 @@
               <p>Symbol: {{ currency.symbol }}</p>
               <p>
                 Symbol position:
-                {{ SymbolPosition[currency.symbolPosition] | enumSeparator }}
+                {{ currency.symbolPosition | enumDisplay: SymbolPosition }}
               </p>
               <p>Decimal count: {{ currency.decimalCount }}</p>
               <p>Decimal separator: {{ currency.decimalSeparator }}</p>
