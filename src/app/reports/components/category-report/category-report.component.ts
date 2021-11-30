@@ -1,18 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
-import {
-  ChartColor,
-  SingleChartData,
-} from 'src/app/shared/models/chart.models';
+import { ChartColor, SingleChartData } from 'src/app/shared/models/chart.models';
 import { Currency, Transaction } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -44,7 +33,9 @@ export class CategoryReportComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.transactions?.currentValue) {
-      const expensesGroup = _.groupBy(this.transactions, 'category.name');
+      // Handle expenses without category
+      const expenses = this.transactions!.map((t) => ({ ...t, category: !t.category ? { name: 'Expenses' } : t.category }));
+      const expensesGroup = _.groupBy(expenses, 'category.name');
 
       this.chartData = _.orderBy(
         Object.keys(expensesGroup).map((e) => ({
@@ -57,9 +48,7 @@ export class CategoryReportComponent implements OnChanges {
 
       this.customColors = Object.keys(expensesGroup).map((e) => ({
         name: e,
-        value:
-          this.transactions?.find((t) => t.category?.name === e)?.category
-            ?.color || '',
+        value: this.transactions?.find((t) => t.category?.name === e)?.category?.color || '#e51c23',
       }));
     }
   }
