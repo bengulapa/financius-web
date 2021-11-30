@@ -1,12 +1,4 @@
-import {
-  Directive,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Directive, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -23,7 +15,9 @@ export abstract class TableBaseComponent<T> implements OnChanges {
   delete = new EventEmitter<T>();
 
   dataSource!: MatTableDataSource<T>;
+
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   abstract displayedColumns: string[];
@@ -34,11 +28,6 @@ export abstract class TableBaseComponent<T> implements OnChanges {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.applySearch(filterValue);
   }
 
   applySearch(search: string) {
