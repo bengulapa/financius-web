@@ -1,28 +1,34 @@
 <app-main-toolbar></app-main-toolbar>
 
 <ng-container *ngIf="vm$ | async as vm">
-  <mat-progress-bar
-    *ngIf="vm.loading; else showContent"
-    color="accent"
-    mode="indeterminate"
-  ></mat-progress-bar>
+  <mat-progress-bar *ngIf="vm.loading; else showContent" color="accent" mode="indeterminate"></mat-progress-bar>
 
   <ng-template #showContent>
     <section class="container">
       <div class="d-flex justify-content-end mb-2">
-        <app-period-selector
-          [selectedValue]="selectedPeriod"
-          (periodChange)="onSelectedPeriodChange($event)"
-        ></app-period-selector>
+        <div class="me-2 mt-n2 d-flex align-items-center justify-content-center">
+          <button
+            (click)="onPeriodChange(-1)"
+            mat-icon-button
+            color="primary"
+            matTooltip="Previous {{ selectedPeriod | enumDisplay: Period }}"
+          >
+            <mat-icon>arrow_left</mat-icon>
+          </button>
+          <h3 class="mx-2 mb-0" color="primary">{{ vm.periodLabel }}</h3>
+          <button (click)="onPeriodChange(1)" mat-icon-button color="primary" matTooltip="Next {{ selectedPeriod | enumDisplay: Period }}">
+            <mat-icon>arrow_right</mat-icon>
+          </button>
+        </div>
+
+        <app-period-selector [selectedValue]="selectedPeriod" (periodChange)="onSelectedPeriodChange($event)"></app-period-selector>
       </div>
 
       <app-category-report
         *ngIf="vm.mainCurrency"
         [transactions]="vm.filteredExpenses"
-        [loading]="vm.loading"
         [title]="vm.periodLabel"
         [mainCurrency]="vm.mainCurrency"
-        (periodChange)="onPeriodChange($event)"
       ></app-category-report>
     </section>
   </ng-template>

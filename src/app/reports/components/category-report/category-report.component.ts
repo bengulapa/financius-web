@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { ChartColor, SingleChartData } from 'src/app/shared/models/chart.models';
@@ -18,13 +18,7 @@ export class CategoryReportComponent implements OnChanges {
   transactions?: Transaction[] | null;
 
   @Input()
-  loading?: boolean | null = false;
-
-  @Input()
   mainCurrency!: Currency | null;
-
-  @Output()
-  periodChange = new EventEmitter<number>();
 
   chartData: SingleChartData[] = [];
   customColors: ChartColor[] = [];
