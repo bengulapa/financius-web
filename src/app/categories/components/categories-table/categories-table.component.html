@@ -1,18 +1,8 @@
 <div class="d-flex justify-content-end w-100">
-  <mat-form-field appearance="standard" class="w-50">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #filter />
-  </mat-form-field>
+  <app-table-search (search)="applySearch($event)"></app-table-search>
 </div>
 
-<table
-  mat-table
-  [dataSource]="dataSource"
-  matSort
-  matSortActive="name"
-  matSortDirection="asc"
-  class="table mat-elevation-z8"
->
+<table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc" class="table mat-elevation-z8">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
     <td mat-cell *matCellDef="let row">{{ row.name }}</td>
@@ -28,12 +18,9 @@
   <ng-container matColumnDef="transactionType">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Type</th>
     <td mat-cell *matCellDef="let row">
-      <span
-        class="transaction-type-{{
-          TransactionType[row.transactionType] | lowercase
-        }}"
-        >{{ TransactionType[row.transactionType] }}</span
-      >
+      <span class="transaction-type-{{ TransactionType[row.transactionType] | lowercase }}">{{
+        row.transactionType | enumDisplay: TransactionType
+      }}</span>
     </td>
   </ng-container>
 
@@ -41,9 +28,7 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let row" class="w-15">
       <button mat-icon-button routerLink="./{{ row.id }}">
-        <mat-icon color="accent" matTooltip="View details"
-          >arrow_forward</mat-icon
-        >
+        <mat-icon color="accent" matTooltip="View details">arrow_forward</mat-icon>
       </button>
 
       <button mat-icon-button (click)="edit.emit(row)" color="accent">
@@ -63,8 +48,4 @@
     <td class="mat-cell" colspan="4">No category found</td>
   </tr>
 </table>
-<mat-paginator
-  [pageSizeOptions]="[10, 25, 100]"
-  showFirstLastButtons
-  aria-label="Select page of categories"
-></mat-paginator>
+<mat-paginator [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons aria-label="Select page of categories"></mat-paginator>

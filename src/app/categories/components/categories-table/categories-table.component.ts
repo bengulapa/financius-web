@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Category } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { TableBaseComponent } from 'src/app/shared/table-base.component';
@@ -15,18 +9,7 @@ import { TableBaseComponent } from 'src/app/shared/table-base.component';
   styleUrls: ['./categories-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoriesTableComponent
-  extends TableBaseComponent<Category>
-  implements OnChanges
-{
+export class CategoriesTableComponent extends TableBaseComponent<Category> {
   displayedColumns = ['color', 'name', 'transactionType', 'actions'];
   TransactionType = TransactionType;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data?.currentValue) {
-      this.dataSource = new MatTableDataSource(this.data || []);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }
-  }
 }
