@@ -12,6 +12,7 @@ import { TransactionsTableComponent } from './components/transactions-table/tran
 import { MaterialModule } from './material.module';
 import { CustomCurrencyPipe } from './pipes/custom-currency.pipe';
 import { EnumArrayPipe } from './pipes/enum-array.pipe';
+import { EnumDisplayPipe } from './pipes/enum-display.pipe';
 import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
 
 @NgModule({
@@ -26,17 +27,9 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     CustomCurrencyPipe,
     EnumArrayPipe,
     EnumSeparatorPipe,
+    EnumDisplayPipe,
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    NgxChartsModule,
-  ],
+  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
   exports: [
     CommonModule,
     MaterialModule,
@@ -47,11 +40,12 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     TransactionsTableComponent,
     PeriodSelectorComponent,
     DateFiltersComponent,
+    TableSearchComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,
     EnumSeparatorPipe,
-    TableSearchComponent,
+    EnumDisplayPipe,
   ],
 })
 export class SharedModule {}
