@@ -16,6 +16,7 @@ import { selectReportsPageViewModel } from '../../state/reports.selectors';
 export class ReportsShellComponent implements OnInit {
   vm$ = this.store.select(selectReportsPageViewModel);
   filter$ = this.store.select(selectFilter);
+  Period = Period;
   selectedPeriod!: Period;
   selectedMonth!: number;
   selectedYear!: number;
@@ -24,6 +25,7 @@ export class ReportsShellComponent implements OnInit {
     start: Date;
     end: Date;
   };
+  now = new Date();
 
   constructor(private store: Store) {}
 
@@ -37,6 +39,44 @@ export class ReportsShellComponent implements OnInit {
       this.selectedMonth = f.selectedMonth;
       this.selectedYear = f.selectedYear;
     });
+  }
+
+  onYearFilterChange(year: number | undefined) {
+    this.selectedYear = year !== undefined ? year : this.now.getFullYear();
+
+    this.store.dispatch(
+      TransactionActions.updateFilterPart({
+        filter: {
+          selectedYear: this.selectedYear,
+        },
+      })
+    );
+  }
+
+  onMonthFilterChange(month: number | undefined) {
+    this.selectedMonth = month !== undefined ? month : this.now.getMonth();
+
+    this.store.dispatch(
+      TransactionActions.updateFilterPart({
+        filter: {
+          selectedMonth: this.selectedMonth,
+        },
+      })
+    );
+  }
+
+  onClearFilters() {
+    this.selectedYear = this.now.getFullYear();
+    this.selectedMonth = this.now.getMonth();
+
+    this.store.dispatch(
+      TransactionActions.updateFilterPart({
+        filter: {
+          selectedYear: this.selectedYear,
+          selectedMonth: this.selectedMonth,
+        },
+      })
+    );
   }
 
   onSelectedPeriodChange(period: Period) {

@@ -5,8 +5,20 @@
 
   <ng-template #showContent>
     <section class="container">
-      <div class="d-flex justify-content-end mb-2">
-        <div class="me-2 mt-n2 d-flex align-items-center justify-content-center">
+      <div class="d-flex justify-content-end align-items-center mb-2">
+        <app-date-filters
+          [year]="selectedYear"
+          [years]="vm.transactionYears"
+          yearLabel="Select year"
+          [month]="selectedMonth"
+          monthLabel="Select month"
+          [appearance]="'legacy'"
+          (monthChange)="onMonthFilterChange($event)"
+          (yearChange)="onYearFilterChange($event)"
+          (clearFilters)="onClearFilters()"
+        ></app-date-filters>
+
+        <div class="me-2 mt-n2 d-flex align-items-center justify-content-center" style="min-width: 210px">
           <button
             (click)="onPeriodChange(-1)"
             mat-icon-button

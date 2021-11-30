@@ -6,11 +6,13 @@ export const selectReportsPageViewModel = createSelector(
   transactionsSelectors.selectExpenses,
   transactionsSelectors.selectPeriodLabel,
   transactionsSelectors.selectLoading,
+  transactionsSelectors.selectTransactionYears,
   currenciesSelectors.selectMainCurrency,
-  (expenses, label, transactionsLoading, mainCurrency) => ({
+  (expenses, label, transactionsLoading, transactionYears, mainCurrency) => ({
     filteredExpenses: expenses,
     periodLabel: label,
     loading: transactionsLoading,
+    transactionYears,
     mainCurrency,
   })
 );
