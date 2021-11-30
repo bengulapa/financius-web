@@ -1,87 +1,60 @@
 <div class="fw-dialog">
-  <h2 mat-dialog-title>{{ isEditMode ? "Edit" : "Add" }} Currency</h2>
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Currency</h2>
 
   <form [formGroup]="form">
-    <mat-slide-toggle class="mb-3" formControlName="isDefault" color="accent"
-      >Set as main currency</mat-slide-toggle
-    >
+    <mat-slide-toggle class="mb-3" formControlName="isDefault" color="accent">Set as main currency</mat-slide-toggle>
 
     <mat-form-field appearance="fill" class="w-100 mb-2">
       <mat-label>Code</mat-label>
       <input matInput formControlName="code" required />
-      <mat-error *ngIf="form.get('code')?.hasError('required')"
-        >Code is required</mat-error
-      >
-      <mat-error *ngIf="form.get('code')?.hasError('maxlength')"
-        >Code is too long. Max of 3 characters.</mat-error
-      >
+      <mat-error *ngIf="form.get('code')?.hasError('required')">Code is required</mat-error>
+      <mat-error *ngIf="form.get('code')?.hasError('maxlength')">Code is too long. Max of 3 characters.</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-100 mb-2">
-      <mat-label>Symbol</mat-label>
-      <input matInput formControlName="symbol" required />
-      <mat-error *ngIf="form.get('symbol')?.hasError('required')"
-        >Symbol is required</mat-error
-      >
-      <mat-error *ngIf="form.get('symbol')?.hasError('maxlength')"
-        >Symbol is too long. Max of 3 characters.</mat-error
-      >
-    </mat-form-field>
+    <div class="w-100 mb-2">
+      <mat-form-field appearance="fill" class="w-50 pe-2">
+        <mat-label>Symbol</mat-label>
+        <input matInput formControlName="symbol" required />
+        <mat-error *ngIf="form.get('symbol')?.hasError('required')">Symbol is required</mat-error>
+        <mat-error *ngIf="form.get('symbol')?.hasError('maxlength')">Symbol is too long. Max of 3 characters.</mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-100 mb-2">
-      <mat-label>Decimal count</mat-label>
-      <input matInput formControlName="decimalCount" required />
-      <mat-error *ngIf="form.get('decimalCount')?.hasError('required')"
-        >Decimal count is required</mat-error
-      >
-      <mat-error *ngIf="form.get('decimalCount')?.hasError('max')"
-        >Max of 2.</mat-error
-      >
-    </mat-form-field>
+      <mat-form-field appearance="fill" class="w-50">
+        <mat-label>Decimal count</mat-label>
+        <input type="number" matInput formControlName="decimalCount" required />
+        <mat-error *ngIf="form.get('decimalCount')?.hasError('required')">Decimal count is required</mat-error>
+        <mat-error *ngIf="form.get('decimalCount')?.hasError('max')">Max of 2.</mat-error>
+      </mat-form-field>
+    </div>
 
     <div class="mb-3">
       <mat-label class="mb-1 d-block">Symbol position</mat-label>
-      <mat-button-toggle-group formControlName="symbolPosition">
-        <mat-button-toggle
-          *ngFor="let type of SymbolPosition | enumArray"
-          [value]="SymbolPosition[type]"
-          >{{ type | enumSeparator }}</mat-button-toggle
-        >
+      <mat-button-toggle-group formControlName="symbolPosition" appearance="legacy">
+        <mat-button-toggle *ngFor="let type of SymbolPosition | enumArray" [value]="SymbolPosition[type]">{{
+          type | enumSeparator
+        }}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 
     <div class="mb-3">
       <mat-label class="mb-1 d-block">Decimal separator</mat-label>
-      <mat-button-toggle-group formControlName="decimalSeparator">
-        <mat-button-toggle
-          *ngFor="let type of DecimalSeparator | keyvalue"
-          [value]="type.value"
-          >{{ type.key }}</mat-button-toggle
-        >
+      <mat-button-toggle-group formControlName="decimalSeparator" appearance="legacy">
+        <mat-button-toggle *ngFor="let type of DecimalSeparator | keyvalue" [value]="type.value">{{ type.key }}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 
     <div>
       <mat-label class="mb-1 d-block">Thousands separator</mat-label>
-      <mat-button-toggle-group formControlName="groupSeparator">
-        <mat-button-toggle
-          *ngFor="let type of GroupSeparator | keyvalue"
-          [value]="type.value"
-          >{{ type.key }}</mat-button-toggle
-        >
+      <mat-button-toggle-group formControlName="groupSeparator" appearance="legacy">
+        <mat-button-toggle *ngFor="let type of GroupSeparator | keyvalue" [value]="type.value">{{ type.key }}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
   </form>
 
   <mat-dialog-actions>
     <button mat-stroked-button [mat-dialog-close]="false">CANCEL</button>
-    <button
-      [disabled]="!form.valid"
-      mat-flat-button
-      color="accent"
-      [mat-dialog-close]="form.value"
-    >
-      {{ isEditMode ? "UPDATE" : "SAVE" }}
+    <button [disabled]="!form.valid" mat-flat-button color="accent" [mat-dialog-close]="form.value">
+      {{ isEditMode ? 'UPDATE' : 'SAVE' }}
     </button>
   </mat-dialog-actions>
 </div>

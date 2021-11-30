@@ -1,22 +1,14 @@
 <form [formGroup]="form">
-  <mat-button-toggle-group
-    class="mx-auto mb-2"
-    formControlName="transactionType"
-    (change)="onTransactionTypeChange($event.value)"
-  >
-    <mat-button-toggle
-      *ngFor="let type of TransactionType | enumArray"
-      [value]="TransactionType[type]"
-      >{{ type }}</mat-button-toggle
-    >
-  </mat-button-toggle-group>
+  <div class="d-flex justify-content-center w-100 mb-3">
+    <mat-button-toggle-group formControlName="transactionType" appearance="legacy" (change)="onTransactionTypeChange($event.value)">
+      <mat-button-toggle *ngFor="let type of TransactionType | enumArray" [value]="TransactionType[type]">{{ type }}</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
     <mat-label>Amount</mat-label>
     <input type="number" matInput formControlName="amount" required />
-    <mat-error *ngIf="form.get('amount')?.hasError('required')"
-      >Amount is required</mat-error
-    >
+    <mat-error *ngIf="form.get('amount')?.hasError('required')">Amount is required</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
@@ -27,24 +19,14 @@
   </mat-form-field>
 
   <mat-form-field
-    *ngIf="
-      selectedTransactionType === TransactionType.Expense ||
-      selectedTransactionType === TransactionType.Income
-    "
+    *ngIf="selectedTransactionType === TransactionType.Expense || selectedTransactionType === TransactionType.Income"
     appearance="fill"
     class="w-100 mb-2"
   >
     <mat-label>Category</mat-label>
-    <mat-select
-      formControlName="categoryId"
-      (selectionChange)="setCategory($event.value)"
-    >
+    <mat-select formControlName="categoryId" (selectionChange)="setCategory($event.value)">
       <mat-optgroup *ngFor="let group of categoryGroups" [label]="group.name">
-        <mat-option
-          [style.color]="category.color"
-          *ngFor="let category of group.categories"
-          [value]="category.id"
-        >
+        <mat-option [style.color]="category.color" *ngFor="let category of group.categories" [value]="category.id">
           {{ category.name }}
         </mat-option>
       </mat-optgroup>
@@ -53,11 +35,7 @@
 
   <mat-form-field appearance="fill" class="w-100 mb-2">
     <mat-label>Tags</mat-label>
-    <mat-select
-      formControlName="tagIds"
-      multiple
-      (selectionChange)="setTags($event.value)"
-    >
+    <mat-select formControlName="tagIds" multiple (selectionChange)="setTags($event.value)">
       <mat-option *ngFor="let tag of tags" [value]="tag.id">
         {{ tag.name }}
       </mat-option>
@@ -65,46 +43,26 @@
   </mat-form-field>
 
   <mat-form-field
-    *ngIf="
-      selectedTransactionType === TransactionType.Expense ||
-      selectedTransactionType === TransactionType.Transfer
-    "
+    *ngIf="selectedTransactionType === TransactionType.Expense || selectedTransactionType === TransactionType.Transfer"
     appearance="fill"
     class="w-100 mb-2"
   >
-    <mat-label>Account</mat-label>
-    <mat-select
-      formControlName="accountFromId"
-      (selectionChange)="setAccount($event.value, true)"
-    >
-      <mat-option
-        [class.text-muted]="!account.includeInTotals"
-        *ngFor="let account of accounts"
-        [value]="account.id"
-      >
+    <mat-label>Account from</mat-label>
+    <mat-select formControlName="accountFromId" (selectionChange)="setAccount($event.value, true)">
+      <mat-option [class.text-muted]="!account.includeInTotals" *ngFor="let account of accounts" [value]="account.id">
         {{ account.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field
-    *ngIf="
-      selectedTransactionType === TransactionType.Income ||
-      selectedTransactionType === TransactionType.Transfer
-    "
+    *ngIf="selectedTransactionType === TransactionType.Income || selectedTransactionType === TransactionType.Transfer"
     appearance="fill"
     class="w-100 mb-2"
   >
-    <mat-label>Account</mat-label>
-    <mat-select
-      formControlName="accountToId"
-      (selectionChange)="setAccount($event.value)"
-    >
-      <mat-option
-        [class.text-muted]="!account.includeInTotals"
-        *ngFor="let account of accounts"
-        [value]="account.id"
-      >
+    <mat-label>Account to</mat-label>
+    <mat-select formControlName="accountToId" (selectionChange)="setAccount($event.value)">
+      <mat-option [class.text-muted]="!account.includeInTotals" *ngFor="let account of accounts" [value]="account.id">
         {{ account.name }}
       </mat-option>
     </mat-select>
@@ -115,10 +73,6 @@
     <textarea matInput formControlName="note"></textarea>
   </mat-form-field>
 
-  <mat-checkbox class="w-100 mb-3" formControlName="transactionState"
-    >Confirmed</mat-checkbox
-  >
-  <mat-checkbox class="w-100 mb-3" formControlName="includeInReports"
-    >Include in reports</mat-checkbox
-  >
+  <mat-checkbox class="w-100 mb-2" formControlName="transactionState">Confirmed</mat-checkbox>
+  <mat-checkbox class="w-100 mb-2" formControlName="includeInReports">Include in reports</mat-checkbox>
 </form>
