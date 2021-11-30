@@ -13,24 +13,22 @@ export interface TransactionsState extends BaseEntityState<Transaction> {
   filter: TransactionFilter;
 }
 
-export const transactionsAdapter: EntityAdapter<Transaction> =
-  createEntityAdapter<Transaction>();
+export const transactionsAdapter: EntityAdapter<Transaction> = createEntityAdapter<Transaction>();
 
-export const initialState: TransactionsState =
-  transactionsAdapter.getInitialState({
-    loading: false,
-    entitiesLoaded: false,
-    filter: {
-      selectedDate: now,
-      selectedWeek: {
-        start: startOfWeek(now, { weekStartsOn: 1 }),
-        end: endOfWeek(now, { weekStartsOn: 1 }),
-      },
-      selectedPeriod: Period.Month,
-      selectedMonth: new Date().getMonth(),
-      selectedYear: new Date().getFullYear(),
+export const initialState: TransactionsState = transactionsAdapter.getInitialState({
+  loading: false,
+  entitiesLoaded: false,
+  filter: {
+    selectedDate: now,
+    selectedWeek: {
+      start: startOfWeek(now, { weekStartsOn: 1 }),
+      end: endOfWeek(now, { weekStartsOn: 1 }),
     },
-  });
+    selectedPeriod: Period.Month,
+    selectedMonth: new Date().getMonth(),
+    selectedYear: new Date().getFullYear(),
+  },
+});
 
 export const transactionsReducer = createReducer(
   initialState,
@@ -91,6 +89,17 @@ export const transactionsReducer = createReducer(
     (state, { filter }): TransactionsState => ({
       ...state,
       filter,
+    })
+  ),
+
+  on(
+    TransactionActions.updateFilterPart,
+    (state, { filter }): TransactionsState => ({
+      ...state,
+      filter: {
+        ...state.filter,
+        ...filter,
+      },
     })
   ),
   on(

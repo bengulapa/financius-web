@@ -34,6 +34,8 @@ export namespace TransactionActions {
 
   export const updateFilter = createAction(`${key} Update Filter`, props<{ filter: TransactionFilter }>());
 
+  export const updateFilterPart = createAction(`${key} Update Filter Part`, props<{ filter: Partial<TransactionFilter> }>());
+
   export const updateSelectedPeriod = createAction(`${key} Update Selected Period `, props<{ period: Period }>());
 
   export const resetFilter = createAction(`${key} Reset Filter`);
