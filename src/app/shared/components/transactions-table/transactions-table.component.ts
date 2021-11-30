@@ -1,13 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { format, getMonth, getYear } from 'date-fns';
-import * as _ from 'lodash';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
 import { Transaction } from '../../models/entities.models';
 import { TransactionsTableFilter } from '../../models/view.models';
@@ -19,44 +11,23 @@ import { TableBaseComponent } from '../../table-base.component';
   styleUrls: ['./transactions-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsTableComponent
-  extends TableBaseComponent<Transaction>
-  implements OnInit, OnChanges
-{
+export class TransactionsTableComponent extends TableBaseComponent<Transaction> {
   @Input()
   loading?: boolean | null = false;
 
   @Input()
-  displayedColumns = [
-    'date',
-    'category',
-    'tags',
-    'note',
-    'amount',
-    'account',
-    'actions',
-  ];
+  years?: number[];
+
+  @Input()
+  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account', 'actions'];
 
   TransactionType = TransactionType;
 
-  filterValues!: TransactionsTableFilter;
-  years: number[] = [];
-
-  ngOnInit(): void {
-    this.filterValues = {
-      freeText: '',
-      selectedMonth: null,
-      selectedYear: null,
-    };
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    super.ngOnChanges(changes);
-
-    if (changes.data?.currentValue) {
-      this.years = _.uniq(this.data?.map((t) => getYear(t.date))).sort();
-    }
-  }
+  filterValues: TransactionsTableFilter = {
+    freeText: '',
+    selectedMonth: null,
+    selectedYear: null,
+  };
 
   onYearChange(year: number | undefined) {
     this.dataSource.filterPredicate = this.createFilter();
@@ -67,8 +38,7 @@ export class TransactionsTableComponent
 
   onMonthChange(month: number | undefined) {
     this.dataSource.filterPredicate = this.createFilter();
-    this.filterValues.selectedMonth =
-      month !== undefined && month >= 0 ? month : null;
+    this.filterValues.selectedMonth = month !== undefined && month >= 0 ? month : null;
 
     this.setFilter();
   }
@@ -95,46 +65,26 @@ export class TransactionsTableComponent
     }
   }
 
-  private createFilter(): (
-    transaction: Transaction,
-    filter: string
-  ) => boolean {
+  private createFilter(): (transaction: Transaction, filter: string) => boolean {
     return function (transaction: Transaction, filter: string): boolean {
       let searchTerms: TransactionsTableFilter = JSON.parse(filter);
 
-      const yearFilter =
-        searchTerms.selectedYear !== null
-          ? getYear(transaction.date) === searchTerms.selectedYear
-          : true;
+      const yearFilter = searchTerms.selectedYear !== null ? getYear(transaction.date) === searchTerms.selectedYear : true;
 
-      const monthFilter =
-        searchTerms.selectedMonth !== null
-          ? getMonth(transaction.date) === searchTerms.selectedMonth
-          : true;
+      const monthFilter = searchTerms.selectedMonth !== null ? getMonth(transaction.date) === searchTerms.selectedMonth : true;
 
       const freeTextFilter = searchTerms.freeText
-        ? transaction.note
-            .trim()
-            .toLocaleLowerCase()
-            .includes(searchTerms.freeText) ||
+        ? transaction.note.trim().toLocaleLowerCase().includes(searchTerms.freeText) ||
           transaction.tags
             .map((t) => t.name)
             .join()
             .toLocaleLowerCase()
             .includes(searchTerms.freeText) ||
           transaction.amount.toString().includes(searchTerms.freeText) ||
-          (transaction.category?.name || '')
-            .toLocaleLowerCase()
-            .includes(searchTerms.freeText) ||
-          (transaction.accountFrom?.name || '')
-            .toLocaleLowerCase()
-            .includes(searchTerms.freeText) ||
-          (transaction.accountTo?.name || '')
-            .toLocaleLowerCase()
-            .includes(searchTerms.freeText) ||
-          format(transaction.date, 'PPPP')
-            .toLocaleLowerCase()
-            .includes(searchTerms.freeText)
+          (transaction.category?.name || '').toLocaleLowerCase().includes(searchTerms.freeText) ||
+          (transaction.accountFrom?.name || '').toLocaleLowerCase().includes(searchTerms.freeText) ||
+          (transaction.accountTo?.name || '').toLocaleLowerCase().includes(searchTerms.freeText) ||
+          format(transaction.date, 'PPPP').toLocaleLowerCase().includes(searchTerms.freeText)
         : true;
 
       return yearFilter && monthFilter && freeTextFilter;

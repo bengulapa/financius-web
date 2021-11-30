@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { format, isWithinInterval } from 'date-fns';
+import { format, getYear, isWithinInterval } from 'date-fns';
+import * as _ from 'lodash';
 import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import { ModelState, TransactionState, TransactionType } from 'src/app/shared/models/financius.enums';
 import { Period } from 'src/app/shared/models/view.models';
@@ -76,7 +77,17 @@ export const selectExpenses = createSelector(selectTransactionsForReport, select
   }
 });
 
-export const selectTransactionsIndexViewModel = createSelector(selectLoading, selectAllTransactions, (loading, transactions) => ({
-  loading,
-  transactions,
-}));
+export const selectTransactionYears = createSelector(selectAllTransactions, (transactions) =>
+  _.uniq(transactions.map((t) => getYear(t.date))).sort()
+);
+
+export const selectTransactionsIndexViewModel = createSelector(
+  selectLoading,
+  selectAllTransactions,
+  selectTransactionYears,
+  (loading, transactions, transactionYears) => ({
+    loading,
+    transactions,
+    transactionYears,
+  })
+);

@@ -11,6 +11,11 @@
       </button>
     </div>
 
-    <app-transactions-table [data]="vm.transactions" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-transactions-table>
+    <app-transactions-table
+      [data]="vm.transactions"
+      [years]="vm.transactionYears"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    ></app-transactions-table>
   </section>
 </ng-container>
