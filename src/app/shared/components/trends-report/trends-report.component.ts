@@ -7,17 +7,16 @@ import { Currency, Transaction } from 'src/app/shared/models/entities.models';
 import { Period } from 'src/app/shared/models/view.models';
 
 @Component({
-  selector: 'app-trends-card',
-  templateUrl: './trends-card.component.html',
-  styleUrls: ['./trends-card.component.scss'],
+  selector: 'app-trends-report',
+  templateUrl: './trends-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrendsCardComponent implements OnChanges {
+export class TrendsReportComponent implements OnChanges {
   @Input()
   title!: string;
 
   @Input()
-  transactions!: Transaction[] | null;
+  transactions?: Transaction[] | null;
 
   @Input()
   mainCurrency!: Currency | null;

@@ -40,6 +40,7 @@
         *ngIf="vm.mainCurrency"
         [transactions]="vm.filteredExpenses"
         [title]="vm.periodLabel"
+        [selectedPeriod]="vm.filter.selectedPeriod"
         [mainCurrency]="vm.mainCurrency"
       ></app-category-report>
     </section>

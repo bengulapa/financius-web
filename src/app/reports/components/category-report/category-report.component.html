@@ -19,6 +19,13 @@
           </ng-template>
         </ngx-charts-advanced-pie-chart>
       </div>
+
+      <app-trends-report
+        [title]="title"
+        [selectedPeriod]="selectedPeriod"
+        [transactions]="transactions"
+        [mainCurrency]="mainCurrency"
+      ></app-trends-report>
     </ng-container>
 
     <ng-template #empty>

@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { CurrenciesService } from 'src/app/core/services/currencies.service';
 import { ChartColor, SingleChartData } from 'src/app/shared/models/chart.models';
 import { Currency, Transaction } from 'src/app/shared/models/entities.models';
+import { Period } from 'src/app/shared/models/view.models';
 
 @Component({
   selector: 'app-category-report',
@@ -19,6 +20,9 @@ export class CategoryReportComponent implements OnChanges {
 
   @Input()
   mainCurrency!: Currency | null;
+
+  @Input()
+  selectedPeriod!: Period;
 
   chartData: SingleChartData[] = [];
   customColors: ChartColor[] = [];

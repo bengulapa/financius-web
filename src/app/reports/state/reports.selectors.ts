@@ -4,12 +4,14 @@ import * as transactionsSelectors from 'src/app/transactions/state/transactions.
 
 export const selectReportsPageViewModel = createSelector(
   transactionsSelectors.selectExpenses,
+  transactionsSelectors.selectFilter,
   transactionsSelectors.selectPeriodLabel,
   transactionsSelectors.selectLoading,
   transactionsSelectors.selectTransactionYears,
   currenciesSelectors.selectMainCurrency,
-  (expenses, label, transactionsLoading, transactionYears, mainCurrency) => ({
+  (expenses, filter, label, transactionsLoading, transactionYears, mainCurrency) => ({
     filteredExpenses: expenses,
+    filter,
     periodLabel: label,
     loading: transactionsLoading,
     transactionYears,

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TrendsReportComponent } from '../shared/components/trends-report/trends-report.component';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { DateFiltersComponent } from './components/date-filters/date-filters.component';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
@@ -28,6 +29,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     EnumArrayPipe,
     EnumSeparatorPipe,
     EnumDisplayPipe,
+    TrendsReportComponent,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
   exports: [
@@ -41,6 +43,7 @@ import { EnumSeparatorPipe } from './pipes/enum-separator.pipe';
     PeriodSelectorComponent,
     DateFiltersComponent,
     TableSearchComponent,
+    TrendsReportComponent,
 
     CustomCurrencyPipe,
     EnumArrayPipe,
