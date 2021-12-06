@@ -16,7 +16,7 @@ export class FormHelpers {
       currency: this.createCurrencyForm(account?.currency),
       note: account?.note || '',
       balance: [account?.balance || 0, Validators.required],
-      includeInTotals: account?.includeInTotals || true,
+      includeInTotals: account ? account.includeInTotals : true,
     });
   }
 
