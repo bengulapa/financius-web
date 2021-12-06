@@ -1,6 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { Period, TransactionFilter } from 'src/app/shared/models/view.models';
 
 export namespace TransactionActions {
@@ -25,6 +25,18 @@ export namespace TransactionActions {
   export const updateSuccess = createAction(`${key} Update Success`, props<{ old: Transaction; transaction: Update<Transaction> }>());
 
   export const updateFail = createAction(`${key} Update Fail`, props<{ errorMessage: string }>());
+
+  export const updateTransactionAccount = createAction(
+    `${key} Update Transaction's Account`,
+    props<{ transaction: Transaction; account: Account }>()
+  );
+
+  export const updateTransactionAccountSuccess = createAction(
+    `${key} Update Transaction's Account Success`,
+    props<{ transaction: Update<Transaction> }>()
+  );
+
+  export const updateTransactionAccountFail = createAction(`${key} Update Transaction's Account Fail`, props<{ errorMessage: string }>());
 
   export const remove = createAction(`${key} Remove`, props<{ transaction: Transaction }>());
 

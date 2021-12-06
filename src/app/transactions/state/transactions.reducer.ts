@@ -78,6 +78,7 @@ export const transactionsReducer = createReducer(
       loading: false,
     })
   ),
+  on(TransactionActions.updateTransactionAccountSuccess, (state, { transaction }) => transactionsAdapter.updateOne(transaction, state)),
   on(TransactionActions.removeSuccess, (state, { transaction }) =>
     transactionsAdapter.removeOne(transaction.id, {
       ...state,

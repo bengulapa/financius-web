@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { forkJoin, of } from 'rxjs';
 import { catchError, concatMap, exhaustMap, filter, map, mergeMap, tap } from 'rxjs/operators';
 import { AccountActions } from 'src/app/accounts/state/accounts.actions';
+import * as accountsSelectors from 'src/app/accounts/state/accounts.selectors';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
 import { round } from 'src/app/core/utilities/number.utils';
@@ -77,7 +78,7 @@ export class TransactionsEffects {
     );
   });
 
-  addTransactionOnAddAccount$ = createEffect(() => {
+  addBalanceUpdateTransactionOnAddAccount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.addSuccess),
       filter((a) => a.account.balance !== 0),
@@ -96,7 +97,7 @@ export class TransactionsEffects {
     );
   });
 
-  addTransactionOnUpdateAccount$ = createEffect(() => {
+  addBalanceUpdateTransactionOnUpdateAccount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.updateSuccess),
       mergeMap(({ account }) =>
@@ -110,6 +111,19 @@ export class TransactionsEffects {
             })
           )
         )
+      )
+    );
+  });
+
+  updateTransactionAccountDetailsOnUpdateAccount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AccountActions.updateSuccess),
+      concatLatestFrom((a) => this.store.select(accountsSelectors.selectAccountTransactionsById(a.account.id.toString()))),
+      filter(([_, t]) => t.length > 0),
+      concatMap(([{ account }, transactions]) =>
+        // TODO: Find a better way to do this instead of dispatching multiple actions
+        // eslint-disable-next-line ngrx/no-multiple-actions-in-effects
+        transactions.map((transaction) => TransactionActions.updateTransactionAccount({ transaction, account: <Account>account.changes }))
       )
     );
   });
@@ -146,6 +160,36 @@ export class TransactionsEffects {
             })
           )
         )
+      )
+    );
+  });
+
+  updateAccountTransactions$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TransactionActions.updateTransactionAccount),
+      concatMap(({ transaction, account }) =>
+        this.service
+          .update({
+            id: transaction.id,
+            changes: {
+              ...transaction,
+              accountFrom: transaction.accountFrom?.id === account?.id ? account : transaction.accountFrom,
+              accountTo: transaction.accountTo?.id === account?.id ? account : transaction.accountTo,
+            },
+          })
+          .pipe(
+            map(
+              (transaction) =>
+                TransactionActions.updateTransactionAccountSuccess({
+                  transaction: { id: transaction.id, changes: transaction },
+                }),
+              catchError((err: any) => {
+                const errorMessage = `An error occurred while updating a transaction's account.`;
+                console.log(err);
+                return of(TransactionActions.updateTransactionAccountFail({ errorMessage }));
+              })
+            )
+          )
       )
     );
   });
