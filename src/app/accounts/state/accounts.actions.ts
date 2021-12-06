@@ -27,7 +27,11 @@ export namespace AccountActions {
 
   export const addFail = createAction(`${prefix} Add Fail`, props<{ errorMessage: string }>());
 
-  export const update = createAction(`${prefix} Update`, props<{ account: Account }>());
+  export const update = createAction(`${prefix} Update`, props<{ old: Account; update: Account }>());
+
+  export const updateSuccess = createAction(`${prefix} Update Success`, props<{ old: Account; update: Update<Account> }>());
+
+  export const updateFail = createAction(`${prefix} Update Fail`, props<{ errorMessage: string }>());
 
   export const updateAccountBalance = createAction(`[Transaction]-${prefix} Update Balance`, props<{ account: Account; amount: number }>());
 
@@ -37,10 +41,6 @@ export namespace AccountActions {
   );
 
   export const updateAccountBalanceFail = createAction(`[Transaction]-${prefix} Update Balance Fail`, props<{ errorMessage: string }>());
-
-  export const updateSuccess = createAction(`${prefix} Update Success`, props<{ account: Update<Account> }>());
-
-  export const updateFail = createAction(`${prefix} Update Fail`, props<{ errorMessage: string }>());
 
   export const remove = createAction(`${prefix} Remove`, props<{ account: Account }>());
 

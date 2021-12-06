@@ -85,12 +85,13 @@ export class AccountsEffects {
   update$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.update),
-      concatMap((action) =>
-        this.service.update({ id: action.account.id, changes: action.account }).pipe(
+      concatMap(({ old, update }) =>
+        this.service.update({ id: update.id, changes: update }).pipe(
           map(
             (account) =>
               AccountActions.updateSuccess({
-                account: { id: account.id, changes: account },
+                old,
+                update: { id: account.id, changes: account },
               }),
             catchError((err: any) => {
               const errorMessage = 'An error occurred while updating a account.';

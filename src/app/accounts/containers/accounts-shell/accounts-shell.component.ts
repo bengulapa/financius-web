@@ -16,11 +16,7 @@ import { AccountFormDialogComponent } from '../account-form-dialog/account-form-
 export class AccountsShellComponent implements OnInit {
   readonly vm$ = this.store.select(selectAccountsPageViewModel);
 
-  constructor(
-    private dialog: MatDialog,
-    private notify: NotificationService,
-    private store: Store
-  ) {}
+  constructor(private dialog: MatDialog, private notify: NotificationService, private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(AccountActions.accountsPageOpened());
@@ -67,7 +63,7 @@ export class AccountsShellComponent implements OnInit {
           return;
         }
 
-        this.store.dispatch(AccountActions.update({ account: dialogData }));
+        this.store.dispatch(AccountActions.update({ old: account, update: dialogData }));
       });
   }
 

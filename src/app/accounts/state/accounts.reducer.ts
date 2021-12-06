@@ -71,7 +71,14 @@ export const accountsReducer = createReducer(
       loading: false,
     })
   ),
-  on(AccountActions.updateSuccess, AccountActions.updateAccountBalanceSuccess, (state, { account }) =>
+  on(AccountActions.updateSuccess, (state, { update }) =>
+    accountsAdapter.updateOne(update, {
+      ...state,
+      loading: false,
+    })
+  ),
+
+  on(AccountActions.updateAccountBalanceSuccess, (state, { account }) =>
     accountsAdapter.updateOne(account, {
       ...state,
       loading: false,

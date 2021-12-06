@@ -100,8 +100,9 @@ export class TransactionsEffects {
   addBalanceUpdateTransactionOnUpdateAccount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.updateSuccess),
-      mergeMap(({ account }) =>
-        this.service.add(this.buildAccountBalanceUpdateTransaction(<Account>account.changes)).pipe(
+      filter(({ old, update }) => old.balance !== update.changes.balance),
+      mergeMap(({ update }) =>
+        this.service.add(this.buildAccountBalanceUpdateTransaction(<Account>update.changes)).pipe(
           map(
             (transaction) => TransactionActions.addSuccess({ transaction }),
             catchError((err: any) => {
@@ -118,12 +119,12 @@ export class TransactionsEffects {
   updateTransactionAccountDetailsOnUpdateAccount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AccountActions.updateSuccess),
-      concatLatestFrom((a) => this.store.select(accountsSelectors.selectAccountTransactionsById(a.account.id.toString()))),
+      concatLatestFrom(({ old }) => this.store.select(accountsSelectors.selectAccountTransactionsById(old.id))),
       filter(([_, t]) => t.length > 0),
-      concatMap(([{ account }, transactions]) =>
+      concatMap(([{ update }, transactions]) =>
         // TODO: Find a better way to do this instead of dispatching multiple actions
         // eslint-disable-next-line ngrx/no-multiple-actions-in-effects
-        transactions.map((transaction) => TransactionActions.updateTransactionAccount({ transaction, account: <Account>account.changes }))
+        transactions.map((transaction) => TransactionActions.updateTransactionAccount({ transaction, account: <Account>update.changes }))
       )
     );
   });
