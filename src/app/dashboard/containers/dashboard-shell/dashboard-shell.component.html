@@ -1,11 +1,7 @@
 <app-main-toolbar></app-main-toolbar>
 
 <ng-container *ngIf="vm$ | async as vm">
-  <mat-progress-bar
-    *ngIf="vm.loading; else showContent"
-    color="accent"
-    mode="indeterminate"
-  ></mat-progress-bar>
+  <mat-progress-bar *ngIf="vm.loading; else showContent" color="accent" mode="indeterminate"></mat-progress-bar>
 
   <ng-template #showContent>
     <section class="container d-flex">
@@ -30,6 +26,7 @@
 
             <app-trends-card
               [title]="vm.periodLabel"
+              [selectedPeriod]="vm.filter.selectedPeriod"
               [transactions]="vm.filteredExpenses"
               [mainCurrency]="vm.mainCurrency"
             ></app-trends-card>

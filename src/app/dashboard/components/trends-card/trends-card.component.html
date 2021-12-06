@@ -1,22 +1,15 @@
 <h3>Trends</h3>
 
 <div #containerRef class="d-flex">
-  <ngx-charts-line-chart
-    [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
-    [results]="chartData"
-    [xAxis]="true"
-    scheme="fire"
-  >
+  <ngx-charts-line-chart [view]="[containerRef.offsetWidth, containerRef.offsetHeight]" [results]="chartData" [xAxis]="true" scheme="fire">
     <ng-template #tooltipTemplate let-model="model">
       <div>{{ model.series }} {{ model.name }}</div>
       <div>{{ model.value | fwCurrency: mainCurrency }}</div>
     </ng-template>
 
     <ng-template #seriesTooltipTemplate let-model="model">
-      <div>
-        {{ model[0].series }} {{ model[0].name }}:
-        {{ model[0].value | fwCurrency: mainCurrency }}
-      </div>
+      <div>{{ model[0].series }} {{ model[0].name }}</div>
+      <div>{{ model[0].value | fwCurrency: mainCurrency }}</div>
     </ng-template>
   </ngx-charts-line-chart>
 </div>
