@@ -8,7 +8,7 @@ import { AccountActions } from 'src/app/accounts/state/accounts.actions';
 import * as accountsSelectors from 'src/app/accounts/state/accounts.selectors';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TransactionsService } from 'src/app/core/services/transactions.service';
-import { round } from 'src/app/core/utilities/number.utils';
+import { round, toPositive } from 'src/app/core/utilities/number.utils';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { ReportsActions } from 'src/app/reports/state/reports.actions';
@@ -101,17 +101,24 @@ export class TransactionsEffects {
     return this.actions$.pipe(
       ofType(AccountActions.updateSuccess),
       filter(({ old, update }) => old.balance !== update.changes.balance),
-      mergeMap(({ update }) =>
-        this.service.add(this.buildAccountBalanceUpdateTransaction(<Account>update.changes)).pipe(
-          map(
-            (transaction) => TransactionActions.addSuccess({ transaction }),
-            catchError((err: any) => {
-              const errorMessage = 'An error occurred while adding a transaction.';
-              console.log(err);
-              return of(TransactionActions.addFail({ errorMessage }));
+      mergeMap(({ old, update }) =>
+        this.service
+          .add(
+            this.buildAccountBalanceUpdateTransaction({
+              ...(<Account>update.changes),
+              balance: update.changes.balance! - old.balance,
             })
           )
-        )
+          .pipe(
+            map(
+              (transaction) => TransactionActions.addSuccess({ transaction }),
+              catchError((err: any) => {
+                const errorMessage = 'An error occurred while adding a transaction.';
+                console.log(err);
+                return of(TransactionActions.addFail({ errorMessage }));
+              })
+            )
+          )
       )
     );
   });
@@ -265,15 +272,16 @@ export class TransactionsEffects {
     return {
       id: Guid.newGuid(),
       date: new Date().getTime(),
-      category: null,
+      // Always save amount as positive to avoid wrong computation of sum
+      amount: toPositive(account.balance),
       accountFrom: account.balance < 0 ? account : null,
       accountTo: account.balance > 0 ? account : null,
       currency: account.currency,
       transactionType: account.balance > 0 ? TransactionType.Income : TransactionType.Expense,
       transactionState: TransactionState.Confirmed,
+      category: null,
       tags: [],
       includeInReports: false,
-      amount: account.balance,
       exchangeRate: 1,
       note: this.accountBalanceUpdate,
     };

@@ -12,3 +12,7 @@ export function round(number: number, precision: number = 2) {
     return +(Math.round(Number(number + 'e+' + precision)) + 'e-' + precision);
   }
 }
+
+export function toPositive(value: number): number {
+  return value < 0 ? value * -1 : value;
+}
