@@ -44,6 +44,12 @@ export namespace TransactionActions {
 
   export const removeFail = createAction(`${key} Remove Fail`, props<{ errorMessage: string }>());
 
+  export const removeMany = createAction(`${key} Remove Many`, props<{ keys: string[] }>());
+
+  export const removeManySuccess = createAction(`${key} Remove Many Success`, props<{ keys: string[] }>());
+
+  export const removeManyFail = createAction(`${key} Remove Many Fail`, props<{ errorMessage: string }>());
+
   export const updateFilter = createAction(`${key} Update Filter`, props<{ filter: TransactionFilter }>());
 
   export const updateFilterPart = createAction(`${key} Update Filter Part`, props<{ filter: Partial<TransactionFilter> }>());

@@ -50,6 +50,10 @@ export abstract class EntityBaseService<TEntity> {
     return this.dbService.deleteByKey(this.name, key);
   }
 
+  bulkDelete(keys: string[]) {
+    return this.dbService.bulkDelete(this.name, keys);
+  }
+
   getAll(): Observable<TEntity[]> {
     return this.dbService.getAll(this.name);
   }

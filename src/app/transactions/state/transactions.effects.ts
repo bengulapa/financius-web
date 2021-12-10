@@ -47,6 +47,7 @@ export class TransactionsEffects {
         TransactionActions.indexPageOpened,
         DashboardActions.dashboardPageOpened,
         ReportsActions.reportsPageOpened,
+        AccountActions.accountsPageOpened,
         AccountActions.accountViewOpened
       ),
       mergeMap(() => of(TransactionActions.retrieve()))
@@ -240,6 +241,22 @@ export class TransactionsEffects {
     );
   });
 
+  removeMany$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TransactionActions.removeMany),
+      concatMap(({ keys }) =>
+        this.service.bulkDelete(keys).pipe(
+          map(() => TransactionActions.removeManySuccess({ keys })),
+          catchError((err: any) => {
+            const errorMessage = 'An error occurred while removing a transaction.';
+            console.log(err);
+            return of(TransactionActions.removeFail({ errorMessage }));
+          })
+        )
+      )
+    );
+  });
+
   removeSuccess$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -253,6 +270,17 @@ export class TransactionsEffects {
     },
     { dispatch: false }
   );
+
+  removeAccountTransactions$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AccountActions.removeSuccess),
+      concatLatestFrom(({ account }) => this.store.select(accountsSelectors.selectAccountTransactionsById(account.id))),
+      concatMap(([_, transactions]) => {
+        const keys = transactions.map((t) => t.id);
+        return of(TransactionActions.removeMany({ keys }));
+      })
+    );
+  });
 
   readonly showErrorAlert$ = createEffect(
     () => {

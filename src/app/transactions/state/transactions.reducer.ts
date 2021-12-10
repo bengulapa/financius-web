@@ -43,6 +43,7 @@ export const transactionsReducer = createReducer(
     TransactionActions.add,
     TransactionActions.update,
     TransactionActions.remove,
+    TransactionActions.removeMany,
     (state): TransactionsState => ({
       ...state,
       loading: true,
@@ -81,6 +82,12 @@ export const transactionsReducer = createReducer(
   on(TransactionActions.updateTransactionAccountSuccess, (state, { transaction }) => transactionsAdapter.updateOne(transaction, state)),
   on(TransactionActions.removeSuccess, (state, { transaction }) =>
     transactionsAdapter.removeOne(transaction.id, {
+      ...state,
+      loading: false,
+    })
+  ),
+  on(TransactionActions.removeManySuccess, (state, { keys }) =>
+    transactionsAdapter.removeMany(keys, {
       ...state,
       loading: false,
     })

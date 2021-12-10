@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { first, switchMap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
 import { Account } from 'src/app/shared/models/entities.models';
 import { AccountActions } from '../../state/accounts.actions';
-import { selectAccountsPageViewModel } from '../../state/accounts.selectors';
+import { selectAccountsPageViewModel, selectAccountTransactionsById } from '../../state/accounts.selectors';
 import { AccountFormDialogComponent } from '../account-form-dialog/account-form-dialog.component';
 
 @Component({
@@ -68,13 +69,21 @@ export class AccountsShellComponent implements OnInit {
   }
 
   onDelete(account: Account) {
-    this.notify
-      .confirm({
-        content: 'Are you sure you want to delete this account?',
-        okButtonColor: 'warn',
-        okButtonText: 'Delete',
-      })
-      .afterClosed()
+    this.store
+      .select(selectAccountTransactionsById(account.id))
+      .pipe(
+        first((t) => !!t),
+        switchMap((t) => {
+          return this.notify
+            .confirm({
+              title: `Are you sure you want to delete this account?`,
+              content: `1 account will be deleted ${t.length > 0 ? `<br> ${t.length} transactions will be deleted` : ''}`,
+              okButtonColor: 'warn',
+              okButtonText: 'Delete',
+            })
+            .afterClosed();
+        })
+      )
       .subscribe((result) => {
         if (result) {
           this.store.dispatch(AccountActions.remove({ account }));
