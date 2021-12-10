@@ -36,7 +36,7 @@ export class NotificationService {
       autoFocus: false,
       data: {
         ...data,
-        title: 'Confirm',
+        title: data.title || 'Confirm',
         okButtonColor: data.okButtonColor || 'primary',
         okButtonText: data.okButtonText || 'Yes',
         cancelButtonText: data.cancelButtonText || 'Cancel',
