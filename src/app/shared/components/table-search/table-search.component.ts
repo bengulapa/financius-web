@@ -5,7 +5,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DestroyableBaseComponent } from '../../destroyable-base.component';
 
@@ -22,7 +22,7 @@ export class TableSearchComponent
   @Output()
   search = new EventEmitter<string>();
 
-  input = new FormControl();
+  input = new UntypedFormControl();
 
   ngOnInit(): void {
     this.input.valueChanges

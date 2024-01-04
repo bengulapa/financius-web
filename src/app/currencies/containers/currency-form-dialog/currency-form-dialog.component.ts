@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormHelpers } from 'src/app/core/utilities/form.helpers';
 import { Currency } from 'src/app/shared/models/entities.models';
@@ -15,7 +15,7 @@ import {
   styleUrls: ['./currency-form-dialog.component.scss'],
 })
 export class CurrencyFormDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   isEditMode = false;
   SymbolPosition = SymbolPosition;
   DecimalSeparator = DecimalSeparator;

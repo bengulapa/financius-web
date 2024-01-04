@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { Account, Currency } from 'src/app/shared/models/entities.models';
   styleUrls: ['./account-form-dialog.component.scss'],
 })
 export class AccountFormDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   isEditMode = false;
   currencies$?: Observable<Currency[]>;
 

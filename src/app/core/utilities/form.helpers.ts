@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Account, Category, Currency, Tag, Transaction } from 'src/app/shared/models/entities.models';
 import { SymbolPosition, TransactionState, TransactionType } from 'src/app/shared/models/financius.enums';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class FormHelpers {
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: UntypedFormBuilder) {}
 
-  createAccountForm(account: Account | null): FormGroup {
+  createAccountForm(account: Account | null): UntypedFormGroup {
     return this.fb.group({
       id: account?.id || '',
       name: [account?.name || '', Validators.required],
@@ -20,7 +20,7 @@ export class FormHelpers {
     });
   }
 
-  createCategoryForm(category: Category | null): FormGroup {
+  createCategoryForm(category: Category | null): UntypedFormGroup {
     return this.fb.group({
       id: category?.id || '',
       name: [category?.name || '', Validators.required],
@@ -29,7 +29,7 @@ export class FormHelpers {
     });
   }
 
-  createCurrencyForm(currency?: Currency | null): FormGroup {
+  createCurrencyForm(currency?: Currency | null): UntypedFormGroup {
     return this.fb.group({
       id: currency?.id || '',
       code: [currency?.code || '', [Validators.required, Validators.maxLength(3)]],
@@ -42,18 +42,18 @@ export class FormHelpers {
     });
   }
 
-  createTagsForm(tags?: Tag[]): FormArray {
+  createTagsForm(tags?: Tag[]): UntypedFormArray {
     return this.fb.array(tags?.map((t) => this.createTagForm(t)) || []);
   }
 
-  createTagForm(tag?: Tag): FormGroup {
+  createTagForm(tag?: Tag): UntypedFormGroup {
     return this.fb.group({
       id: tag?.id || '',
       name: [tag?.name || '', Validators.required],
     });
   }
 
-  createTransactionForm(transaction: Transaction): FormGroup {
+  createTransactionForm(transaction: Transaction): UntypedFormGroup {
     const form = this.fb.group({
       id: transaction?.id || '',
       category: transaction?.category,

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Tag } from 'src/app/shared/models/entities.models';
 
@@ -9,7 +9,7 @@ import { Tag } from 'src/app/shared/models/entities.models';
   styleUrls: ['./tag-form-dialog.component.scss'],
 })
 export class TagFormDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   isEditMode = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { tag: Tag }) {}
@@ -17,9 +17,9 @@ export class TagFormDialogComponent implements OnInit {
   ngOnInit(): void {
     this.isEditMode = !!this.data.tag;
 
-    this.form = new FormGroup({
-      id: new FormControl(this.data.tag?.id || ''),
-      name: new FormControl(this.data.tag?.name || ''),
+    this.form = new UntypedFormGroup({
+      id: new UntypedFormControl(this.data.tag?.id || ''),
+      name: new UntypedFormControl(this.data.tag?.name || ''),
     });
   }
 }

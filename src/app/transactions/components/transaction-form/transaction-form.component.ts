@@ -5,7 +5,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Account, Category, Tag } from 'src/app/shared/models/entities.models';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
@@ -18,7 +18,7 @@ import { TransactionType } from 'src/app/shared/models/financius.enums';
 })
 export class TransactionFormComponent implements OnChanges {
   @Input()
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   @Input()
   accounts?: Account[] | null;

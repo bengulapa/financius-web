@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Currency } from 'src/app/shared/models/entities.models';
 
 @Component({
@@ -10,7 +10,7 @@ import { Currency } from 'src/app/shared/models/entities.models';
 })
 export class AccountFormComponent implements OnChanges {
   @Input()
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   @Input()
   currencies?: Currency[] | null;

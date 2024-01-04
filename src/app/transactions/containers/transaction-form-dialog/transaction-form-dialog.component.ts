@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/core/services/accounts.service';
@@ -20,7 +20,7 @@ import { TransactionType } from 'src/app/shared/models/financius.enums';
   styleUrls: ['./transaction-form-dialog.component.scss'],
 })
 export class TransactionFormDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   isEditMode = false;
 
   TransactionType = TransactionType;

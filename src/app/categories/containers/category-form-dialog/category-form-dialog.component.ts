@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColorService } from 'src/app/core/services/color.service';
 import { FormHelpers } from 'src/app/core/utilities/form.helpers';
@@ -12,7 +12,7 @@ import { TransactionType } from 'src/app/shared/models/financius.enums';
   styleUrls: ['./category-form-dialog.component.scss'],
 })
 export class CategoryFormDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   isEditMode = false;
   TransactionType = TransactionType;
   colors: string[] = [];
