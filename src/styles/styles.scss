@@ -25,7 +25,7 @@ table {
   display: none !important;
 }
 
-.mat-toolbar .mat-button {
+.mat-toolbar .mat-mdc-button {
   border-radius: 0;
   margin-right: 0.5rem;
 }
@@ -99,7 +99,7 @@ table {
 }
 
 .fw-dialog {
-  .mat-dialog-actions {
+  .mat-mdc-dialog-actions {
     justify-content: flex-end;
   }
 }

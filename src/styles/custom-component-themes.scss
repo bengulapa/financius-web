@@ -46,7 +46,7 @@
     background: mat.get-color-from-palette($accent, 500);
   }
 
-  .mat-row {
+  .mat-mdc-row {
     transition: background ease-out 0.2s;
     &:hover {
       background: mat.get-color-from-palette($background, 'hover');

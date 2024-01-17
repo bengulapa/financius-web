@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import 'custom-component-themes';
 
+@include mat.all-component-typographies();
 @include mat.core();
 
 $primary-palette: (
@@ -238,6 +239,6 @@ $light-theme: mat.define-light-theme(
   background-color: $color-negative !important;
 }
 
-.text-muted .mat-cell {
+.text-muted .mat-mdc-cell {
   color: #6c757d !important;
 }

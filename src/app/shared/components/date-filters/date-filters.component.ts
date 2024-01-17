@@ -11,7 +11,7 @@ import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 })
 export class DateFiltersComponent implements OnInit {
   @Input()
-  appearance: MatFormFieldAppearance = 'standard';
+  appearance: MatFormFieldAppearance = 'fill';
 
   @Input()
   years!: number[];

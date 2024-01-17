@@ -12,7 +12,7 @@
           yearLabel="Select year"
           [month]="selectedMonth"
           monthLabel="Select month"
-          [appearance]="'legacy'"
+          [appearance]="'outline'"
           (monthChange)="onMonthFilterChange($event)"
           (yearChange)="onYearFilterChange($event)"
           (clearFilters)="onClearFilters()"
@@ -23,12 +23,12 @@
             (click)="onPeriodChange(-1)"
             mat-icon-button
             color="primary"
-            matTooltip="Previous {{ selectedPeriod | enumDisplay: Period }}"
+            matTooltip="Previous {{ selectedPeriod | enumDisplay : Period }}"
           >
             <mat-icon>arrow_left</mat-icon>
           </button>
           <h3 class="mx-2 mb-0" color="primary">{{ vm.periodLabel }}</h3>
-          <button (click)="onPeriodChange(1)" mat-icon-button color="primary" matTooltip="Next {{ selectedPeriod | enumDisplay: Period }}">
+          <button (click)="onPeriodChange(1)" mat-icon-button color="primary" matTooltip="Next {{ selectedPeriod | enumDisplay : Period }}">
             <mat-icon>arrow_right</mat-icon>
           </button>
         </div>

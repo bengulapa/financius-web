@@ -10,7 +10,7 @@
   <ng-container *ngIf="tag$ | async as tag">
     <h2><a routerLink="/tags">Tags</a> / {{ tag.name }}</h2>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-title>Transactions</mat-card-title>
       <mat-card-content>
         <app-transactions-table

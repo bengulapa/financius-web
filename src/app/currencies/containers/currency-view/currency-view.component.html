@@ -9,7 +9,7 @@
 
       <div class="d-flex">
         <section class="w-30 me-1">
-          <mat-card *ngIf="currency">
+          <mat-card appearance="outlined" *ngIf="currency">
             <mat-card-title>Details</mat-card-title>
             <mat-card-content>
               <p class="mt-4">
@@ -28,7 +28,7 @@
         </section>
 
         <section class="w-70 ms-1">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-title>Accounts</mat-card-title>
             <mat-card-content>
               <app-currency-accounts [accounts]="vm.accounts"></app-currency-accounts>
