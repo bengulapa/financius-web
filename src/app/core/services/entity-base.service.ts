@@ -29,13 +29,15 @@ export abstract class EntityBaseService<TEntity> {
         ...update.changes,
         modelState: ModelState.Normal,
         syncState: SyncState.None,
-      })
+      } as unknown as TEntity)
       .pipe(
         map((e) => {
-          const entityToUpdate = e.find((e) => (e as any).id === update.id);
+          // TODO: Check if this is still needed
+          console.log(e);
+          // const entityToUpdate = e.find((e) => (e as any).id === update.id);
 
           return <TEntity>{
-            ...entityToUpdate,
+            ...e,
             ...update.changes,
           };
         })

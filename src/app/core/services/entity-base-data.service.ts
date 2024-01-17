@@ -7,9 +7,7 @@ import { map } from 'rxjs/operators';
 import { ModelState, SyncState } from 'src/app/shared/models/financius.enums';
 
 @Injectable()
-export class EntityBaseDataService<TEntity>
-  implements EntityCollectionDataService<TEntity>
-{
+export class EntityBaseDataService<TEntity> implements EntityCollectionDataService<TEntity> {
   name!: string;
 
   constructor(private dbService: NgxIndexedDBService) {}
@@ -32,15 +30,17 @@ export class EntityBaseDataService<TEntity>
         ...update.changes,
         modelState: ModelState.Normal,
         syncState: SyncState.None,
-      })
+      } as unknown as TEntity)
       .pipe(
         map((e) => {
-          const entityToUpdate = e.find((e) => (e as any).id === update.id);
+          // TODO: Check if this is still needed
+          console.log(e);
+          // const entityToUpdate = e.find((e) => (e as any).id === update.id);
 
-          return <TEntity>{
-            ...entityToUpdate,
+          return {
+            ...e,
             ...update.changes,
-          };
+          } as TEntity;
         })
       );
 
