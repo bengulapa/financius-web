@@ -12,14 +12,14 @@ export interface AccountsState extends BaseEntityState<Account> {
 
 export const accountsAdapter: EntityAdapter<Account> = createEntityAdapter<Account>();
 
-export const initialState: AccountsState = accountsAdapter.getInitialState({
+export const accountsInitialState: AccountsState = accountsAdapter.getInitialState({
   loading: false,
   entitiesLoaded: false,
   selectedAccount: null,
 });
 
 export const accountsReducer = createReducer(
-  initialState,
+  accountsInitialState,
   on(
     AccountActions.retrieve,
     (state): AccountsState => ({

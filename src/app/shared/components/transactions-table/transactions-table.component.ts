@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { format, getMonth, getYear } from 'date-fns';
 import { TransactionType } from 'src/app/shared/models/financius.enums';
-import { Transaction } from '../../models/entities.models';
+import { Account, Transaction } from '../../models/entities.models';
 import { TransactionsTableFilter } from '../../models/view.models';
 import { TableBaseComponent } from '../../table-base.component';
 
@@ -19,14 +19,19 @@ export class TransactionsTableComponent extends TableBaseComponent<Transaction> 
   years?: number[];
 
   @Input()
-  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'account', 'actions'];
+  displayedColumns = ['date', 'category', 'tags', 'note', 'amount', 'accountFrom', 'syncState', 'actions'];
+
+  @Input()
+  accounts: Account[] | null = [];
 
   TransactionType = TransactionType;
+  accountFromFilter = '';
 
   filterValues: TransactionsTableFilter = {
     freeText: '',
     selectedMonth: null,
     selectedYear: null,
+    accountFrom: '',
   };
 
   onYearChange(year: number | undefined) {
@@ -57,6 +62,13 @@ export class TransactionsTableComponent extends TableBaseComponent<Transaction> 
     this.setFilter();
   }
 
+  filterByAccountFrom(accountFrom: string) {
+    this.dataSource.filterPredicate = this.createFilter();
+    this.filterValues.accountFrom = accountFrom || '';
+
+    this.setFilter();
+  }
+
   private setFilter() {
     this.dataSource.filter = JSON.stringify(this.filterValues);
 
@@ -73,6 +85,8 @@ export class TransactionsTableComponent extends TableBaseComponent<Transaction> 
 
       const monthFilter = searchTerms.selectedMonth !== null ? getMonth(transaction.date) === searchTerms.selectedMonth : true;
 
+      const accountFromFilter = searchTerms.accountFrom ? transaction.accountFrom?.id === searchTerms.accountFrom : false;
+
       const freeTextFilter = searchTerms.freeText
         ? transaction.note.trim().toLocaleLowerCase().includes(searchTerms.freeText) ||
           transaction.tags
@@ -87,7 +101,7 @@ export class TransactionsTableComponent extends TableBaseComponent<Transaction> 
           format(transaction.date, 'PPPP').toLocaleLowerCase().includes(searchTerms.freeText)
         : true;
 
-      return yearFilter && monthFilter && freeTextFilter;
+      return (yearFilter && monthFilter && freeTextFilter) || accountFromFilter;
     };
   }
 }

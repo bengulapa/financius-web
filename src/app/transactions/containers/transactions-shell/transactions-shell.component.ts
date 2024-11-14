@@ -4,11 +4,14 @@ import { Store } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Guid } from 'src/app/core/utilities/uuid.utils';
-import { Transaction } from 'src/app/shared/models/entities.models';
+import { Account, Transaction } from 'src/app/shared/models/entities.models';
 import { TransactionState } from 'src/app/shared/models/financius.enums';
 import { TransactionActions } from '../../state/transactions.actions';
 import { selectTransactionsIndexViewModel } from '../../state/transactions.selectors';
 import { TransactionFormDialogComponent } from '../transaction-form-dialog/transaction-form-dialog.component';
+import { AccountsService } from 'src/app/core/services/accounts.service';
+import { Observable } from 'rxjs';
+import { selectActiveAccounts } from 'src/app/accounts/state/accounts.selectors';
 
 @Component({
   selector: 'app-transactions-shell',
@@ -17,11 +20,18 @@ import { TransactionFormDialogComponent } from '../transaction-form-dialog/trans
 })
 export class TransactionsShellComponent implements OnInit {
   readonly vm$ = this.store.select(selectTransactionsIndexViewModel);
+  accounts$?: Observable<Account[]>;
 
-  constructor(private dialog: MatDialog, private notify: NotificationService, private store: Store) {}
+  constructor(
+    private dialog: MatDialog,
+    // private accountsService: AccountsService,
+    private notify: NotificationService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(TransactionActions.indexPageOpened());
+    this.accounts$ = this.store.select(selectActiveAccounts);
   }
 
   onAddClick() {

@@ -14,6 +14,7 @@
     <app-transactions-table
       [data]="vm.transactions"
       [years]="vm.transactionYears"
+      [accounts]="accounts$ | async"
       (edit)="onEdit($event)"
       (delete)="onDelete($event)"
     ></app-transactions-table>

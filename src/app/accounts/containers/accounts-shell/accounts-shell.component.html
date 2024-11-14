@@ -1,11 +1,7 @@
 <app-main-toolbar></app-main-toolbar>
 
 <ng-container *ngIf="vm$ | async as vm">
-  <mat-progress-bar
-    *ngIf="vm.loading"
-    color="accent"
-    mode="indeterminate"
-  ></mat-progress-bar>
+  <mat-progress-bar *ngIf="vm.loading" color="accent" mode="indeterminate"></mat-progress-bar>
 
   <section class="container">
     <div class="d-flex justify-content-between align-items-center">
@@ -15,10 +11,6 @@
       </button>
     </div>
 
-    <app-accounts-table
-      [data]="vm.accounts"
-      (edit)="onEdit($event)"
-      (delete)="onDelete($event)"
-    ></app-accounts-table>
+    <app-accounts-table [data]="vm.activeAccounts" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-accounts-table>
   </section>
 </ng-container>

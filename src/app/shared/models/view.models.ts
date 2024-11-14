@@ -34,4 +34,5 @@ export interface TransactionsTableFilter {
   selectedYear: number | null;
   selectedMonth: number | null;
   freeText: string;
+  accountFrom: string;
 }

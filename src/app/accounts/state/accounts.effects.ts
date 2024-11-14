@@ -9,6 +9,7 @@ import { CurrencyActions } from 'src/app/currencies/state/currencies.actions';
 import { DashboardActions } from 'src/app/dashboard/state/dashboard.actions';
 import { AccountActions } from './accounts.actions';
 import { selectEntitiesLoaded } from './accounts.selectors';
+import { TransactionActions } from 'src/app/transactions/state/transactions.actions';
 
 @Injectable()
 export class AccountsEffects {
@@ -34,7 +35,12 @@ export class AccountsEffects {
 
   loadAccounts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AccountActions.accountsPageOpened, DashboardActions.dashboardPageOpened, CurrencyActions.currencyViewOpened),
+      ofType(
+        AccountActions.accountsPageOpened,
+        DashboardActions.dashboardPageOpened,
+        CurrencyActions.currencyViewOpened,
+        TransactionActions.indexPageOpened
+      ),
       mergeMap(() => of(AccountActions.retrieve()))
     );
   });

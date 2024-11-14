@@ -5,6 +5,7 @@ import { getLocaleMonthName } from 'src/app/core/utilities/date.utils';
 import { ModelState, TransactionState, TransactionType } from 'src/app/shared/models/financius.enums';
 import { Period } from 'src/app/shared/models/view.models';
 import * as fromReducer from './transactions.reducer';
+import * as accountsSelectors from 'src/app/accounts/state/accounts.selectors';
 
 const { selectAll } = fromReducer.transactionsAdapter.getSelectors();
 

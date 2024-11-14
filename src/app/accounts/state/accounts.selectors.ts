@@ -42,10 +42,16 @@ export const selectAccountTransactionsById = (accountId: string) =>
       : [];
   });
 
-export const selectAccountsPageViewModel = createSelector(selectAccounts, selectLoading, (accounts, loading) => ({
-  accounts,
-  loading,
-}));
+export const selectAccountsPageViewModel = createSelector(
+  selectAccounts,
+  selectActiveAccounts,
+  selectLoading,
+  (accounts, activeAccounts, loading) => ({
+    accounts,
+    activeAccounts,
+    loading,
+  })
+);
 
 export const selectAccountPageViewModel = createSelector(
   selectAccount,
